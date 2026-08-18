@@ -13,7 +13,7 @@ from contract import (
     check_chat_template_parity, check_phase_d_gate,
     check_phase_constants, check_compensation_hypothesis,
     check_amendment_record, check_budget_overrun, check_model_config_parity,
-    check_construct_validity, check_lockbox_creation_ready,
+    check_construct_pilot_ready, check_construct_validity, check_lockbox_creation_ready,
     ContractViolation, ClaimTransitioner,
 )
 
@@ -32,6 +32,16 @@ CHECKS = [
     ("Model Config Parity (Contract §3.4)", check_model_config_parity),
     ("Phase D Gate (Contract §6)", check_phase_d_gate),
 ]
+
+
+def _check_construct_full(project_root: str) -> None:
+    check_construct_pilot_ready(project_root)
+    check_construct_validity(project_root)
+
+
+def _check_lockbox_creation_full(project_root: str) -> None:
+    check_construct_pilot_ready(project_root)
+    check_lockbox_creation_ready(project_root)
 
 
 def run_all():
@@ -65,8 +75,9 @@ def run_summary():
             all_pass = False
             print(f"  ❌ {name}: {str(exc).splitlines()[0][:80]}")
     for name, fn in (
-        ("Construct Validity (next substrate campaign)", check_construct_validity),
-        ("Lockbox Creation Ready (next substrate campaign)", check_lockbox_creation_ready),
+        ("Construct Pilot Format Policy", check_construct_pilot_ready),
+        ("Construct Validity (next substrate campaign)", _check_construct_full),
+        ("Lockbox Creation Ready (next substrate campaign)", _check_lockbox_creation_full),
     ):
         try:
             fn(script_dir)
@@ -94,6 +105,7 @@ if __name__ == "__main__":
     parser.add_argument("--check-lockbox", action="store_true")
     parser.add_argument("--check-lockbox-pass", action="store_true")
     parser.add_argument("--check-lockbox-creation", action="store_true")
+    parser.add_argument("--check-construct-pilot", action="store_true")
     parser.add_argument("--check-construct", action="store_true")
     parser.add_argument("--check-matrix", action="store_true")
     parser.add_argument("--check-phase-d", action="store_true")
@@ -111,8 +123,9 @@ if __name__ == "__main__":
         "check_template": check_chat_template_parity,
         "check_lockbox": check_lockbox_intact,
         "check_lockbox_pass": check_lockbox_pass,
-        "check_lockbox_creation": check_lockbox_creation_ready,
-        "check_construct": check_construct_validity,
+        "check_lockbox_creation": _check_lockbox_creation_full,
+        "check_construct_pilot": check_construct_pilot_ready,
+        "check_construct": _check_construct_full,
         "check_matrix": check_experiment_matrix,
         "check_phase_d": check_phase_d_gate,
         "check_constants": check_phase_constants,

@@ -23,8 +23,8 @@
     "exit_gate": "Substrate overhead within frozen budget; >=1 pre-registered trustworthy-stateful metric improves without violating task-retention",
     "current_wall_clock_days": 0,
     "current_researcher_days": 0,
-    "current_experiments": 0,
-    "current_compute_hours": 0,
+    "current_experiments": 6,
+    "current_compute_hours": 0.01255,
     "mode": "open"
   },
   {

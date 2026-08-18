@@ -74,8 +74,8 @@ class ClaimTransitioner:
         actual_state = self.get_entity_state(req.entity_type, req.entity_id)
         if actual_state != req.from_state:
             violations.append(
-                f"Entity {req.entity_type}/{req.entity_id} is in state {actual_state.value}, "
-                f"but transition requests from {req.from_state.value}."
+                f"from_state mismatch: entity {req.entity_type}/{req.entity_id} is in state "
+                f"{actual_state.value}, but transition requests from {req.from_state.value}."
             )
 
         allowed = VALID_TRANSITIONS.get(req.from_state, set())

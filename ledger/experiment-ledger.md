@@ -1,5 +1,7 @@
 # Experiment Ledger
 
+> ⚠️ **NOTICE — Protocol Audit (2026-08-18):** All experiments below (EXP-001–010) are reclassified as **DEV / EXPLORATORY EVIDENCE** following a v2.2 protocol audit. See `ledger/reclassification-v2.2.md` for detailed findings and `ledger/status-correction.md` for the corrected project status. The following protocol violations were found: B2 received wrong chat template (MiniCPM format for Qwen model), S2 was never run (missing B1/S1/B2/S2 matrix), lockbox partitions were contaminated, LCTX evaluation was incomplete, and Phase D gate was not passed. Experiments are preserved in place for auditability but their original conclusions are withdrawn.
+
 Every materially distinct experiment is recorded here. See Research Contract §3.4 for record requirements.
 
 ---

@@ -1,0 +1,21 @@
+{
+    "model_id": "MiniCPM5-1B",
+    "revision": "main (87179e5c1f455ef22e6223592d2d61351b525bfc)",
+    "template_source": "hardcoded_adapter_v1",
+    "template_string": "<|user|>\n{prompt}<|end|>\n<|assistant|>\n",
+    "tokenizer_class": "PreTrainedTokenizerFast",
+    "golden_tokenisation_test": {
+        "test_input": "<|user|>\nWhat is the capital of France?<|end|>\n<|assistant|>\n",
+        "description": "Simple factual prompt in MiniCPM format",
+        "expected_prefix_ids": [151337, 151338, 151339]
+    },
+    "generation_config": {
+        "thinking_mode": false,
+        "max_total_tokens": 131072,
+        "max_answer_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_policy": "eos_plus_stops",
+        "stop_tokens": [1, 130073]
+    }
+}

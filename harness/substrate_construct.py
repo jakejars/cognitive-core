@@ -9,6 +9,8 @@ The current task prompt is never stored before retrieval.
 
 from __future__ import annotations
 
+import random
+
 from contract.schema import ExperimentCell
 from substrate.context_compiler import MemoryEntry
 from substrate.runtime import SubstrateRuntime
@@ -82,6 +84,16 @@ def validate_construct_task(task: dict) -> None:
             f"S0 token/word load must be length matched within 20%; real={real_words}, null={null_words}"
         )
 
+    filler = task.get("history_filler")
+    if filler:
+        count = int(filler.get("count", 0))
+        words = int(filler.get("words_per_record", 0))
+        minimum = int(filler.get("minimum_address_space_words", 0))
+        if count <= 0 or words <= 0 or count * words < minimum:
+            raise ValueError(
+                "long-history filler must meet its declared minimum external address-space word proxy"
+            )
+
 
 def _entry(record: dict) -> MemoryEntry:
     return MemoryEntry(
@@ -99,11 +111,54 @@ def _entry(record: dict) -> MemoryEntry:
     )
 
 
+def _history_filler(task: dict) -> list[MemoryEntry]:
+    spec = task.get("history_filler")
+    if not spec:
+        return []
+
+    rng = random.Random(int(spec["seed"]))
+    count = int(spec["count"])
+    words_per_record = int(spec["words_per_record"])
+    vocabulary = (
+        "historical operational project backup retention encryption deadline owner "
+        "decision provenance archive policy review staging recovery audit configuration "
+        "superseded current record migration release service storage compliance"
+    ).split()
+    entries = []
+    for index in range(count):
+        entity_id = f"filler-project-{int(spec['seed'])}-{index:04d}"
+        prefix = [
+            "Historical",
+            "operational",
+            "record",
+            f"filler-{index:04d}",
+            f"entity-{int(spec['seed'])}-{index:04d}",
+        ]
+        remaining = max(words_per_record - len(prefix), 0)
+        tokens = prefix + [rng.choice(vocabulary) for _ in range(remaining)]
+        entries.append(MemoryEntry(
+            id=f"filler-{int(spec['seed'])}-{index:04d}",
+            content=" ".join(tokens),
+            entry_type="observation",
+            freshness=1.0,
+            confidence=1.0,
+            metadata={"source": "synthetic_history_filler", "entity_id": entity_id},
+        ))
+    return entries
+
+
 def prepare_substrate(rt: SubstrateRuntime, task: dict, *, arm: str) -> None:
     """Load only pre-existing history appropriate for the requested arm."""
     if arm not in SUBSTRATE_ARMS:
         return
     validate_construct_task(task)
+
+    # The same deterministic background address space is present for S0/O1/S1.
+    # It contains no target entity IDs and therefore cannot answer the task.
+    filler = _history_filler(task)
+    if filler:
+        rt.compiler.store_many(filler)
+
     records = task["null_memory_records"] if arm == "S0" else task["memory_records"]
     rt.compiler.store_many([_entry(record) for record in records])
 

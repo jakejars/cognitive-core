@@ -66,7 +66,7 @@
     },
     "retrieve_k": {"type": "integer", "minimum": 1},
     "history_filler": {
-      "description": "Neutral background address space present on every construct task. Content must have zero overlap under the actual substring keyword scorer; near-semantic distractors are a separate experiment.",
+      "description": "Neutral background address space present on every construct task. Generated content must score zero relevance under the actual substring keyword scorer (`query_word in content`); near-semantic distractors are a separate experiment.",
       "type": "object",
       "properties": {
         "count": {"type": "integer", "minimum": 1},

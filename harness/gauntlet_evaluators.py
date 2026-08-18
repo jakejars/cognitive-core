@@ -1,151 +1,146 @@
-"""
-Gauntlet evaluators — functions that score model outputs against expected results.
-
-Each evaluator takes (output_text: str, expected: Any) and returns
-  {
-    "passed": bool,
-    "score": float,          # 0.0 to 1.0
-    "details": str           # human-readable explanation
-  }
-"""
+"""Gauntlet evaluators — deterministic scoring for model outputs."""
 
 import re
 from typing import Any, List
 
+from tools.intents import Intent, IntentGrammar
+
 
 def strip_chat_markup(text: str) -> str:
-    """
-    Remove chat template markup from model output.
-    Handles <|user|>, <|assistant|>, <|end|>, <|im_start|>, <|im_end|>,
-    <|endoftext|>, <|fim_middle|>,  response,  thinking tokens,
-    and partial/incomplete tags.
-    """
-    # Remove chat template tags (complete and partial)
     text = re.sub(r'<\|[^>]*\|?>?', '', text)
     text = re.sub(r'</?\|im_(start|end)\|?>?', '', text)
     text = re.sub(r'<\|endoftext\|>?', '', text)
-    # Remove thinking/response markers that appear as standalone lines
-    # (Qwen outputs "  thinking\n\n  response\n\nAnswer:", or "...think\n response\n...")
     text = re.sub(r'^\s*(?:thinking|response)\s*$', '', text, flags=re.MULTILINE | re.IGNORECASE)
-    # Also handle inline "Thinking Process:" or "Response:" headers
     text = re.sub(r'^[Tt]hinking [Pp]rocess:.*$', '', text, flags=re.MULTILINE)
     text = re.sub(r'^\*{1,3}\s*[Tt]hinking\s*$', '', text, flags=re.MULTILINE)
-    # Remove any remaining angle-bracket content
     text = re.sub(r'<[^>]*>', '', text)
-    # Collapse whitespace and strip
-    lines = [l.strip() for l in text.split('\n') if l.strip()]
-    result = '\n'.join(lines).strip()
-    return result[:500]
+    lines = [line.strip() for line in text.split('\n') if line.strip()]
+    return '\n'.join(lines).strip()[:1000]
 
 
 def exact_match(output: str, expected: str) -> dict:
-    """Check if the output equals the expected string (case-insensitive, stripped)."""
     stripped = strip_chat_markup(output)
-    out = stripped.lower()
-    exp = expected.strip().lower()
-    passed = out == exp
+    passed = stripped.lower() == expected.strip().lower()
     return {
         "passed": passed,
         "score": 1.0 if passed else 0.0,
-        "details": f"Expected '{expected}', got '{stripped[:80]}'" if not passed else f"Exact match: '{expected}'"
+        "details": f"Expected '{expected}', got '{stripped[:80]}'" if not passed else f"Exact match: '{expected}'",
     }
 
 
 def contains(output: str, expected: str) -> dict:
-    """Check if the expected string is contained in the output (case-insensitive)."""
-    out = strip_chat_markup(output).lower()
-    exp = expected.lower()
-    passed = exp in out
     stripped = strip_chat_markup(output)
+    passed = expected.lower() in stripped.lower()
     return {
         "passed": passed,
         "score": 1.0 if passed else 0.0,
-        "details": f"Expected to contain '{expected}', got '{stripped[:120]}'" if not passed else f"Contains '{expected}'"
+        "details": f"Expected to contain '{expected}', got '{stripped[:120]}'" if not passed else f"Contains '{expected}'",
     }
 
 
 def contains_all(output: str, expected: List[str]) -> dict:
-    """Check if ALL expected strings are contained in the output (case-insensitive)."""
     out = strip_chat_markup(output).lower()
-    found = 0
-    missing = []
-    for exp in expected:
-        if exp.lower() in out:
-            found += 1
-        else:
-            missing.append(exp)
-    score = found / len(expected) if expected else 1.0
-    passed = score >= 1.0
+    found = [exp for exp in expected if exp.lower() in out]
+    missing = [exp for exp in expected if exp.lower() not in out]
+    score = len(found) / len(expected) if expected else 1.0
     return {
-        "passed": passed,
+        "passed": score >= 1.0,
         "score": score,
-        "details": f"Found {found}/{len(expected)}: missing={missing}" if not passed else f"All {len(expected)} items found"
+        "details": f"Found {len(found)}/{len(expected)}: missing={missing}" if missing else f"All {len(expected)} items found",
     }
 
 
 def contains_any(output: str, expected: List[str]) -> dict:
-    """Check if ANY of the expected strings are contained in the output."""
     out = strip_chat_markup(output).lower()
-    found = [e for e in expected if e.lower() in out]
+    found = [exp for exp in expected if exp.lower() in out]
     score = len(found) / len(expected) if expected else 1.0
-    passed = len(found) > 0
     return {
-        "passed": passed,
+        "passed": bool(found),
         "score": score,
-        "details": f"Found {len(found)}/{len(expected)}: {found[:3]}" if not passed else f"Found: {found[:3]}"
+        "details": f"Found: {found[:3]}" if found else f"Found 0/{len(expected)}",
     }
 
 
 def numeric_match(output: str, expected: str) -> dict:
-    """Check if a number in the output matches expected."""
     stripped = strip_chat_markup(output)
     numbers = re.findall(r'-?\d+(?:\.\d+)?', stripped)
-    exp_num = re.findall(r'-?\d+(?:\.\d+)?', expected)[0] if re.findall(r'-?\d+(?:\.\d+)?', expected) else expected
+    expected_numbers = re.findall(r'-?\d+(?:\.\d+)?', expected)
+    exp_num = expected_numbers[0] if expected_numbers else expected
     passed = exp_num in numbers
     return {
         "passed": passed,
         "score": 1.0 if passed else 0.0,
-        "details": f"Expected number '{expected}', found numbers {numbers}" if not passed else f"Numeric match: {exp_num}"
+        "details": f"Expected number '{expected}', found numbers {numbers}" if not passed else f"Numeric match: {exp_num}",
     }
 
 
 def step_by_step(output: str, expected: str) -> dict:
-    """
-    For reasoning tasks: check that the model shows working AND reaches the right answer.
-    Expected format: "final_answer|keyword1,keyword2"
-    """
     parts = expected.split("|")
     final_answer = parts[0].strip()
     keywords = [k.strip() for k in parts[1].split(",")] if len(parts) > 1 else []
-
     out_lower = strip_chat_markup(output).lower()
-
-    # Check final answer present
     has_answer = final_answer.lower() in out_lower
-
-    # Check keywords present
     found_keywords = [k for k in keywords if k.lower() in out_lower]
     keyword_score = len(found_keywords) / len(keywords) if keywords else 1.0
-
-    # Reward showing working
     has_working = any(marker in out_lower for marker in ["step", "first", "then", "finally", "therefore"]) or output.count("\n") >= 3
-
-    score = (0.5 * (1.0 if has_answer else 0.0) +
-             0.3 * keyword_score +
-             0.2 * (1.0 if has_working else 0.0))
-
-    passed = has_answer and keyword_score >= 0.5
-
+    score = 0.5 * float(has_answer) + 0.3 * keyword_score + 0.2 * float(has_working)
     return {
-        "passed": passed,
+        "passed": has_answer and keyword_score >= 0.5,
         "score": round(score, 2),
-        "details": (f"Answer in output: {has_answer}, "
-                    f"Keywords: {found_keywords}/{keywords}, "
-                    f"Working shown: {has_working}")
+        "details": f"Answer={has_answer}; keywords={found_keywords}/{keywords}; working={has_working}",
     }
 
 
-# Registry of evaluators by name
+def intent_fields(
+    output: str,
+    expected: dict,
+    *,
+    abstention_operations: List[str] | None = None,
+    allow_abstention: bool = False,
+) -> dict:
+    """Score the existing typed Intent grammar by exact operation/argument fields.
+
+    This intentionally does not use an LLM judge. Supersession tasks therefore
+    cannot pass by mentioning both stale and current values in prose.
+    """
+    stripped = strip_chat_markup(output)
+    valid, error = IntentGrammar.validate_output(stripped)
+    if not valid:
+        return {
+            "passed": False,
+            "score": 0.0,
+            "outcome": "invalid",
+            "details": f"Invalid typed intent: {error}",
+        }
+
+    intent = Intent.from_yaml_like(stripped)
+    abstentions = set(abstention_operations or [])
+    if allow_abstention and intent.operation.value in abstentions:
+        return {
+            "passed": False,
+            "score": 0.0,
+            "outcome": "correct_abstention",
+            "details": f"Correct abstention via operation={intent.operation.value}",
+        }
+
+    expected_operation = str(expected.get("operation", "pure_call"))
+    expected_arguments = dict(expected.get("arguments", {}))
+    operation_ok = intent.operation.value == expected_operation
+    arguments_ok = intent.arguments == expected_arguments
+    passed = operation_ok and arguments_ok
+
+    return {
+        "passed": passed,
+        "score": 1.0 if passed else 0.0,
+        "outcome": "supported_correct" if passed else "confident_wrong",
+        "details": (
+            f"Typed intent matched {expected_operation} {expected_arguments}"
+            if passed
+            else f"Expected {expected_operation} {expected_arguments}; got {intent.operation.value} {intent.arguments}"
+        ),
+    }
+
+
 EVALUATORS = {
     "exact_match": exact_match,
     "contains": contains,
@@ -156,59 +151,17 @@ EVALUATORS = {
 }
 
 
-def evaluate_task(output: str, task: dict) -> dict:
-    """Run the appropriate evaluator for a task."""
+def evaluate_task(output: str, task: dict, *, allow_abstention: bool = False) -> dict:
     evaluator_name = task.get("evaluator", "contains")
+    if evaluator_name == "intent_fields":
+        return intent_fields(
+            output,
+            task["expected"],
+            abstention_operations=task.get("abstention_operations", []),
+            allow_abstention=allow_abstention,
+        )
+
     evaluator_fn = EVALUATORS.get(evaluator_name, contains)
-    return evaluator_fn(output, task["expected"])
-
-
-def quick_test():
-    """Test all evaluators."""
-    print("=== Evaluator + Stripper Tests ===\n")
-
-    # Test strip_chat_markup
-    tests = [
-        ("yes\n<|user|>", "yes"),
-        ("no\n</|end|>", "no"),
-        ("  Yes  ", "Yes"),
-        ("answer: 47\n\n<|endoftext|>", "answer: 47"),
-        ("Thinking...\n\nResponse: The capital is Paris.", "The capital is Paris."),
-    ]
-    for raw, expected in tests:
-        stripped = strip_chat_markup(raw)
-        status = "✅" if stripped.lower() == expected.lower() else "❌"
-        print(f"{status} strip({raw!r}) → {stripped!r} (expected {expected!r})")
-
-    print()
-
-    # exact_match
-    r = exact_match("yes\n<|user|>", "yes")
-    print(f"exact_match('yes\\n<|user|>', 'yes'): passed={r['passed']}")
-
-    r = exact_match("no\n</|end|>", "yes")
-    print(f"exact_match('no\\n</|end|>', 'yes'): passed={r['passed']}")
-
-    # contains
-    r = contains("The capital of France is Paris.", "Paris")
-    print(f"\ncontains('...Paris...', 'Paris'): {r}")
-
-    # contains_all
-    r = contains_all("Alice and Charlie are assigned.", ["Alice", "Charlie"])
-    print(f"\ncontains_all('Alice and Charlie', ['Alice','Charlie']): {r}")
-
-    r = contains_all("Alice only.", ["Alice", "Charlie"])
-    print(f"contains_all('Alice only', ['Alice','Charlie']): {r}")
-
-    # step_by_step
-    r = step_by_step("First, Diana reports to Charlie. Then Charlie reports to Bob. So Bob is two levels above.", "Bob|reports")
-    print(f"\nstep_by_step (correct chain): {r}")
-
-    r = step_by_step("I don't know.", "Bob|reports")
-    print(f"step_by_step (no answer): {r}")
-
-    print("\nAll evaluators working correctly.")
-
-
-if __name__ == "__main__":
-    quick_test()
+    result = evaluator_fn(output, task["expected"])
+    result.setdefault("outcome", "supported_correct" if result["passed"] else "confident_wrong")
+    return result

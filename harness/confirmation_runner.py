@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
-"""Unified B1/B2/S1/S2 confirmation runner.
+"""Unified confirmation/construct-validity runner.
 
-This is the only runner intended for the clean v2.2 confirmation campaign.
-All four factorial cells share the same partition loading, adapter rendering,
-generation policy, scoring, evidence hashing, and receipt path.
+The same execution path now supports:
+- B1: MiniCPM5-1B bare
+- B2: Qwen3.5-4B bare size control
+- S0: MiniCPM + length/schema-matched off-topic substrate null
+- O1: MiniCPM + oracle perfect-recall relevant set
+- S1: MiniCPM + real substrate retrieval
+- S2: Qwen + real substrate retrieval (retained for the full factorial)
+
+No current task prompt is written into memory before retrieval.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
-import os
 import sys
 import time
 from pathlib import Path
@@ -49,36 +54,30 @@ from harness.experiment_support import (
     validate_lockbox_taskset,
 )
 from harness.gauntlet_evaluators import evaluate_task
+from harness.substrate_construct import (
+    ABSTENTION_ALLOWED_ARMS,
+    build_model_prompt,
+    prepare_substrate,
+    validate_construct_task,
+)
 from substrate.runtime import SubstrateRuntime
 
 
 CELL_CONFIG = {
-    ExperimentCell.B1: ("MiniCPM5-1B", False),
-    ExperimentCell.B2: ("Qwen3.5-4B", False),
-    ExperimentCell.S1: ("MiniCPM5-1B", True),
-    ExperimentCell.S2: ("Qwen3.5-4B", True),
+    ExperimentCell.B1: ("MiniCPM5-1B", "B1"),
+    ExperimentCell.B2: ("Qwen3.5-4B", "B2"),
+    ExperimentCell.S0: ("MiniCPM5-1B", "S0"),
+    ExperimentCell.O1: ("MiniCPM5-1B", "O1"),
+    ExperimentCell.S1: ("MiniCPM5-1B", "S1"),
+    ExperimentCell.S2: ("Qwen3.5-4B", "S1"),
 }
 
-
-def _substrate_prompt(rt: SubstrateRuntime, task: dict) -> str:
-    """One substrate policy shared by S1 and S2."""
-    task_id = task["id"]
-    prompt = task["prompt"]
-    gauntlet = task.get("gauntlet", "")
-
-    if gauntlet == "LCTX01":
-        background = prompt.split("Question:")[0] if "Question:" in prompt else prompt
-        rt.record_observation(background, source="task_context", metadata={"task_id": task_id})
-    elif gauntlet in ("LCTX03", "SA01"):
-        rt.record_observation(prompt, source="task_context", metadata={"task_id": task_id})
-
-    if gauntlet in ("M01", "SA01"):
-        return prompt
-
-    packet = rt.compile_context(prompt, k=3)
-    if "Relevant claims" in packet or "Evidence" in packet:
-        return f"{packet}\n\n{prompt}"
-    return prompt
+SUBSTRATE_CELLS = {
+    ExperimentCell.S0,
+    ExperimentCell.O1,
+    ExperimentCell.S1,
+    ExperimentCell.S2,
+}
 
 
 def _required_hash(path: Path, label: str, confirmation: bool) -> str:
@@ -87,6 +86,29 @@ def _required_hash(path: Path, label: str, confirmation: bool) -> str:
     if confirmation:
         raise RuntimeError(f"{label} is required for confirmatory evidence: {path}")
     return ""
+
+
+def _construct_task(task: dict) -> bool:
+    return all(
+        key in task
+        for key in ("memory_records", "null_memory_records", "oracle_record_ids", "target_entities")
+    )
+
+
+def _prompt_for_task(cell: ExperimentCell, arm: str, task: dict) -> tuple[str, SubstrateRuntime | None]:
+    if cell not in SUBSTRATE_CELLS:
+        return str(task["prompt"]), None
+
+    runtime = SubstrateRuntime()
+    if _construct_task(task):
+        validate_construct_task(task)
+        prepare_substrate(runtime, task, arm=arm)
+        return build_model_prompt(runtime, task, arm=arm), runtime
+
+    # Legacy/non-construct tasks receive no circular prompt seeding. A substrate
+    # with no pre-existing state cannot add information and therefore leaves the
+    # prompt untouched.
+    return str(task["prompt"]), runtime
 
 
 def run_cell(
@@ -98,7 +120,7 @@ def run_cell(
     seed: int,
     verbose: bool,
 ) -> dict:
-    model_id, use_substrate = CELL_CONFIG[cell]
+    model_id, arm = CELL_CONFIG[cell]
     model_dir = _project_root / "models" / model_id
     if not model_dir.is_dir():
         raise RuntimeError(f"model directory not found: {model_dir}")
@@ -109,6 +131,9 @@ def run_cell(
         task_file=task_file,
         gauntlet_filter=gauntlet_filter,
     )
+
+    if cell in (ExperimentCell.S0, ExperimentCell.O1) and not all(_construct_task(task) for task in tasks):
+        raise RuntimeError(f"{cell.value} is only valid for construct tasks with frozen memory records")
 
     if partition == Partition.LOCKBOX:
         validate_lockbox_taskset(str(_project_root), tasks, cell)
@@ -121,12 +146,10 @@ def run_cell(
         raise RuntimeError("adapter verification failed:\n  - " + "\n  - ".join(adapter_issues))
     generation = adapter.generation_manifest(seed=seed)
 
-    substrate = SubstrateRuntime() if use_substrate else None
     results = []
-
     for task in tasks:
         task_id = str(task["id"])
-        model_prompt = _substrate_prompt(substrate, task) if substrate else task["prompt"]
+        model_prompt, substrate = _prompt_for_task(cell, arm, task)
         rendered = adapter.render(harness.tokenizer, model_prompt)
 
         attempted = False
@@ -142,7 +165,11 @@ def run_cell(
                 verbose=False,
             )
             output_text = inference["text"]
-            evaluated = evaluate_task(output_text, task)
+            evaluated = evaluate_task(
+                output_text,
+                task,
+                allow_abstention=arm in ABSTENTION_ALLOWED_ARMS,
+            )
 
             if substrate and evaluated["passed"]:
                 substrate.record_claim(
@@ -153,8 +180,10 @@ def run_cell(
             row = {
                 "task_id": task_id,
                 "gauntlet": task.get("gauntlet", ""),
+                "family": task.get("family", task.get("gauntlet", "")),
                 "passed": bool(evaluated["passed"]),
                 "score": float(evaluated["score"]),
+                "outcome": evaluated.get("outcome", "supported_correct" if evaluated["passed"] else "confident_wrong"),
                 "evaluation_details": evaluated["details"],
                 "output_text": output_text,
                 "prompt_tokens": inference["prompt_tokens"],
@@ -169,8 +198,10 @@ def run_cell(
             row = {
                 "task_id": task_id,
                 "gauntlet": task.get("gauntlet", ""),
+                "family": task.get("family", task.get("gauntlet", "")),
                 "passed": False,
                 "score": 0.0,
+                "outcome": "invalid",
                 "evaluation_details": f"runtime error: {exc}",
                 "output_text": "",
                 "time_seconds": 0.0,
@@ -179,28 +210,38 @@ def run_cell(
             }
         finally:
             if partition == Partition.LOCKBOX and attempted:
-                # An attempted model call consumes this cell's one authorised look,
-                # even if inference/scoring/receipt finalisation subsequently fails.
                 mark_lockbox_evaluated(str(_project_root), task_id, cell)
 
         results.append(row)
         if verbose:
-            status = "PASS" if row["passed"] else "FAIL"
-            print(f"[{cell.value}] {task_id}: {status} score={row['score']:.3f}")
+            print(
+                f"[{cell.value}] {task_id}: {row['outcome']} "
+                f"score={row['score']:.3f}"
+            )
 
     passed = sum(1 for row in results if row["passed"])
     total_time = sum(float(row.get("time_seconds", 0.0)) for row in results)
     mean_score = sum(float(row.get("score", 0.0)) for row in results) / len(results)
     peak_values = [float(row["peak_memory_gb"]) for row in results if row.get("peak_memory_gb")]
     peak_memory = max(peak_values) if peak_values else None
+    outcome_counts = {
+        outcome: sum(1 for row in results if row.get("outcome") == outcome)
+        for outcome in ("supported_correct", "correct_abstention", "confident_wrong", "invalid")
+    }
 
     summary = {
         "cell": cell.value,
+        "arm": arm,
         "partition": partition.value,
         "model_id": model_id,
         "n_passed": passed,
         "n_total": len(results),
         "pass_rate": passed / len(results),
+        "supported_correct_rate": outcome_counts["supported_correct"] / len(results),
+        "abstention_rate": outcome_counts["correct_abstention"] / len(results),
+        "confident_wrong_rate": outcome_counts["confident_wrong"] / len(results),
+        "invalid_rate": outcome_counts["invalid"] / len(results),
+        "outcomes": outcome_counts,
         "mean_score": mean_score,
         "total_time_s": total_time,
         "mean_latency_ms": (total_time / len(results)) * 1000,
@@ -231,7 +272,7 @@ def run_cell(
         code_hash = ""
 
     substrate_manifest = None
-    if substrate:
+    if cell in SUBSTRATE_CELLS:
         substrate_manifest = SubstrateManifest(
             revision=code_hash or "dev-unpinned",
             config_hash=hash_tree(_project_root / "substrate"),
@@ -250,6 +291,12 @@ def run_cell(
         model_resident_memory_gb=peak_memory,
         successful_tasks_per_gb=(passed / peak_memory) if peak_memory else None,
         successful_tasks_per_second=(passed / total_time) if total_time else None,
+    )
+
+    hypothesis = (
+        "construct-valid substrate information-value decomposition"
+        if all(_construct_task(task) for task in tasks)
+        else "2x2 factorial substrate/small-executive confirmation"
     )
 
     writer = ReceiptWriter(str(_project_root))
@@ -284,15 +331,14 @@ def run_cell(
             contract_version="2.2",
             preregistration_hash=prereg_hash,
             amendment_log_hash=amendment_hash,
-            hypothesis="2x2 factorial substrate/small-executive confirmation",
+            hypothesis=hypothesis,
             code_diff_hash=code_hash,
         ),
-        hypothesis="2x2 factorial substrate/small-executive confirmation",
+        hypothesis=hypothesis,
         code_diff_hash=code_hash,
         budget_consumed={"compute_hours": total_time / 3600.0},
     )
 
-    # Convenience mirror is written only after the authoritative receipt succeeds.
     run_dir = _project_root / "ledger" / "runs"
     run_dir.mkdir(parents=True, exist_ok=True)
     mirror = run_dir / f"{receipt.run_id}.json"
@@ -307,8 +353,16 @@ def run_cell(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Cognitive Core v2.2 confirmation runner")
-    parser.add_argument("--cell", required=True, choices=["B1", "B2", "S1", "S2"])
+    choices = [cell.value for cell in (
+        ExperimentCell.B1,
+        ExperimentCell.B2,
+        ExperimentCell.S0,
+        ExperimentCell.O1,
+        ExperimentCell.S1,
+        ExperimentCell.S2,
+    )]
+    parser = argparse.ArgumentParser(description="Cognitive Core v2.2 unified runner")
+    parser.add_argument("--cell", required=True, choices=choices)
     parser.add_argument("--partition", default="dev", choices=["dev", "replication", "lockbox"])
     parser.add_argument("--task-file", default=None)
     parser.add_argument("--gauntlet", default=None)

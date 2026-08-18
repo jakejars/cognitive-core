@@ -98,11 +98,24 @@ The `contract/` package already enforces the trust boundary programmatically:
 
 Before the confirmation campaign produces final claims:
 
-- [ ] `contract/` directory is read-only to the research agent process
-- [ ] `ledger/` directory is writable but its receipts are cryptographically
+- [x] `contract/` directory is read-only to the research agent process
+      (local M5 Pro: `chmod -R a-w contract/`; verified write-denied and
+      imports/`pytest`/`check-invariants.py` still pass)
+- [x] `ledger/` directory is writable but its receipts are cryptographically
       verified on every load
-- [ ] The research agent's Python path does not include a writable directory
-      that shadows `contract/`
-- [ ] CI/CD pipeline runs `check-invariants.py` as a mandatory gate before
-      any claim is accepted
-- [ ] The `contract/` package hash is pinned in the experiment record
+- [x] The research agent's Python path does not include a writable directory
+      that shadows `contract/` (verified `contract.__file__` resolves to the
+      read-only repo package)
+- [~] CI/CD pipeline: `protocol-tests.yml` runs compileall + pytest on PR;
+      the full `check-invariants.py` gate is executed locally before any claim
+      (CI cannot run model/tokenizer checks without the local checkpoints)
+- [x] The `contract/` package hash is pinned in `ledger/confirmation-record.json`
+      (contract tree SHA-256 + git HEAD + adapter revisions/hashes)
+
+## Current Status (confirmation campaign)
+
+- DEV + REPLICATION matrices complete with validated receipts.
+- LOCKBOX plaintext held outside the repo (`/Users/jake/cognitive-core-lockbox/`,
+  mode 600); ledger frozen with hashes; release not authorised until the
+  supervisor boundary above was in place.
+- Phase D counterfactual gate and Phase C LCTX curve remain open items.

@@ -1,0 +1,113 @@
+{
+  "recorded_at": "2026-08-18T11:39:49.531505+00:00",
+  "contract_pin": {
+    "git_head": "3058ee5d87059c8a0447c5784132753f35a3e391",
+    "contract_tree_hash": "3c3f47047e913248c469a9872293aba8455501530d856ecb7422f9e733d4c679",
+    "adapters": {
+      "MiniCPM5-1B": {
+        "revision": "87179e5c1f455ef22e6223592d2d61351b525bfc",
+        "adapter_hash": "d34af28dc1500c80"
+      },
+      "Qwen3.5-4B": {
+        "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+        "adapter_hash": "a27c07d759dc47b0"
+      }
+    }
+  },
+  "tasksets": {
+    "dev": {
+      "file": "gauntlets/frozen/dev-v1.json",
+      "n_tasks": 20,
+      "taskset_hash": "1436e9421c2194be8fdb094e39d74ee07832a46f40affee1e14cda4d99ba0604",
+      "description": "Fresh DEV gauntlet v1 for Phase A'/B' confirmation, stratified across M01/LCTX01/LCTX02/LCTX03/SA01"
+    },
+    "replication": {
+      "file": "gauntlets/frozen/rep-v1.json",
+      "n_tasks": 12,
+      "taskset_hash": "ce873587f32370db3c16026a530ad1f775b14b7571b2becd2dc0ae37ff3b5618",
+      "description": "Fresh REPLICATION gauntlet v1, distinct content from DEV"
+    },
+    "lockbox": {
+      "file": "/Users/jake/cognitive-core-lockbox/lockbox-v1.json",
+      "n_tasks": 8,
+      "taskset_hash": "ced97a3afa099f12c6766225ef0e24ad60ec4302864325f4537cb0b50e9647f3",
+      "description": "Fresh LOCKBOX gauntlet v1, untouched plaintext outside repo",
+      "plaintext_location": "outside repo (mode 600)"
+    }
+  },
+  "phase_constants": {
+    "C_success": 0.95,
+    "C_memory": 0.5,
+    "C_latency": 0.2,
+    "C_trust": 0.5,
+    "frozen_at": "2026-08-18T11:36:42.893947+00:00",
+    "calibration_basis": "Corrected B1/B2 DEV on frozen dev-v1 taskset (20 tasks, seed 0), calibrated adapters, native chat templates: B1(MiniCPM5-1B) 85% (17/20), mean latency 165ms, peak mem 2.28GB; B2(Qwen3.5-4B) 80% (16/20), mean latency 826ms, peak mem 8.63GB. C_success 0.95 (S1 >= 95% of S2 success; baseline ratio 85/80 = 1.06), C_memory 0.50 (S1 <= 50% of S2 memory; baseline ratio 2.28/8.63 = 0.26), C_latency 0.20 (substrate p95 overhead <= 20% of vanilla), C_trust 0.50 (effect/provenance/state error <= 50% of vanilla baseline)."
+  },
+  "matrix": {
+    "B1/dev": {
+      "pass": 17,
+      "total": 20,
+      "rate": 0.85,
+      "latency_ms": 165.1,
+      "peak_mem_gb": 2.278936284,
+      "receipt": "721a8b1591bc7ae7"
+    },
+    "B1/replication": {
+      "pass": 10,
+      "total": 12,
+      "rate": 0.8333333333333334,
+      "latency_ms": 142.7,
+      "peak_mem_gb": 2.272431724,
+      "receipt": "7826a2b755d61485"
+    },
+    "B2/dev": {
+      "pass": 16,
+      "total": 20,
+      "rate": 0.8,
+      "latency_ms": 825.9,
+      "peak_mem_gb": 8.629959544,
+      "receipt": "3dec4c166ac9ebc8"
+    },
+    "B2/replication": {
+      "pass": 9,
+      "total": 12,
+      "rate": 0.75,
+      "latency_ms": 760.4,
+      "peak_mem_gb": 8.632400784,
+      "receipt": "800dd88d899f3c8f"
+    },
+    "S1/dev": {
+      "pass": 14,
+      "total": 20,
+      "rate": 0.7,
+      "latency_ms": 420.8,
+      "peak_mem_gb": 2.388119552,
+      "receipt": "6cae1fe20fbc022a"
+    },
+    "S1/replication": {
+      "pass": 10,
+      "total": 12,
+      "rate": 0.8333333333333334,
+      "latency_ms": 344.5,
+      "peak_mem_gb": 2.391642124,
+      "receipt": "586230fb03ee6a84"
+    },
+    "S2/dev": {
+      "pass": 14,
+      "total": 20,
+      "rate": 0.7,
+      "latency_ms": 766.1,
+      "peak_mem_gb": 8.762687504,
+      "receipt": "e7a6111adbcefe2e"
+    },
+    "S2/replication": {
+      "pass": 9,
+      "total": 12,
+      "rate": 0.75,
+      "latency_ms": 694.2,
+      "peak_mem_gb": 8.7523655,
+      "receipt": "55532c105423d9ea"
+    }
+  },
+  "status": "DEV+REPLICATION complete; LOCKBOX pending authorised release; Phase D/C gate pending"
+}

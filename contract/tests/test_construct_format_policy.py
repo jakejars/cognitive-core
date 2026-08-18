@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from contract.hardening import ContractViolation, check_construct_pilot_ready
+from contract.construct_pilot import ContractViolation, check_construct_pilot_ready
 
 
 def _record():

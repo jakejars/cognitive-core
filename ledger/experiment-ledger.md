@@ -167,3 +167,21 @@ Embedding-based hybrid retrieval also implemented (all-MiniLM-L6-v2) for semanti
 | 008 | 2026-08-18 | D | Counterfactual skill evaluation | Skills accurate but trivial for single-turn tasks |
 | 009 | 2026-08-18 | G | 4-bit MLX quantisation | **580MB (3.4× reduction), quality preserved** |
 | 010 | 2026-08-18 | G | Phase G completion | Escalation, Cactus assessment, performance tuning |
+## v2.2 Confirmation Campaign — corrected DEV / REPLICATION / LOCKBOX matrices (2026-08-18)
+
+Frozen tasksets (contract-hashed, `ledger/tasksets.json`): DEV `dev-v1.json` (20 tasks, seed 0), REPLICATION `rep-v1.json` (12 tasks, seed 1), LOCKBOX `lockbox-v1.json` (8 tasks, seed 2, plaintext outside repo at `/Users/jake/cognitive-core-lockbox/`, mode 600, released only after supervisor boundary active).
+
+Calibrated adapters: MiniCPM5-1B → native `apply_chat_template(enable_thinking=false)` pinned `87179e5c`; Qwen3.5-4B pinned `851bf6e8` (was `revision: main`), golden fixtures bound to actual local checkpoint bytes.
+
+| Cell | DEV (20, seed 0) | REPLICATION (12, seed 1) | LOCKBOX (8, seed 2) |
+|---|---|---|---|
+| B1 MiniCPM5-1B | 85.0% (17/20) | 83.3% (10/12) | 87.5% (7/8) |
+| B2 Qwen3.5-4B | 80.0% (16/20) | 75.0% (9/12) | 75.0% (6/8) |
+| S1 MiniCPM5-1B + substrate | 70.0% (14/20) | 83.3% (10/12) | 75.0% (6/8) |
+| S2 Qwen3.5-4B + substrate | 70.0% (14/20) | 75.0% (9/12) | 75.0% (6/8) |
+
+Findings:
+- B2 (4B) does not dominate B1 (1B) → no Compensation Hypothesis required (Contract §3.3).
+- Substrate maintains success parity but costs latency: S1/B1 DEV latency ratio 2.55× > C_latency 0.20 cap → **Phase B exit gate not met** (systems cost finding).
+- Substrate effect on DEV success is negative (−15pp B1→S1, −10pp B2→S2) and neutral on REPLICATION; LOCKBOX neutral.
+- `check-invariants.py`: 9/10 pass; Phase D gate blocked (Phase D′ not yet run). SUPPORTED_CLAIM blocked.

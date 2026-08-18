@@ -1,0 +1,216 @@
+{
+  "cell": "B1",
+  "partition": "lockbox",
+  "model_id": "MiniCPM5-1B",
+  "n_passed": 7,
+  "n_total": 8,
+  "pass_rate": 0.875,
+  "mean_score": 0.875,
+  "total_time_s": 1.541034460067749,
+  "mean_latency_ms": 192.62930750846863,
+  "peak_memory_gb": 2.287505052,
+  "taskset_hash": "ced97a3afa099f12c6766225ef0e24ad60ec4302864325f4537cb0b50e9647f3",
+  "adapter_hash": "d34af28dc1500c80cde781cced9b8055fdf3b4c8f2291ac65ae9fac4084da918",
+  "results": [
+    {
+      "task_id": "LBX-M01-01",
+      "gauntlet": "M01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Exact match: 'A'",
+      "output_text": "A",
+      "prompt_tokens": 101,
+      "output_tokens": 1,
+      "time_seconds": 0.13045597076416016,
+      "tokens_per_sec": 7.66542147624513,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.287505052,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-M01-02",
+      "gauntlet": "M01",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected 'B', got 'A'",
+      "output_text": "A",
+      "prompt_tokens": 101,
+      "output_tokens": 1,
+      "time_seconds": 0.0934598445892334,
+      "tokens_per_sec": 10.699782397404075,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.287505052,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-LCTX01-01",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'koala'",
+      "output_text": "The koala is a marsupial native to Australia.",
+      "prompt_tokens": 64,
+      "output_tokens": 12,
+      "time_seconds": 0.16407012939453125,
+      "tokens_per_sec": 73.13945594047895,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.287505052,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-LCTX01-02",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Louvre'",
+      "output_text": "The Louvre houses the Mona Lisa.",
+      "prompt_tokens": 59,
+      "output_tokens": 7,
+      "time_seconds": 0.12816095352172852,
+      "tokens_per_sec": 54.618819598694806,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.287505052,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-LCTX02-01",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "The tallest land animal is the giraffe, which can reach heights of up to 18 feet (5.6 meters) including the neck. The largest animal ever is the blue whale, which can grow to lengths of up to 100 feet (30 meters) and weigh as much as 200 tons.",
+      "prompt_tokens": 69,
+      "output_tokens": 62,
+      "time_seconds": 0.5421907901763916,
+      "tokens_per_sec": 114.35089109468176,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.287505052,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-LCTX02-02",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "The Danube flows through Vienna, and the Seine flows through Paris. Therefore, the rivers that flow through Vienna and Paris are the Danube and the Seine.",
+      "prompt_tokens": 55,
+      "output_tokens": 30,
+      "time_seconds": 0.29967594146728516,
+      "tokens_per_sec": 100.1081363192281,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.287505052,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-LCTX03-01",
+      "gauntlet": "LCTX03",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Kofi'",
+      "output_text": "Kofi",
+      "prompt_tokens": 51,
+      "output_tokens": 2,
+      "time_seconds": 0.09145593643188477,
+      "tokens_per_sec": 21.868454668216916,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.287505052,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-SA01-01",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Ravi'",
+      "output_text": "Ravi",
+      "prompt_tokens": 90,
+      "output_tokens": 2,
+      "time_seconds": 0.09156489372253418,
+      "tokens_per_sec": 21.842432385282162,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.287505052,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "cell": "S2",
+  "partition": "lockbox",
+  "model_id": "Qwen3.5-4B",
+  "n_passed": 6,
+  "n_total": 8,
+  "pass_rate": 0.75,
+  "mean_score": 0.75,
+  "total_time_s": 6.8639349937438965,
+  "mean_latency_ms": 857.9918742179871,
+  "peak_memory_gb": 8.743960436,
+  "taskset_hash": "ced97a3afa099f12c6766225ef0e24ad60ec4302864325f4537cb0b50e9647f3",
+  "adapter_hash": "a27c07d759dc47b082864a55883004fc765dfcb7bfcef820c4037191b58998f3",
+  "results": [
+    {
+      "task_id": "LBX-M01-01",
+      "gauntlet": "M01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Exact match: 'A'",
+      "output_text": "A",
+      "prompt_tokens": 97,
+      "output_tokens": 1,
+      "time_seconds": 0.341292142868042,
+      "tokens_per_sec": 2.930041083268191,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.615247616,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-M01-02",
+      "gauntlet": "M01",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected 'B', got 'A'",
+      "output_text": "A",
+      "prompt_tokens": 97,
+      "output_tokens": 1,
+      "time_seconds": 0.2820601463317871,
+      "tokens_per_sec": 3.5453431227526235,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.615410432,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-LCTX01-01",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'koala'",
+      "output_text": "The koala is a marsupial native to Australia.",
+      "prompt_tokens": 134,
+      "output_tokens": 12,
+      "time_seconds": 0.6713008880615234,
+      "tokens_per_sec": 17.875739796280776,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.667102396,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-LCTX01-02",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Louvre'",
+      "output_text": "The Louvre houses the Mona Lisa.",
+      "prompt_tokens": 180,
+      "output_tokens": 8,
+      "time_seconds": 0.5479788780212402,
+      "tokens_per_sec": 14.599102850256049,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.727412452,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-LCTX02-01",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the facts provided:\n\n*   **Tallest land animal:** The giraffe.\n*   **Largest animal ever:** The blue whale.",
+      "prompt_tokens": 189,
+      "output_tokens": 32,
+      "time_seconds": 1.3981659412384033,
+      "tokens_per_sec": 22.887125952772465,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.739635024,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-LCTX02-02",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the facts provided:\n\n1.  **Vienna**: The **Danube** flows through Vienna (Fact 1).\n2.  **Paris**: The **Seine** flows through Paris (Fact 2).\n\nTherefore, the rivers that flow through Vienna and Paris are the **Danube** and the **Seine**, respectively.",
+      "prompt_tokens": 192,
+      "output_tokens": 70,
+      "time_seconds": 2.766542911529541,
+      "tokens_per_sec": 25.302336612338696,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.743960436,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-LCTX03-01",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'Kofi', got 'Ines'",
+      "output_text": "Ines",
+      "prompt_tokens": 173,
+      "output_tokens": 2,
+      "time_seconds": 0.32918500900268555,
+      "tokens_per_sec": 6.0756108124707575,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.743960436,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "LBX-SA01-01",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Ravi'",
+      "output_text": "Ravi was added to the workspace.",
+      "prompt_tokens": 95,
+      "output_tokens": 8,
+      "time_seconds": 0.5274090766906738,
+      "tokens_per_sec": 15.168491316451142,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.743960436,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 2,
+        "max_kv_size": 131072
+      }
+    }
+  ]
+}

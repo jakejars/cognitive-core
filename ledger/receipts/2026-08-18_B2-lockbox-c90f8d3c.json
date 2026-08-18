@@ -1,0 +1,75 @@
+{
+  "run_id": "B2-lockbox-c90f8d3c",
+  "cell": "B2",
+  "partition": "lockbox",
+  "created_at": "2026-08-18T11:40:57.368731+00:00",
+  "model": {
+    "model_id": "Qwen3.5-4B",
+    "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+    "weights_hash": "76eef3317d2e81bba118981981c38e0ccbd267fdcda9689e531a20ebdc3703a2",
+    "tokenizer_id": "Qwen3.5-4B",
+    "tokenizer_hash": "ddc09ec2ebf37c621b31a4ca7050715c3d0a5468036242e0a6d52d6267b067de",
+    "template_adapter_version": "verified_a27c07d759dc47b0",
+    "applied_template": "a27c07d759dc47b082864a55883004fc765dfcb7bfcef820c4037191b58998f3"
+  },
+  "generation": {
+    "thinking_mode": false,
+    "max_total_tokens": 131072,
+    "max_answer_tokens": 256,
+    "temperature": 0.0,
+    "top_p": 0.0,
+    "stop_policy": "explicit_plus_eos",
+    "stop_tokens": [
+      248046,
+      248044
+    ],
+    "seed": 2
+  },
+  "tasks": {
+    "source": "/Users/jake/cognitive-core-lockbox/lockbox-v1.json",
+    "partition": "lockbox",
+    "task_ids": [
+      "LBX-M01-01",
+      "LBX-M01-02",
+      "LBX-LCTX01-01",
+      "LBX-LCTX01-02",
+      "LBX-LCTX02-01",
+      "LBX-LCTX02-02",
+      "LBX-LCTX03-01",
+      "LBX-SA01-01"
+    ],
+    "content_hash": "ced97a3afa099f12c6766225ef0e24ad60ec4302864325f4537cb0b50e9647f3",
+    "n_tasks": 8,
+    "n_turns": 0
+  },
+  "substrate": null,
+  "result": {
+    "result_hash": "dc5baa01a33d9b338272ea478bace2712589c471f516b2132e50b648b36a66fa",
+    "completed_at": "2026-08-18T11:40:57Z",
+    "metrics": {
+      "n_passed": 6,
+      "n_total": 8,
+      "pass_rate": 0.75,
+      "mean_score": 0.75,
+      "mean_latency_ms": 827.2010684013367,
+      "total_time_s": 6.617608547210693,
+      "model_resident_memory_gb": 8.615410432,
+      "successful_tasks_per_gb": 0.6964264845368658,
+      "successful_tasks_per_second": 0.9066719430736027,
+      "effect_duplication_rate": null,
+      "provenance_error_rate": null
+    },
+    "raw_output_hash": "02fd0305604af71bf46d2e2594908a8c73fe9fbe154a23a7a9a516d802e3dff7"
+  },
+  "protocol": {
+    "contract_version": "2.2",
+    "preregistration_hash": "5173ffdb7d3a9f9266ecba83f646595160aee23cfef6b245b377e4bb020f0442",
+    "amendment_log_hash": "b70fc44a375200b2061e30a43939c2d197504d1c436b2fb314af54482f223a68",
+    "hypothesis": "2x2 factorial substrate/small-executive confirmation",
+    "code_diff_hash": "5459350979232ced30dd8556c2aba898088d2f366c4f84480a498255265f8ff5"
+  },
+  "receipt_hash": "86c794ee84f5d9809fbd19e26efb6219",
+  "budget_consumed": {
+    "compute_hours": 0.0018382245964474147
+  }
+}

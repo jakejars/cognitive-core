@@ -1,7 +1,7 @@
 # Cognitive Core Gen-2 — Confirmation Campaign Plan
 
-**Date:** 2026-08-18  
-**Status:** Protocol hardening implemented on `fix/protocol-hardening-final`; **clean campaign not yet started**  
+**Date:** 2026-08-18
+**Status:** DEV + REPLICATION + LOCKBOX matrices **complete and validated** on local M5 Pro with calibrated adapters; **Phase A′/B′ run done**. Remaining before any claim: Phase C′ (LCTX01–10 capability curve) and Phase D′ (paired counterfactual). Phase B exit gate (C_latency) not met; SUPPORTED_CLAIM blocked.
 **Supersedes:** All previous experiment schedules
 
 ---

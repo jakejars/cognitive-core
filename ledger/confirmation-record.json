@@ -52,6 +52,14 @@
       "peak_mem_gb": 2.278936284,
       "receipt": "721a8b1591bc7ae7"
     },
+    "B1/lockbox": {
+      "pass": 7,
+      "total": 8,
+      "rate": 0.875,
+      "latency_ms": 192.6,
+      "peak_mem_gb": 2.287505052,
+      "receipt": "3ca8d87756e8fb32"
+    },
     "B1/replication": {
       "pass": 10,
       "total": 12,
@@ -67,6 +75,14 @@
       "latency_ms": 825.9,
       "peak_mem_gb": 8.629959544,
       "receipt": "3dec4c166ac9ebc8"
+    },
+    "B2/lockbox": {
+      "pass": 6,
+      "total": 8,
+      "rate": 0.75,
+      "latency_ms": 827.2,
+      "peak_mem_gb": 8.615410432,
+      "receipt": "86c794ee84f5d980"
     },
     "B2/replication": {
       "pass": 9,
@@ -84,6 +100,14 @@
       "peak_mem_gb": 2.388119552,
       "receipt": "6cae1fe20fbc022a"
     },
+    "S1/lockbox": {
+      "pass": 6,
+      "total": 8,
+      "rate": 0.75,
+      "latency_ms": 265.8,
+      "peak_mem_gb": 2.360594344,
+      "receipt": "6fa320c4f7104183"
+    },
     "S1/replication": {
       "pass": 10,
       "total": 12,
@@ -100,6 +124,14 @@
       "peak_mem_gb": 8.762687504,
       "receipt": "e7a6111adbcefe2e"
     },
+    "S2/lockbox": {
+      "pass": 6,
+      "total": 8,
+      "rate": 0.75,
+      "latency_ms": 858.0,
+      "peak_mem_gb": 8.743960436,
+      "receipt": "75fc7d08e45a9662"
+    },
     "S2/replication": {
       "pass": 9,
       "total": 12,
@@ -109,5 +141,30 @@
       "receipt": "55532c105423d9ea"
     }
   },
-  "status": "DEV+REPLICATION complete; LOCKBOX pending authorised release; Phase D/C gate pending"
+  "status": "DEV+REPLICATION complete; LOCKBOX pending authorised release; Phase D/C gate pending",
+  "updated_at": "2026-08-18T11:41:56.252628+00:00",
+  "final_gate": {
+    "check_invariants": {
+      "pass": [
+        "Chat Template Parity",
+        "Lockbox Intact",
+        "Lockbox Pass",
+        "Experiment Matrix",
+        "Phase Constants",
+        "Compensation Hypothesis",
+        "Amendment Record",
+        "Budget Overrun",
+        "Model Config Parity"
+      ],
+      "blocked": [
+        "Phase D Gate (no counterfactual_eval.json; Phase D' not run)"
+      ]
+    },
+    "claim_status": "SUPPORTED_CLAIM BLOCKED until Phase C' LCTX curve and Phase D' paired counterfactual complete",
+    "substrate_gates": {
+      "C_success": "PASS (S1/S2 = 1.0 >= 0.95 on DEV)",
+      "C_memory": "PASS (S1/S2 = 0.27 <= 0.50 on DEV)",
+      "C_latency": "FAIL (S1/B1 = 2.55x; substrate overhead 155% > 20% cap) - Phase B exit gate not met"
+    }
+  }
 }

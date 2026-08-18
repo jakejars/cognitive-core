@@ -1,157 +1,462 @@
 {
-  "frozen_at": "2026-08-18T11:34:44.919939+00:00",
   "entries": {
-    "LBX-M01-01": {
-      "content_hash": "90da3815169060481ab045d7ace7b8130c4397aa4d3c351d44c3c8b732d5c089",
-      "partition": "lockbox",
-      "created_at": "2026-08-18T11:34:44.919939+00:00",
-      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
-      "authorised_release_at": "2026-12-31T00:00:00+00:00",
-      "first_exposed_at": null,
-      "first_researcher_exposure_at": null,
-      "first_evaluated_at": null,
-      "evaluation_count": 0,
-      "cell_evaluations": {},
-      "authorised_cells": [
-        "B1",
-        "B2",
-        "S1",
-        "S2"
-      ],
-      "exposure_history": []
-    },
-    "LBX-M01-02": {
-      "content_hash": "f930870cb806fdbccfe240b689962318aae52221715bc36946e7879a1c34e649",
-      "partition": "lockbox",
-      "created_at": "2026-08-18T11:34:44.919939+00:00",
-      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
-      "authorised_release_at": "2026-12-31T00:00:00+00:00",
-      "first_exposed_at": null,
-      "first_researcher_exposure_at": null,
-      "first_evaluated_at": null,
-      "evaluation_count": 0,
-      "cell_evaluations": {},
-      "authorised_cells": [
-        "B1",
-        "B2",
-        "S1",
-        "S2"
-      ],
-      "exposure_history": []
-    },
     "LBX-LCTX01-01": {
-      "content_hash": "ea9c387298ac770ea750693215e1830b3efbee1942f384d6b01f6106363eb1ee",
-      "partition": "lockbox",
-      "created_at": "2026-08-18T11:34:44.919939+00:00",
-      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
-      "authorised_release_at": "2026-12-31T00:00:00+00:00",
-      "first_exposed_at": null,
-      "first_researcher_exposure_at": null,
-      "first_evaluated_at": null,
-      "evaluation_count": 0,
-      "cell_evaluations": {},
       "authorised_cells": [
         "B1",
         "B2",
         "S1",
         "S2"
       ],
-      "exposure_history": []
+      "authorised_release_at": "2026-08-18T11:40:33.988979+00:00",
+      "cell_evaluations": {
+        "B1": 1,
+        "B2": 1,
+        "S1": 1,
+        "S2": 1
+      },
+      "content_hash": "ea9c387298ac770ea750693215e1830b3efbee1942f384d6b01f6106363eb1ee",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "evaluation_count": 4,
+      "exposure_history": [
+        {
+          "timestamp": "2026-08-18T11:40:42.115318+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:42.904022+00:00",
+          "type": "evaluation:B1"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:46.857550+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:48.882521+00:00",
+          "type": "evaluation:B2"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:59.518940+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:00.313960+00:00",
+          "type": "evaluation:S1"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:04.854645+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:06.846191+00:00",
+          "type": "evaluation:S2"
+        }
+      ],
+      "first_evaluated_at": null,
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "partition": "lockbox"
     },
     "LBX-LCTX01-02": {
-      "content_hash": "a77941867020259371c025fa9ff5abc18aa16ff003db6506d40419cac713b641",
-      "partition": "lockbox",
-      "created_at": "2026-08-18T11:34:44.919939+00:00",
-      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
-      "authorised_release_at": "2026-12-31T00:00:00+00:00",
-      "first_exposed_at": null,
-      "first_researcher_exposure_at": null,
-      "first_evaluated_at": null,
-      "evaluation_count": 0,
-      "cell_evaluations": {},
       "authorised_cells": [
         "B1",
         "B2",
         "S1",
         "S2"
       ],
-      "exposure_history": []
+      "authorised_release_at": "2026-08-18T11:40:33.988979+00:00",
+      "cell_evaluations": {
+        "B1": 1,
+        "B2": 1,
+        "S1": 1,
+        "S2": 1
+      },
+      "content_hash": "a77941867020259371c025fa9ff5abc18aa16ff003db6506d40419cac713b641",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "evaluation_count": 4,
+      "exposure_history": [
+        {
+          "timestamp": "2026-08-18T11:40:42.115318+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:43.033162+00:00",
+          "type": "evaluation:B1"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:46.857550+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:49.405726+00:00",
+          "type": "evaluation:B2"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:59.518940+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:00.422156+00:00",
+          "type": "evaluation:S1"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:04.854645+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:07.395621+00:00",
+          "type": "evaluation:S2"
+        }
+      ],
+      "first_evaluated_at": null,
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "partition": "lockbox"
     },
     "LBX-LCTX02-01": {
-      "content_hash": "68a1d43639c726f6732ad33dbca4a271c090147bff2578779fec072d32962ce2",
-      "partition": "lockbox",
-      "created_at": "2026-08-18T11:34:44.919939+00:00",
-      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
-      "authorised_release_at": "2026-12-31T00:00:00+00:00",
-      "first_exposed_at": null,
-      "first_researcher_exposure_at": null,
-      "first_evaluated_at": null,
-      "evaluation_count": 0,
-      "cell_evaluations": {},
       "authorised_cells": [
         "B1",
         "B2",
         "S1",
         "S2"
       ],
-      "exposure_history": []
+      "authorised_release_at": "2026-08-18T11:40:33.988979+00:00",
+      "cell_evaluations": {
+        "B1": 1,
+        "B2": 1,
+        "S1": 1,
+        "S2": 1
+      },
+      "content_hash": "68a1d43639c726f6732ad33dbca4a271c090147bff2578779fec072d32962ce2",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "evaluation_count": 4,
+      "exposure_history": [
+        {
+          "timestamp": "2026-08-18T11:40:42.115318+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:43.576532+00:00",
+          "type": "evaluation:B1"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:46.857550+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:50.827848+00:00",
+          "type": "evaluation:B2"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:59.518940+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:01.488484+00:00",
+          "type": "evaluation:S1"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:04.854645+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:08.795301+00:00",
+          "type": "evaluation:S2"
+        }
+      ],
+      "first_evaluated_at": null,
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "partition": "lockbox"
     },
     "LBX-LCTX02-02": {
-      "content_hash": "a180483491fe22c5b0d09843029fb1ab5769d2dd42b2af87924a6841d98a1e18",
-      "partition": "lockbox",
-      "created_at": "2026-08-18T11:34:44.919939+00:00",
-      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
-      "authorised_release_at": "2026-12-31T00:00:00+00:00",
-      "first_exposed_at": null,
-      "first_researcher_exposure_at": null,
-      "first_evaluated_at": null,
-      "evaluation_count": 0,
-      "cell_evaluations": {},
       "authorised_cells": [
         "B1",
         "B2",
         "S1",
         "S2"
       ],
-      "exposure_history": []
+      "authorised_release_at": "2026-08-18T11:40:33.988979+00:00",
+      "cell_evaluations": {
+        "B1": 1,
+        "B2": 1,
+        "S1": 1,
+        "S2": 1
+      },
+      "content_hash": "a180483491fe22c5b0d09843029fb1ab5769d2dd42b2af87924a6841d98a1e18",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "evaluation_count": 4,
+      "exposure_history": [
+        {
+          "timestamp": "2026-08-18T11:40:42.115318+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:43.877370+00:00",
+          "type": "evaluation:B1"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:46.857550+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:53.384981+00:00",
+          "type": "evaluation:B2"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:59.518940+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:01.659713+00:00",
+          "type": "evaluation:S1"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:04.854645+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:11.563481+00:00",
+          "type": "evaluation:S2"
+        }
+      ],
+      "first_evaluated_at": null,
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "partition": "lockbox"
     },
     "LBX-LCTX03-01": {
-      "content_hash": "3b042ee68f2a2ab99f363658fce96e04fca8c3f1f540ab1e4ec9252cc36a0519",
-      "partition": "lockbox",
-      "created_at": "2026-08-18T11:34:44.919939+00:00",
-      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
-      "authorised_release_at": "2026-12-31T00:00:00+00:00",
-      "first_exposed_at": null,
-      "first_researcher_exposure_at": null,
-      "first_evaluated_at": null,
-      "evaluation_count": 0,
-      "cell_evaluations": {},
       "authorised_cells": [
         "B1",
         "B2",
         "S1",
         "S2"
       ],
-      "exposure_history": []
+      "authorised_release_at": "2026-08-18T11:40:33.988979+00:00",
+      "cell_evaluations": {
+        "B1": 1,
+        "B2": 1,
+        "S1": 1,
+        "S2": 1
+      },
+      "content_hash": "3b042ee68f2a2ab99f363658fce96e04fca8c3f1f540ab1e4ec9252cc36a0519",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "evaluation_count": 4,
+      "exposure_history": [
+        {
+          "timestamp": "2026-08-18T11:40:42.115318+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:43.969818+00:00",
+          "type": "evaluation:B1"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:46.857550+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:53.686033+00:00",
+          "type": "evaluation:B2"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:59.518940+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:01.951130+00:00",
+          "type": "evaluation:S1"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:04.854645+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:11.894087+00:00",
+          "type": "evaluation:S2"
+        }
+      ],
+      "first_evaluated_at": null,
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "partition": "lockbox"
+    },
+    "LBX-M01-01": {
+      "authorised_cells": [
+        "B1",
+        "B2",
+        "S1",
+        "S2"
+      ],
+      "authorised_release_at": "2026-08-18T11:40:33.988979+00:00",
+      "cell_evaluations": {
+        "B1": 1,
+        "B2": 1,
+        "S1": 1,
+        "S2": 1
+      },
+      "content_hash": "90da3815169060481ab045d7ace7b8130c4397aa4d3c351d44c3c8b732d5c089",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "evaluation_count": 4,
+      "exposure_history": [
+        {
+          "timestamp": "2026-08-18T11:40:42.115318+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:42.644662+00:00",
+          "type": "evaluation:B1"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:46.857550+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:47.928742+00:00",
+          "type": "evaluation:B2"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:59.518940+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:00.032308+00:00",
+          "type": "evaluation:S1"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:04.854645+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:05.889925+00:00",
+          "type": "evaluation:S2"
+        }
+      ],
+      "first_evaluated_at": null,
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "partition": "lockbox"
+    },
+    "LBX-M01-02": {
+      "authorised_cells": [
+        "B1",
+        "B2",
+        "S1",
+        "S2"
+      ],
+      "authorised_release_at": "2026-08-18T11:40:33.988979+00:00",
+      "cell_evaluations": {
+        "B1": 1,
+        "B2": 1,
+        "S1": 1,
+        "S2": 1
+      },
+      "content_hash": "f930870cb806fdbccfe240b689962318aae52221715bc36946e7879a1c34e649",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "evaluation_count": 4,
+      "exposure_history": [
+        {
+          "timestamp": "2026-08-18T11:40:42.115318+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:42.739034+00:00",
+          "type": "evaluation:B1"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:46.857550+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:48.223127+00:00",
+          "type": "evaluation:B2"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:59.518940+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:00.119260+00:00",
+          "type": "evaluation:S1"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:04.854645+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:06.173204+00:00",
+          "type": "evaluation:S2"
+        }
+      ],
+      "first_evaluated_at": null,
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "partition": "lockbox"
     },
     "LBX-SA01-01": {
-      "content_hash": "0c551b88865320e54524e5558d686a09a984d7dcaea2fbfece18b9dd008b859e",
-      "partition": "lockbox",
-      "created_at": "2026-08-18T11:34:44.919939+00:00",
-      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
-      "authorised_release_at": "2026-12-31T00:00:00+00:00",
-      "first_exposed_at": null,
-      "first_researcher_exposure_at": null,
-      "first_evaluated_at": null,
-      "evaluation_count": 0,
-      "cell_evaluations": {},
       "authorised_cells": [
         "B1",
         "B2",
         "S1",
         "S2"
       ],
-      "exposure_history": []
+      "authorised_release_at": "2026-08-18T11:40:33.988979+00:00",
+      "cell_evaluations": {
+        "B1": 1,
+        "B2": 1,
+        "S1": 1,
+        "S2": 1
+      },
+      "content_hash": "0c551b88865320e54524e5558d686a09a984d7dcaea2fbfece18b9dd008b859e",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "evaluation_count": 4,
+      "exposure_history": [
+        {
+          "timestamp": "2026-08-18T11:40:42.115318+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:44.062324+00:00",
+          "type": "evaluation:B1"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:46.857550+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:54.198874+00:00",
+          "type": "evaluation:B2"
+        },
+        {
+          "timestamp": "2026-08-18T11:40:59.518940+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:02.044021+00:00",
+          "type": "evaluation:S1"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:04.854645+00:00",
+          "type": "authorised_evaluation"
+        },
+        {
+          "timestamp": "2026-08-18T11:41:12.422620+00:00",
+          "type": "evaluation:S2"
+        }
+      ],
+      "first_evaluated_at": null,
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "partition": "lockbox"
     }
-  }
+  },
+  "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+  "release_authorised_at": "2026-08-18T11:40:33.988979+00:00"
 }

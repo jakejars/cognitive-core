@@ -13,7 +13,8 @@
     "target_entities",
     "memory_records",
     "oracle_record_ids",
-    "null_memory_records"
+    "null_memory_records",
+    "history_filler"
   ],
   "properties": {
     "id": {"type": "string", "pattern": "^CV-"},
@@ -65,14 +66,16 @@
     },
     "retrieve_k": {"type": "integer", "minimum": 1},
     "history_filler": {
+      "description": "Neutral background address space present on every construct task. Content must have zero overlap under the actual substring keyword scorer; near-semantic distractors are a separate experiment.",
       "type": "object",
       "properties": {
         "count": {"type": "integer", "minimum": 1},
         "words_per_record": {"type": "integer", "minimum": 1},
         "seed": {"type": "integer"},
-        "minimum_address_space_words": {"type": "integer", "minimum": 131072}
+        "minimum_address_space_words": {"type": "integer", "minimum": 131072},
+        "lexicon": {"const": "disjoint_v1"}
       },
-      "required": ["count", "words_per_record", "seed", "minimum_address_space_words"]
+      "required": ["count", "words_per_record", "seed", "minimum_address_space_words", "lexicon"]
     }
   },
   "$defs": {

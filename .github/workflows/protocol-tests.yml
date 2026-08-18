@@ -10,6 +10,8 @@ on:
 jobs:
   protocol:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -22,4 +24,4 @@ jobs:
           python -m compileall -q contract harness
       - name: Run protocol tests
         run: |
-          pytest -q contract/tests harness/tests
+          python -m pytest -q contract/tests harness/tests

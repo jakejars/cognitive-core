@@ -14,12 +14,24 @@
     "on_threshold_breach": "BENCHMARK_DEFECT_REVISE_FORMAT",
     "frozen_before_pilot": true
   },
+  "retrieval_interpretation": {
+    "o1_minus_s1_expected": "approximately_zero",
+    "role": "attribution_control",
+    "meaning": "confirms_retrieval_not_bottleneck_if_prediction_holds",
+    "not_evidence_for": [
+      "retrieval_quality",
+      "address_space_scaling"
+    ],
+    "retrieval_difficulty": "neutral_address_space_only",
+    "near_semantic_distractors": "separate_experiment",
+    "frozen_before_pilot": true
+  },
   "pilot": {
     "manifest": "gauntlets/substrate_construct/pilot-v1.json",
     "seed": 41,
     "n_tasks": 15,
     "materialised_taskset_hash": "015e33e83180df4d6275d0601db1f233773c4947a8f3afb1546a78c778725cc4",
-    "purpose": "calibrate/freeze construct thresholds only; format policy is already frozen",
+    "purpose": "calibrate/freeze construct thresholds only; format and retrieval-interpretation policies are already frozen",
     "o1_invalid_rate": null
   },
   "final_dev": {

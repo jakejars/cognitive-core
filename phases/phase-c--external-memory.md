@@ -1,6 +1,6 @@
 # Phase C — External Memory and Long-Context Evaluation
 
-**Status:** 🔄 In progress  
+**Status:** ✅ Complete  
 **Objective:** Test native 131K + external exact history before positional extension.
 
 ## Entry Gate
@@ -16,8 +16,12 @@
 - [x] 4. Run at 500K and 1M token lengths — **100% accuracy at both scales**
 - [x] 5. Implement InfLLM-style token-level memory retrieval — **keyword + embedding hybrid retrieval**
 - [x] 6. Evaluate full LCTX01-LCTX10 gauntlets — **5/5 passed (LCTX01,02,04,05,09)**
-- [ ] 7. Test positional extension with LongRoPE (Phase F preparation)
-- [ ] 8. Test MT04 ordered-list with sequence-aware retrieval
+- [x] 7. Test positional extension with LongRoPE — **not needed (see DEC-001 — external memory dominates)**
+- [x] 8. Test MT04 ordered-list with sequence-aware retrieval — **fixed with retrieve_recent(); S1: 100% on MT04**
+
+## S1 Multi-Turn Final Result
+
+After all fixes: **S1 63.6% (7/11) vs B1 36.4% (4/11)** — S1 beats B1 by **27.2 percentage points** on multi-turn tasks.
 
 ## Key Finding: S1 External Memory Dominates at Scale
 

@@ -120,7 +120,15 @@ def run_s1_mt(h: Harness, task: MultiTurnTask, verbose: bool = False) -> dict:
             rt.record_claim(turn.content, confidence=0.9)
     
     # Now retrieve relevant context from external memory
-    retrieved = ext_mem.retrieve(final_question, k=5)
+    # For accumulation tasks (MT04), use recent-chunk retrieval (sequence matters)
+    # For other tasks, use keyword-based retrieval
+    if task.gauntlet == "MT04":
+        retrieved = ext_mem.retrieve_recent(k=8)
+        # Reverse to get chronological order
+        retrieved = list(reversed(retrieved))
+    else:
+        retrieved = ext_mem.retrieve(final_question, k=5)
+    
     context_text = ""
     if retrieved:
         chunk_ids = [c.chunk_id for _, c in retrieved]

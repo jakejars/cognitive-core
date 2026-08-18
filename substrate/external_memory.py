@@ -292,7 +292,23 @@ class ExternalMemory:
         chunks.sort(key=lambda c: c.importance, reverse=True)
         return chunks[:k]
 
-    def materialise(self, chunk_ids: List[str]) -> str:
+    def retrieve_recent(self, k: int = 5, min_importance: float = 0.0) -> List[Tuple[float, Chunk]]:
+        """
+        Retrieve the most recent chunks by timestamp.
+        Useful for state-tracking and accumulation tasks where the most
+        recent conversation history is more relevant than semantic similarity.
+        Returns list of (timestamp, chunk) sorted by recency (newest first).
+        """
+        scored = []
+        for chunk in self._chunks.values():
+            if chunk.importance < min_importance:
+                continue
+            scored.append((chunk.timestamp, chunk))
+        
+        scored.sort(key=lambda x: x[0], reverse=True)
+        return [(s, c) for s, c in scored[:k]]
+
+    def materialise(self, chunk_ids: List[str], preserve_order: bool = False) -> str:
         """
         Materialise chunks into a text string for the context window.
         From Memory Spec §5: content is serialised at ordinary local positions.

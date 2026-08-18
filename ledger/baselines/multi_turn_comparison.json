@@ -61,8 +61,8 @@
     ]
   },
   "s1": {
-    "pass_rate": 45.5,
-    "mean_score": 0.455,
+    "pass_rate": 63.6,
+    "mean_score": 0.636,
     "results": [
       {
         "id": "MT01-001",
@@ -106,13 +106,13 @@
       },
       {
         "id": "MT04-001",
-        "passed": false,
-        "score": 0.0
+        "passed": true,
+        "score": 1.0
       },
       {
         "id": "MT04-002",
-        "passed": false,
-        "score": 0.0
+        "passed": true,
+        "score": 1.0
       },
       {
         "id": "MT05-001",

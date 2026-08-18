@@ -23,7 +23,11 @@ def test_construct_ledger_hashes_match_materialised_pilot_and_dev_manifests():
 
     actual_pilot = hash_taskset(pilot)
     actual_dev = hash_taskset(dev)
-    assert record["pilot_taskset_hash"] == actual_pilot, actual_pilot
-    assert record["dev_taskset_hash"] == actual_dev, actual_dev
-    assert record["pilot"]["materialised_taskset_hash"] == actual_pilot, actual_pilot
-    assert record["final_dev"]["materialised_taskset_hash"] == actual_dev, actual_dev
+    expected = (
+        record["pilot_taskset_hash"],
+        record["dev_taskset_hash"],
+        record["pilot"]["materialised_taskset_hash"],
+        record["final_dev"]["materialised_taskset_hash"],
+    )
+    actual = (actual_pilot, actual_dev, actual_pilot, actual_dev)
+    assert expected == actual, f"pilot={actual_pilot} dev={actual_dev}"

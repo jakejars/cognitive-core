@@ -14,6 +14,8 @@ from contract.hardening import (
     check_chat_template_parity, check_phase_d_gate,
     check_phase_constants, check_compensation_hypothesis,
     check_amendment_record, check_budget_overrun, check_model_config_parity,
+    paired_exact_improvement, check_construct_validity,
+    check_lockbox_creation_ready,
 )
 from contract.transition import (
     ClaimTransitioner, TransitionRequest, TransitionResult,
@@ -33,6 +35,8 @@ __all__ = [
     "check_chat_template_parity", "check_phase_d_gate",
     "check_phase_constants", "check_compensation_hypothesis",
     "check_amendment_record", "check_budget_overrun", "check_model_config_parity",
+    "paired_exact_improvement", "check_construct_validity",
+    "check_lockbox_creation_ready",
     "ClaimTransitioner", "TransitionRequest", "TransitionResult",
     "request_claim", "request_phase_gate",
     "ReceiptWriter", "ModelAdapter",

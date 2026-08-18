@@ -10,8 +10,8 @@
     "current_wall_clock_days": 2,
     "current_researcher_days": 2,
     "current_experiments": 2,
-    "current_compute_hours": 0.1,
-    "mode": "open"
+    "current_compute_hours": 0.0055,
+    "mode": "closed"
   },
   {
     "phase": "B",

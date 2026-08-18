@@ -1,0 +1,87 @@
+{
+  "run_id": "B1-dev-ac46352f",
+  "cell": "B1",
+  "partition": "dev",
+  "created_at": "2026-08-18T11:35:12.692435+00:00",
+  "model": {
+    "model_id": "MiniCPM5-1B",
+    "revision": "87179e5c1f455ef22e6223592d2d61351b525bfc",
+    "weights_hash": "",
+    "tokenizer_id": "MiniCPM5-1B",
+    "tokenizer_hash": "",
+    "template_adapter_version": "verified_d34af28dc1500c80",
+    "applied_template": "d34af28dc1500c80cde781cced9b8055fdf3b4c8f2291ac65ae9fac4084da918"
+  },
+  "generation": {
+    "thinking_mode": false,
+    "max_total_tokens": 131072,
+    "max_answer_tokens": 256,
+    "temperature": 0.0,
+    "top_p": 0.0,
+    "stop_policy": "explicit_plus_eos",
+    "stop_tokens": [
+      1,
+      130073
+    ],
+    "seed": 0
+  },
+  "tasks": {
+    "source": "/Users/jake/Projects/cognitive core/gauntlets/frozen/dev-v1.json",
+    "partition": "dev",
+    "task_ids": [
+      "DV-M01-01",
+      "DV-M01-02",
+      "DV-M01-03",
+      "DV-M01-04",
+      "DV-LCTX01-01",
+      "DV-LCTX01-02",
+      "DV-LCTX01-03",
+      "DV-LCTX01-04",
+      "DV-LCTX02-01",
+      "DV-LCTX02-02",
+      "DV-LCTX02-03",
+      "DV-LCTX02-04",
+      "DV-LCTX03-01",
+      "DV-LCTX03-02",
+      "DV-LCTX03-03",
+      "DV-LCTX03-04",
+      "DV-SA01-01",
+      "DV-SA01-02",
+      "DV-SA01-03",
+      "DV-SA01-04"
+    ],
+    "content_hash": "1436e9421c2194be8fdb094e39d74ee07832a46f40affee1e14cda4d99ba0604",
+    "n_tasks": 20,
+    "n_turns": 0
+  },
+  "substrate": null,
+  "result": {
+    "result_hash": "e1a72da7dcd5274b793632059245f2aaea478253ab49658bc1375a12b878127e",
+    "completed_at": "2026-08-18T11:35:12Z",
+    "metrics": {
+      "n_passed": 17,
+      "n_total": 20,
+      "pass_rate": 0.85,
+      "mean_score": 0.85,
+      "mean_latency_ms": 165.11731147766113,
+      "total_time_s": 3.3023462295532227,
+      "model_resident_memory_gb": 2.278936284,
+      "successful_tasks_per_gb": 7.459620577966103,
+      "successful_tasks_per_second": 5.147855136407046,
+      "effect_duplication_rate": null,
+      "provenance_error_rate": null
+    },
+    "raw_output_hash": "0ad06ef6bda74ce616bdd516b8297ad45f28683c8be4e34cfbcb74d3bbd8146b"
+  },
+  "protocol": {
+    "contract_version": "2.2",
+    "preregistration_hash": "5173ffdb7d3a9f9266ecba83f646595160aee23cfef6b245b377e4bb020f0442",
+    "amendment_log_hash": "b70fc44a375200b2061e30a43939c2d197504d1c436b2fb314af54482f223a68",
+    "hypothesis": "2x2 factorial substrate/small-executive confirmation",
+    "code_diff_hash": "9b3a66ebf2672478f3300c4400277b7bd97efe0b53b01de197da18a769b535bc"
+  },
+  "receipt_hash": "721a8b1591bc7ae74240e712cf659af2",
+  "budget_consumed": {
+    "compute_hours": 0.0009173183970981174
+  }
+}

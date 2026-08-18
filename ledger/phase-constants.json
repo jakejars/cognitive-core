@@ -1,0 +1,8 @@
+{
+  "C_success": 0.95,
+  "C_memory": 0.5,
+  "C_latency": 0.2,
+  "C_trust": 0.5,
+  "frozen_at": "2026-08-18T11:36:42.893947+00:00",
+  "calibration_basis": "Corrected B1/B2 DEV on frozen dev-v1 taskset (20 tasks, seed 0), calibrated adapters, native chat templates: B1(MiniCPM5-1B) 85% (17/20), mean latency 165ms, peak mem 2.28GB; B2(Qwen3.5-4B) 80% (16/20), mean latency 826ms, peak mem 8.63GB. C_success 0.95 (S1 >= 95% of S2 success; baseline ratio 85/80 = 1.06), C_memory 0.50 (S1 <= 50% of S2 memory; baseline ratio 2.28/8.63 = 0.26), C_latency 0.20 (substrate p95 overhead <= 20% of vanilla), C_trust 0.50 (effect/provenance/state error <= 50% of vanilla baseline)."
+}

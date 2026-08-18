@@ -18,6 +18,14 @@ def _record():
             "o1_invalid_rate_benchmark_defect_threshold": 0.10,
             "on_threshold_breach": "BENCHMARK_DEFECT_REVISE_FORMAT",
         },
+        "retrieval_interpretation": {
+            "o1_minus_s1_expected": "approximately_zero",
+            "role": "attribution_control",
+            "meaning": "confirms_retrieval_not_bottleneck_if_prediction_holds",
+            "not_evidence_for": ["retrieval_quality", "address_space_scaling"],
+            "retrieval_difficulty": "neutral_address_space_only",
+            "near_semantic_distractors": "separate_experiment",
+        },
         "pilot": {},
     }
 
@@ -36,7 +44,23 @@ def test_construct_pilot_requires_format_policy_before_running(tmp_path):
         check_construct_pilot_ready(str(tmp_path))
 
 
-def test_construct_pilot_format_policy_is_accepted_before_results_exist(tmp_path):
+def test_construct_pilot_requires_retrieval_interpretation_before_running(tmp_path):
+    record = _record()
+    record.pop("retrieval_interpretation")
+    _write(tmp_path, record)
+    with pytest.raises(ContractViolation, match="retrieval interpretation"):
+        check_construct_pilot_ready(str(tmp_path))
+
+
+def test_construct_pilot_rejects_retrieval_quality_claim_from_neutral_address_space(tmp_path):
+    record = _record()
+    record["retrieval_interpretation"]["not_evidence_for"] = ["address_space_scaling"]
+    _write(tmp_path, record)
+    with pytest.raises(ContractViolation, match="retrieval interpretation"):
+        check_construct_pilot_ready(str(tmp_path))
+
+
+def test_construct_pilot_policies_are_accepted_before_results_exist(tmp_path):
     record = _record()
     _write(tmp_path, record)
     check_construct_pilot_ready(str(tmp_path))

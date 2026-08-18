@@ -1,9 +1,5 @@
-import json
-from pathlib import Path
-
 import pytest
 
-from contract.schema import ExperimentCell
 from harness.gauntlet_evaluators import evaluate_task
 
 
@@ -38,7 +34,7 @@ def _supersession_task():
 
 def test_typed_fields_reject_packet_parroting():
     task = _supersession_task()
-    output = """operation: pure_call\narguments:\n  deadline: \"2026-06-14 then 2026-08-03\"\n  owner: \"Maya then Daniel\""" 
+    output = 'operation: pure_call\narguments:\n  deadline: "2026-06-14 then 2026-08-03"\n  owner: "Maya then Daniel"'
     result = evaluate_task(output, task, allow_abstention=False)
     assert result["passed"] is False
     assert result["outcome"] == "confident_wrong"
@@ -46,7 +42,7 @@ def test_typed_fields_reject_packet_parroting():
 
 def test_typed_fields_accept_current_state_only():
     task = _supersession_task()
-    output = """operation: pure_call\narguments:\n  deadline: \"2026-08-03\"\n  owner: \"Daniel\"""
+    output = 'operation: pure_call\narguments:\n  deadline: "2026-08-03"\n  owner: "Daniel"'
     result = evaluate_task(output, task, allow_abstention=False)
     assert result["passed"] is True
     assert result["outcome"] == "supported_correct"

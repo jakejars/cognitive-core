@@ -1,0 +1,316 @@
+{
+  "cell": "S2",
+  "partition": "replication",
+  "model_id": "Qwen3.5-4B",
+  "n_passed": 9,
+  "n_total": 12,
+  "pass_rate": 0.75,
+  "mean_score": 0.75,
+  "total_time_s": 8.330825805664062,
+  "mean_latency_ms": 694.2354838053385,
+  "peak_memory_gb": 8.7523655,
+  "taskset_hash": "ce873587f32370db3c16026a530ad1f775b14b7571b2becd2dc0ae37ff3b5618",
+  "adapter_hash": "a27c07d759dc47b082864a55883004fc765dfcb7bfcef820c4037191b58998f3",
+  "results": [
+    {
+      "task_id": "RP-M01-01",
+      "gauntlet": "M01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Exact match: 'A'",
+      "output_text": "A",
+      "prompt_tokens": 89,
+      "output_tokens": 1,
+      "time_seconds": 0.3110520839691162,
+      "tokens_per_sec": 3.2148956767616066,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.604274912,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-M01-02",
+      "gauntlet": "M01",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected 'B', got 'A'",
+      "output_text": "A",
+      "prompt_tokens": 89,
+      "output_tokens": 1,
+      "time_seconds": 0.2546541690826416,
+      "tokens_per_sec": 3.9268942802011426,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.604392096,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-M01-03",
+      "gauntlet": "M01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Exact match: 'A'",
+      "output_text": "A",
+      "prompt_tokens": 109,
+      "output_tokens": 1,
+      "time_seconds": 0.2602832317352295,
+      "tokens_per_sec": 3.8419685868094646,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.632400784,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX01-01",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains '2012'",
+      "output_text": "The Curiosity rover landed on Mars in 2012.",
+      "prompt_tokens": 146,
+      "output_tokens": 14,
+      "time_seconds": 0.7368869781494141,
+      "tokens_per_sec": 18.998842991036415,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.681143628,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX01-02",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Atlantic'",
+      "output_text": "The Panama Canal connects the Atlantic and Pacific oceans.",
+      "prompt_tokens": 168,
+      "output_tokens": 10,
+      "time_seconds": 0.6121490001678467,
+      "tokens_per_sec": 16.335892074083393,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.71115938,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX01-03",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Sputnik'",
+      "output_text": "The first satellite was Sputnik 1.",
+      "prompt_tokens": 186,
+      "output_tokens": 8,
+      "time_seconds": 0.5517230033874512,
+      "tokens_per_sec": 14.500029817284863,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.735850284,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX02-01",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the facts provided:\n\n1.  **Mercury** has no moons.\n2.  **Venus** has no moons.\n3.  Saturn has more than 100 moons.\n\nTherefore, the two planets that have no moons are **Mercury** and **Venus**.",
+      "prompt_tokens": 182,
+      "output_tokens": 64,
+      "time_seconds": 2.4848361015319824,
+      "tokens_per_sec": 25.756225917895314,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.735850284,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX02-02",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the facts provided:\n\n*   The **cheetah** is the fastest land animal.\n*   The **peregrine falcon** is the fastest bird.",
+      "prompt_tokens": 198,
+      "output_tokens": 37,
+      "time_seconds": 1.5422239303588867,
+      "tokens_per_sec": 23.991327894509997,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.7523655,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX03-01",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'Yara', got 'Omar'",
+      "output_text": "Omar",
+      "prompt_tokens": 166,
+      "output_tokens": 2,
+      "time_seconds": 0.31241321563720703,
+      "tokens_per_sec": 6.401777837473175,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.7523655,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX03-02",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'schema', got 'The API'",
+      "output_text": "The API",
+      "prompt_tokens": 189,
+      "output_tokens": 2,
+      "time_seconds": 0.3067162036895752,
+      "tokens_per_sec": 6.520685819469071,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.7523655,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-SA01-01",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'dev'",
+      "output_text": "The default branch is dev.",
+      "prompt_tokens": 73,
+      "output_tokens": 6,
+      "time_seconds": 0.4236159324645996,
+      "tokens_per_sec": 14.1637732204546,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.7523655,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-SA01-02",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains '9am'",
+      "output_text": "Reminders are set to 9am.",
+      "prompt_tokens": 78,
+      "output_tokens": 9,
+      "time_seconds": 0.5342719554901123,
+      "tokens_per_sec": 16.845353583539463,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.7523655,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    }
+  ]
+}

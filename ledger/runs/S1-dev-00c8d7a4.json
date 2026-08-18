@@ -1,0 +1,516 @@
+{
+  "cell": "S1",
+  "partition": "dev",
+  "model_id": "MiniCPM5-1B",
+  "n_passed": 14,
+  "n_total": 20,
+  "pass_rate": 0.7,
+  "mean_score": 0.725,
+  "total_time_s": 8.41527271270752,
+  "mean_latency_ms": 420.763635635376,
+  "peak_memory_gb": 2.388119552,
+  "taskset_hash": "1436e9421c2194be8fdb094e39d74ee07832a46f40affee1e14cda4d99ba0604",
+  "adapter_hash": "d34af28dc1500c80cde781cced9b8055fdf3b4c8f2291ac65ae9fac4084da918",
+  "results": [
+    {
+      "task_id": "DV-M01-01",
+      "gauntlet": "M01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Exact match: 'A'",
+      "output_text": "A",
+      "prompt_tokens": 91,
+      "output_tokens": 1,
+      "time_seconds": 0.1201469898223877,
+      "tokens_per_sec": 8.323138194958457,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.275626612,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-M01-02",
+      "gauntlet": "M01",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected 'B', got 'A'",
+      "output_text": "A",
+      "prompt_tokens": 91,
+      "output_tokens": 1,
+      "time_seconds": 0.13710689544677734,
+      "tokens_per_sec": 7.293579194112696,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.275626612,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-M01-03",
+      "gauntlet": "M01",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected 'A', got 'B'",
+      "output_text": "B",
+      "prompt_tokens": 103,
+      "output_tokens": 1,
+      "time_seconds": 0.13599491119384766,
+      "tokens_per_sec": 7.353216316856123,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.275626612,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-M01-04",
+      "gauntlet": "M01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Exact match: 'B'",
+      "output_text": "B",
+      "prompt_tokens": 103,
+      "output_tokens": 1,
+      "time_seconds": 0.1289660930633545,
+      "tokens_per_sec": 7.75397607422868,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.275626612,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX01-01",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Mariana Trench'",
+      "output_text": "The Mariana Trench",
+      "prompt_tokens": 145,
+      "output_tokens": 5,
+      "time_seconds": 0.1677570343017578,
+      "tokens_per_sec": 29.805009493706866,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.31380151,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX01-02",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Queensland'",
+      "output_text": "The Great Barrier Reef lies off the coast of Queensland.",
+      "prompt_tokens": 180,
+      "output_tokens": 11,
+      "time_seconds": 0.21497797966003418,
+      "tokens_per_sec": 51.16803133695545,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.329694084,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX01-03",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Z3'",
+      "output_text": "The first programmable electronic computer was the Z3.",
+      "prompt_tokens": 188,
+      "output_tokens": 10,
+      "time_seconds": 0.16398096084594727,
+      "tokens_per_sec": 60.98268938303484,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.361937876,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX01-04",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Kilimanjaro'",
+      "output_text": "Mount Kilimanjaro is the highest peak in Africa.",
+      "prompt_tokens": 186,
+      "output_tokens": 12,
+      "time_seconds": 0.18661093711853027,
+      "tokens_per_sec": 64.30491259136608,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.366607316,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX02-01",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Here are the answers to your questions based on the provided context:\n\n1.  **Jupiter**: The context states that \"Jupiter has the shortest day of all the planets.\" Therefore, Jupiter is the correct answer.\n2.  **Neptune**: The context states that \"Neptune was discovered by mathematical prediction, not direct observation.\" Therefore, Neptune is the correct answer.\n3.  **Mars**: The context states that \"Mars has two moons.\" Therefore, Mars is the correct answer.\n\n**Final Answer:**\n*   The planet with the shortest day is **Jupiter**.\n*   The planet discovered by mathematical prediction is **Neptune**.\n*   The planet with two moons is **Mars**.",
+      "prompt_tokens": 196,
+      "output_tokens": 143,
+      "time_seconds": 1.1750819683074951,
+      "tokens_per_sec": 121.69363827952111,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX02-02",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the context packet and the provided facts, here is the analysis to determine the largest river by volume and the one traditionally the longest:\n\n1.  **Largest by Volume**: The text states, \"The Amazon flows through Brazil.\" It also mentions it is the largest river by water volume. Therefore, the Amazon is the largest by volume.\n2.  **Longest by Tradition**: The text states, \"The Nile is traditionally the longest river.\" Therefore, the Nile is traditionally the longest.\n\n**Answer:**\n*   **Largest by volume:** The Amazon\n*   **Longest by tradition:** The Nile",
+      "prompt_tokens": 195,
+      "output_tokens": 127,
+      "time_seconds": 0.9925577640533447,
+      "tokens_per_sec": 127.95225084066183,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX02-03",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the context packet and the provided facts, the largest moon of Saturn is Titan, and the icy moon of Jupiter is Europa.\n\nHere is the evidence:\n\n- The Great Barrier Reef lies off the coast of Queensland. (This fact is not relevant to the question)\n- Koalas sleep up to 20 hours a day. (This fact is not relevant to the question)\n- Uluru is in central Australia. (This fact is not relevant to the question)\n- The deepest point of the ocean is the Mariana Trench. (This fact is not relevant to the question)\n- Sharks have no bones. (This fact is not relevant to the question)\n- The Amazon flows through Brazil. (This fact is not relevant to the question)\n- Titan is the largest moon of Saturn. (This fact is relevant to the question)\n- Europa is an icy moon of Jupiter. (This fact is relevant to the question)\n- Phobos orbits Mars. (This fact is not relevant to the question)\n\nTherefore, the answer is Saturn's largest moon is Titan, and Jupiter's icy moon is Europa.",
+      "prompt_tokens": 191,
+      "output_tokens": 228,
+      "time_seconds": 1.7505600452423096,
+      "tokens_per_sec": 130.24403282804312,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX02-04",
+      "gauntlet": "LCTX02",
+      "passed": false,
+      "score": 0.5,
+      "evaluation_details": "Found 1/2: missing=['Baikal']",
+      "output_text": "Based on the context packet and the provided facts, the largest ri is determined by analyzing the context packet and the provided facts. The context packet states that the deepest point of the ocean is the Mariana Trench, and the highest large navigable lake is Lake Titicaca. Therefore, the largest ri is the Mariana Trench and Lake Titicaca.\n\nThe evidence (1 item) is: \"The deepest point of the ocean is the Mariana Trench. The highest large navigable lake is Lake Titicaca.\"\n\nThe evidence (2 item) is: \"Lake Baikal is the deepest lake on Earth. Lake Titicaca is the highest large navigable lake.\"\n\nThe evidence (3 item) is: \"The Caspian Sea is the largest enclosed body of water.\"\n\nThe evidence (4 item) is: \"Sharks have no bones. The Amazon flows through Brazil.\"\n\nThe evidence (5 item) is: \"Lake Baikal is the deepest lake on Earth. Lake Titicaca is the highest large navigable lake.\"\n\nThe evidence (6 item) is: \"The deepest point of the ocean is the Mariana Trench. Sharks have no bones. The Amazon flows through Brazil.\"\n\nThe evidence (7 item",
+      "prompt_tokens": 202,
+      "output_tokens": 256,
+      "time_seconds": 1.991671085357666,
+      "tokens_per_sec": 128.53527968651878,
+      "finish_reason": "length",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX03-01",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'Leo', got 'Zara'",
+      "output_text": "Zara",
+      "prompt_tokens": 191,
+      "output_tokens": 2,
+      "time_seconds": 0.09081602096557617,
+      "tokens_per_sec": 22.022546008243417,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX03-02",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'Tom', got 'Zara'",
+      "output_text": "Zara",
+      "prompt_tokens": 194,
+      "output_tokens": 2,
+      "time_seconds": 0.37580275535583496,
+      "tokens_per_sec": 5.321940756145514,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX03-03",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'data', got 'At Acme Corp: Ava reports to Leo. Leo reports to Zara.'",
+      "output_text": "At Acme Corp: Ava reports to Leo. Leo reports to Zara.",
+      "prompt_tokens": 209,
+      "output_tokens": 16,
+      "time_seconds": 0.2164618968963623,
+      "tokens_per_sec": 73.91601122141364,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX03-04",
+      "gauntlet": "LCTX03",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Maya'",
+      "output_text": "Maya\nEthan\nAva\nLeo\nZara\nSam\nTom\nAna",
+      "prompt_tokens": 191,
+      "output_tokens": 18,
+      "time_seconds": 0.203110933303833,
+      "tokens_per_sec": 88.62152178225608,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-SA01-01",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Aurora'",
+      "output_text": "The current project name is Aurora.",
+      "prompt_tokens": 89,
+      "output_tokens": 7,
+      "time_seconds": 0.11969995498657227,
+      "tokens_per_sec": 58.47955415509762,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-SA01-02",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Nadia'",
+      "output_text": "Nadia",
+      "prompt_tokens": 90,
+      "output_tokens": 2,
+      "time_seconds": 0.08188009262084961,
+      "tokens_per_sec": 24.425961622455812,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-SA01-03",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains '14pt'",
+      "output_text": "14pt",
+      "prompt_tokens": 80,
+      "output_tokens": 2,
+      "time_seconds": 0.08123326301574707,
+      "tokens_per_sec": 24.62045627309468,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-SA01-04",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'eu-west'",
+      "output_text": "eu-west",
+      "prompt_tokens": 76,
+      "output_tokens": 2,
+      "time_seconds": 0.08085513114929199,
+      "tokens_per_sec": 24.73559774836273,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.388119552,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    }
+  ]
+}

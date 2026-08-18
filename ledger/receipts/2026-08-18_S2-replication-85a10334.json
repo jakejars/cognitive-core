@@ -1,0 +1,87 @@
+{
+  "run_id": "S2-replication-85a10334",
+  "cell": "S2",
+  "partition": "replication",
+  "created_at": "2026-08-18T11:38:52.673914+00:00",
+  "model": {
+    "model_id": "Qwen3.5-4B",
+    "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+    "weights_hash": "76eef3317d2e81bba118981981c38e0ccbd267fdcda9689e531a20ebdc3703a2",
+    "tokenizer_id": "Qwen3.5-4B",
+    "tokenizer_hash": "ddc09ec2ebf37c621b31a4ca7050715c3d0a5468036242e0a6d52d6267b067de",
+    "template_adapter_version": "verified_a27c07d759dc47b0",
+    "applied_template": "a27c07d759dc47b082864a55883004fc765dfcb7bfcef820c4037191b58998f3"
+  },
+  "generation": {
+    "thinking_mode": false,
+    "max_total_tokens": 131072,
+    "max_answer_tokens": 256,
+    "temperature": 0.0,
+    "top_p": 0.0,
+    "stop_policy": "explicit_plus_eos",
+    "stop_tokens": [
+      248046,
+      248044
+    ],
+    "seed": 1
+  },
+  "tasks": {
+    "source": "/Users/jake/Projects/cognitive core/gauntlets/frozen/rep-v1.json",
+    "partition": "replication",
+    "task_ids": [
+      "RP-M01-01",
+      "RP-M01-02",
+      "RP-M01-03",
+      "RP-LCTX01-01",
+      "RP-LCTX01-02",
+      "RP-LCTX01-03",
+      "RP-LCTX02-01",
+      "RP-LCTX02-02",
+      "RP-LCTX03-01",
+      "RP-LCTX03-02",
+      "RP-SA01-01",
+      "RP-SA01-02"
+    ],
+    "content_hash": "ce873587f32370db3c16026a530ad1f775b14b7571b2becd2dc0ae37ff3b5618",
+    "n_tasks": 12,
+    "n_turns": 0
+  },
+  "substrate": {
+    "revision": "76060b48902b28b8e67c3ff60cf5264b520d40a2b6ecbfaca8e3023e9adb10cb",
+    "config_hash": "f80449f45c1166af5f3e0c697868609942eb776c009691cdfa8425871a110661",
+    "modules": [
+      "runtime",
+      "context_compiler",
+      "provenance"
+    ]
+  },
+  "result": {
+    "result_hash": "76de71a9e4f13d98c4d2d13370888dd3ced6c763b36db89dd8c7b231ef8fc350",
+    "completed_at": "2026-08-18T11:38:52Z",
+    "metrics": {
+      "n_passed": 9,
+      "n_total": 12,
+      "pass_rate": 0.75,
+      "mean_score": 0.75,
+      "mean_latency_ms": 694.2354838053385,
+      "total_time_s": 8.330825805664062,
+      "model_resident_memory_gb": 8.7523655,
+      "successful_tasks_per_gb": 1.0282934367857466,
+      "successful_tasks_per_second": 1.0803250734016034,
+      "effect_duplication_rate": null,
+      "provenance_error_rate": null
+    },
+    "raw_output_hash": "490fe2e561d6d609c7774157d9cd627dea0d4de5bce381d4cf2caf73523538bf"
+  },
+  "protocol": {
+    "contract_version": "2.2",
+    "preregistration_hash": "5173ffdb7d3a9f9266ecba83f646595160aee23cfef6b245b377e4bb020f0442",
+    "amendment_log_hash": "b70fc44a375200b2061e30a43939c2d197504d1c436b2fb314af54482f223a68",
+    "hypothesis": "2x2 factorial substrate/small-executive confirmation",
+    "code_diff_hash": "76060b48902b28b8e67c3ff60cf5264b520d40a2b6ecbfaca8e3023e9adb10cb"
+  },
+  "receipt_hash": "55532c105423d9ea41fdf9ca90ca0440",
+  "budget_consumed": {
+    "compute_hours": 0.0023141182793511286
+  }
+}

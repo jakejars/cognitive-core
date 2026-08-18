@@ -1,0 +1,316 @@
+{
+  "cell": "S1",
+  "partition": "replication",
+  "model_id": "MiniCPM5-1B",
+  "n_passed": 10,
+  "n_total": 12,
+  "pass_rate": 0.8333333333333334,
+  "mean_score": 0.8333333333333334,
+  "total_time_s": 4.134531259536743,
+  "mean_latency_ms": 344.54427162806195,
+  "peak_memory_gb": 2.391642124,
+  "taskset_hash": "ce873587f32370db3c16026a530ad1f775b14b7571b2becd2dc0ae37ff3b5618",
+  "adapter_hash": "d34af28dc1500c80cde781cced9b8055fdf3b4c8f2291ac65ae9fac4084da918",
+  "results": [
+    {
+      "task_id": "RP-M01-01",
+      "gauntlet": "M01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Exact match: 'A'",
+      "output_text": "A",
+      "prompt_tokens": 89,
+      "output_tokens": 1,
+      "time_seconds": 0.11078405380249023,
+      "tokens_per_sec": 9.02656985077325,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.272431724,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-M01-02",
+      "gauntlet": "M01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Exact match: 'B'",
+      "output_text": "B",
+      "prompt_tokens": 89,
+      "output_tokens": 1,
+      "time_seconds": 0.09252095222473145,
+      "tokens_per_sec": 10.808362602786675,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.272431724,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-M01-03",
+      "gauntlet": "M01",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected 'A', got 'B'",
+      "output_text": "B",
+      "prompt_tokens": 102,
+      "output_tokens": 1,
+      "time_seconds": 0.08864307403564453,
+      "tokens_per_sec": 11.281197215677414,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.285276916,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX01-01",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains '2012'",
+      "output_text": "2012",
+      "prompt_tokens": 145,
+      "output_tokens": 2,
+      "time_seconds": 0.09466290473937988,
+      "tokens_per_sec": 21.12760014607916,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.32617143,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX01-02",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Atlantic'",
+      "output_text": "The Panama Canal connects the Atlantic and Pacific oceans.",
+      "prompt_tokens": 153,
+      "output_tokens": 10,
+      "time_seconds": 0.14786791801452637,
+      "tokens_per_sec": 67.62792182559582,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.335018824,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX01-03",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Sputnik'",
+      "output_text": "Sputnik 1",
+      "prompt_tokens": 189,
+      "output_tokens": 5,
+      "time_seconds": 0.10968780517578125,
+      "tokens_per_sec": 45.58391875912916,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.375471064,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX02-01",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the context packet and the provided facts, here is the analysis to determine which planets have no moons:\n\n1.  **Mercury**: The context mentions \"Mercury has no moons\" and the fact \"Mercury has no moons.\" This is a direct statement.\n2.  **Venus**: The context mentions \"Venus rotates backwards\" and the fact \"Venus has no moons.\" This is also a direct statement.\n3.  **Saturn**: The fact \"Saturn has more than 100 moons\" contradicts the statement that it has no moons.\n4.  **Earth**: The context mentions \"The Moon has no atmosphere\" and \"The first animal in space was a dog named Laika.\" It does not explicitly state Earth has no moons, though it is a common assumption in astronomy that Earth has one. However, the provided facts list Mercury and Venus as having no moons.\n5.  **Mars**: The context mentions \"The Curiosity rover landed on Mars.\" It does not explicitly state Mars has no moons, though it is a common assumption.\n\nThe question asks specifically for the two planets listed in the context that have no moons. Both **Mercury** and **Venus** are explicitly stated to have no moons in",
+      "prompt_tokens": 176,
+      "output_tokens": 256,
+      "time_seconds": 1.9861252307891846,
+      "tokens_per_sec": 128.89418855943876,
+      "finish_reason": "length",
+      "peak_memory_gb": 2.375471064,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX02-02",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the context packet and the provided facts, here is the analysis to determine which animals are the fastest land animals and the fastest birds:\n\n1.  **Fastest Land Animal**: The text states, \"The cheetah is the fastest land animal.\" Therefore, the cheetah is the fastest land animal.\n2.  **Fastest Bird**: The text states, \"The peregrine falcon is the fastest bird.\" Therefore, the peregrine falcon is the fastest bird.\n\n**Answer:**\nThe fastest land animal is the **cheetah**, and the fastest bird is the **peregrine falcon**.",
+      "prompt_tokens": 202,
+      "output_tokens": 127,
+      "time_seconds": 1.0215859413146973,
+      "tokens_per_sec": 124.31651108722329,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.391642124,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX03-01",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'Yara', got 'Tess'",
+      "output_text": "Tess",
+      "prompt_tokens": 168,
+      "output_tokens": 2,
+      "time_seconds": 0.09849905967712402,
+      "tokens_per_sec": 20.30476236581263,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.391642124,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-LCTX03-02",
+      "gauntlet": "LCTX03",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'schema'",
+      "output_text": "The second-level dependency of the web app is the database schema.",
+      "prompt_tokens": 191,
+      "output_tokens": 13,
+      "time_seconds": 0.17408418655395508,
+      "tokens_per_sec": 74.6765128834423,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.391642124,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-SA01-01",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'dev'",
+      "output_text": "dev",
+      "prompt_tokens": 71,
+      "output_tokens": 1,
+      "time_seconds": 0.07591509819030762,
+      "tokens_per_sec": 13.172610242736589,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.391642124,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "RP-SA01-02",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains '9am'",
+      "output_text": "Reminders are set to 9am.",
+      "prompt_tokens": 77,
+      "output_tokens": 9,
+      "time_seconds": 0.1341550350189209,
+      "tokens_per_sec": 67.08656144535061,
+      "finish_reason": "stop",
+      "peak_memory_gb": 2.391642124,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          1,
+          130073
+        ],
+        "seed": 1,
+        "max_kv_size": 131072
+      }
+    }
+  ]
+}

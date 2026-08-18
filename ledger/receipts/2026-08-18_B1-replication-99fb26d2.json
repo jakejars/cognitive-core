@@ -1,0 +1,79 @@
+{
+  "run_id": "B1-replication-99fb26d2",
+  "cell": "B1",
+  "partition": "replication",
+  "created_at": "2026-08-18T11:38:15.710258+00:00",
+  "model": {
+    "model_id": "MiniCPM5-1B",
+    "revision": "87179e5c1f455ef22e6223592d2d61351b525bfc",
+    "weights_hash": "1c624d8ecd3be9c345ac22dfc763b8e75a011856df91fd2af83edc8b587c7438",
+    "tokenizer_id": "MiniCPM5-1B",
+    "tokenizer_hash": "a5997ba5892cc9e0f40c0ec23a1b4a6ceea47cc6614edc2aab201a875682e238",
+    "template_adapter_version": "verified_d34af28dc1500c80",
+    "applied_template": "d34af28dc1500c80cde781cced9b8055fdf3b4c8f2291ac65ae9fac4084da918"
+  },
+  "generation": {
+    "thinking_mode": false,
+    "max_total_tokens": 131072,
+    "max_answer_tokens": 256,
+    "temperature": 0.0,
+    "top_p": 0.0,
+    "stop_policy": "explicit_plus_eos",
+    "stop_tokens": [
+      1,
+      130073
+    ],
+    "seed": 1
+  },
+  "tasks": {
+    "source": "/Users/jake/Projects/cognitive core/gauntlets/frozen/rep-v1.json",
+    "partition": "replication",
+    "task_ids": [
+      "RP-M01-01",
+      "RP-M01-02",
+      "RP-M01-03",
+      "RP-LCTX01-01",
+      "RP-LCTX01-02",
+      "RP-LCTX01-03",
+      "RP-LCTX02-01",
+      "RP-LCTX02-02",
+      "RP-LCTX03-01",
+      "RP-LCTX03-02",
+      "RP-SA01-01",
+      "RP-SA01-02"
+    ],
+    "content_hash": "ce873587f32370db3c16026a530ad1f775b14b7571b2becd2dc0ae37ff3b5618",
+    "n_tasks": 12,
+    "n_turns": 0
+  },
+  "substrate": null,
+  "result": {
+    "result_hash": "ef5e8bf1673e92a0aa19bdfa865424e4e26cca8ed6411b9f37fb369850ef2f1c",
+    "completed_at": "2026-08-18T11:38:15Z",
+    "metrics": {
+      "n_passed": 10,
+      "n_total": 12,
+      "pass_rate": 0.8333333333333334,
+      "mean_score": 0.8333333333333334,
+      "mean_latency_ms": 142.7007516225179,
+      "total_time_s": 1.7124090194702148,
+      "model_resident_memory_gb": 2.272431724,
+      "successful_tasks_per_gb": 4.400572256753092,
+      "successful_tasks_per_second": 5.839726307382917,
+      "effect_duplication_rate": null,
+      "provenance_error_rate": null
+    },
+    "raw_output_hash": "59ebc2b615c34b00da2e5cbe19395e0ebb229656a1b1dcc1f2c1246f78802fd6"
+  },
+  "protocol": {
+    "contract_version": "2.2",
+    "preregistration_hash": "5173ffdb7d3a9f9266ecba83f646595160aee23cfef6b245b377e4bb020f0442",
+    "amendment_log_hash": "b70fc44a375200b2061e30a43939c2d197504d1c436b2fb314af54482f223a68",
+    "hypothesis": "2x2 factorial substrate/small-executive confirmation",
+    "code_diff_hash": "76060b48902b28b8e67c3ff60cf5264b520d40a2b6ecbfaca8e3023e9adb10cb"
+  },
+  "receipt_hash": "7826a2b755d61485ea2a0631de98d9c7",
+  "budget_consumed": {
+    "compute_hours": 0.0004756691720750597
+  }
+}

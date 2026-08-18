@@ -1,0 +1,95 @@
+{
+  "run_id": "S1-dev-00c8d7a4",
+  "cell": "S1",
+  "partition": "dev",
+  "created_at": "2026-08-18T11:37:15.663865+00:00",
+  "model": {
+    "model_id": "MiniCPM5-1B",
+    "revision": "87179e5c1f455ef22e6223592d2d61351b525bfc",
+    "weights_hash": "",
+    "tokenizer_id": "MiniCPM5-1B",
+    "tokenizer_hash": "",
+    "template_adapter_version": "verified_d34af28dc1500c80",
+    "applied_template": "d34af28dc1500c80cde781cced9b8055fdf3b4c8f2291ac65ae9fac4084da918"
+  },
+  "generation": {
+    "thinking_mode": false,
+    "max_total_tokens": 131072,
+    "max_answer_tokens": 256,
+    "temperature": 0.0,
+    "top_p": 0.0,
+    "stop_policy": "explicit_plus_eos",
+    "stop_tokens": [
+      1,
+      130073
+    ],
+    "seed": 0
+  },
+  "tasks": {
+    "source": "/Users/jake/Projects/cognitive core/gauntlets/frozen/dev-v1.json",
+    "partition": "dev",
+    "task_ids": [
+      "DV-M01-01",
+      "DV-M01-02",
+      "DV-M01-03",
+      "DV-M01-04",
+      "DV-LCTX01-01",
+      "DV-LCTX01-02",
+      "DV-LCTX01-03",
+      "DV-LCTX01-04",
+      "DV-LCTX02-01",
+      "DV-LCTX02-02",
+      "DV-LCTX02-03",
+      "DV-LCTX02-04",
+      "DV-LCTX03-01",
+      "DV-LCTX03-02",
+      "DV-LCTX03-03",
+      "DV-LCTX03-04",
+      "DV-SA01-01",
+      "DV-SA01-02",
+      "DV-SA01-03",
+      "DV-SA01-04"
+    ],
+    "content_hash": "1436e9421c2194be8fdb094e39d74ee07832a46f40affee1e14cda4d99ba0604",
+    "n_tasks": 20,
+    "n_turns": 0
+  },
+  "substrate": {
+    "revision": "76060b48902b28b8e67c3ff60cf5264b520d40a2b6ecbfaca8e3023e9adb10cb",
+    "config_hash": "f80449f45c1166af5f3e0c697868609942eb776c009691cdfa8425871a110661",
+    "modules": [
+      "runtime",
+      "context_compiler",
+      "provenance"
+    ]
+  },
+  "result": {
+    "result_hash": "1a0bb885745e1ba18fb72d742db8315f33cce424aeddb7a9516bc3abc5ca23f8",
+    "completed_at": "2026-08-18T11:37:15Z",
+    "metrics": {
+      "n_passed": 14,
+      "n_total": 20,
+      "pass_rate": 0.7,
+      "mean_score": 0.725,
+      "mean_latency_ms": 420.763635635376,
+      "total_time_s": 8.41527271270752,
+      "model_resident_memory_gb": 2.388119552,
+      "successful_tasks_per_gb": 5.862353075362284,
+      "successful_tasks_per_second": 1.6636418661583288,
+      "effect_duplication_rate": null,
+      "provenance_error_rate": null
+    },
+    "raw_output_hash": "e04ef0a9bb2408d13de2cb7a04cbf2564444910c781a8020de01f7aacc6057e4"
+  },
+  "protocol": {
+    "contract_version": "2.2",
+    "preregistration_hash": "5173ffdb7d3a9f9266ecba83f646595160aee23cfef6b245b377e4bb020f0442",
+    "amendment_log_hash": "b70fc44a375200b2061e30a43939c2d197504d1c436b2fb314af54482f223a68",
+    "hypothesis": "2x2 factorial substrate/small-executive confirmation",
+    "code_diff_hash": "76060b48902b28b8e67c3ff60cf5264b520d40a2b6ecbfaca8e3023e9adb10cb"
+  },
+  "receipt_hash": "6cae1fe20fbc022ad2291f40b8365156",
+  "budget_consumed": {
+    "compute_hours": 0.0023375757535298667
+  }
+}

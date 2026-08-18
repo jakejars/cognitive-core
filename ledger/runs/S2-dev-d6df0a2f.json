@@ -1,0 +1,516 @@
+{
+  "cell": "S2",
+  "partition": "dev",
+  "model_id": "Qwen3.5-4B",
+  "n_passed": 14,
+  "n_total": 20,
+  "pass_rate": 0.7,
+  "mean_score": 0.7,
+  "total_time_s": 15.322591066360474,
+  "mean_latency_ms": 766.1295533180237,
+  "peak_memory_gb": 8.762687504,
+  "taskset_hash": "1436e9421c2194be8fdb094e39d74ee07832a46f40affee1e14cda4d99ba0604",
+  "adapter_hash": "a27c07d759dc47b082864a55883004fc765dfcb7bfcef820c4037191b58998f3",
+  "results": [
+    {
+      "task_id": "DV-M01-01",
+      "gauntlet": "M01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Exact match: 'A'",
+      "output_text": "A",
+      "prompt_tokens": 91,
+      "output_tokens": 1,
+      "time_seconds": 0.35808587074279785,
+      "tokens_per_sec": 2.7926262433243827,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.607489116,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-M01-02",
+      "gauntlet": "M01",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected 'B', got 'A'",
+      "output_text": "A",
+      "prompt_tokens": 91,
+      "output_tokens": 1,
+      "time_seconds": 0.25604677200317383,
+      "tokens_per_sec": 3.905536446238051,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.607603384,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-M01-03",
+      "gauntlet": "M01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Exact match: 'A'",
+      "output_text": "A",
+      "prompt_tokens": 107,
+      "output_tokens": 1,
+      "time_seconds": 0.25121307373046875,
+      "tokens_per_sec": 3.980684544598658,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.629959544,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-M01-04",
+      "gauntlet": "M01",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected 'B', got 'A'",
+      "output_text": "A",
+      "prompt_tokens": 107,
+      "output_tokens": 1,
+      "time_seconds": 0.24806809425354004,
+      "tokens_per_sec": 4.031151216802358,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.629959544,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX01-01",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Mariana Trench'",
+      "output_text": "The deepest point of the ocean is the Mariana Trench.",
+      "prompt_tokens": 141,
+      "output_tokens": 12,
+      "time_seconds": 0.6207578182220459,
+      "tokens_per_sec": 19.331210413700475,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.673754384,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX01-02",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Queensland'",
+      "output_text": "The Great Barrier Reef lies off the coast of Queensland.",
+      "prompt_tokens": 184,
+      "output_tokens": 11,
+      "time_seconds": 0.6168849468231201,
+      "tokens_per_sec": 17.831526051411394,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.733163284,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX01-03",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Z3'",
+      "output_text": "The first programmable electronic computer was the Z3.",
+      "prompt_tokens": 193,
+      "output_tokens": 11,
+      "time_seconds": 1.0328171253204346,
+      "tokens_per_sec": 10.65048180391782,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.744877952,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX01-04",
+      "gauntlet": "LCTX01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Kilimanjaro'",
+      "output_text": "Mount Kilimanjaro",
+      "prompt_tokens": 180,
+      "output_tokens": 5,
+      "time_seconds": 0.39844322204589844,
+      "tokens_per_sec": 12.548839391284783,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.744877952,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX02-01",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the facts provided:\n\n1.  **Jupiter** has the shortest day of all the planets.\n2.  **Neptune** was discovered by mathematical prediction, not direct observation.\n\n**Answer:**\n*   The planet with the shortest day is **Jupiter**.\n*   The planet discovered by mathematical prediction is **Neptune**.",
+      "prompt_tokens": 197,
+      "output_tokens": 73,
+      "time_seconds": 2.700356960296631,
+      "tokens_per_sec": 27.033463010009253,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.750841776,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX02-02",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the facts provided:\n\n*   **Largest by volume:** The **Amazon** (Fact 1).\n*   **Traditionally the longest:** The **Nile** (Fact 2).\n\n*(Note: While Fact 3 states the Yangtze is the longest in Asia, Fact 2 explicitly identifies the Nile as the traditionally longest river overall.)*",
+      "prompt_tokens": 192,
+      "output_tokens": 77,
+      "time_seconds": 2.7265288829803467,
+      "tokens_per_sec": 28.24103587556055,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.750841776,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX02-03",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the facts provided:\n\n*   **Saturn's largest moon** is **Titan**.\n*   **Jupiter's icy moon** is **Europa**.",
+      "prompt_tokens": 189,
+      "output_tokens": 34,
+      "time_seconds": 1.3494479656219482,
+      "tokens_per_sec": 25.195487981879843,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.750841776,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX02-04",
+      "gauntlet": "LCTX02",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "All 2 items found",
+      "output_text": "Based on the facts provided:\n\n*   **Lake Baikal** is the deepest lake on Earth.\n*   **Lake Titicaca** is the highest large navigable lake.",
+      "prompt_tokens": 200,
+      "output_tokens": 38,
+      "time_seconds": 1.4887709617614746,
+      "tokens_per_sec": 25.52440971513805,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.755150804,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX03-01",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'Leo', got 'Zara'",
+      "output_text": "Zara",
+      "prompt_tokens": 178,
+      "output_tokens": 2,
+      "time_seconds": 0.30817604064941406,
+      "tokens_per_sec": 6.489797181459774,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.755150804,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX03-02",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'Tom', got 'Ana'",
+      "output_text": "Ana",
+      "prompt_tokens": 188,
+      "output_tokens": 1,
+      "time_seconds": 0.2766549587249756,
+      "tokens_per_sec": 3.6146107939243777,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.755150804,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX03-03",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'data', got 'The analysis'",
+      "output_text": "The analysis",
+      "prompt_tokens": 205,
+      "output_tokens": 2,
+      "time_seconds": 0.30794787406921387,
+      "tokens_per_sec": 6.494605640792582,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.762687504,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-LCTX03-04",
+      "gauntlet": "LCTX03",
+      "passed": false,
+      "score": 0.0,
+      "evaluation_details": "Expected to contain 'Maya', got 'Elena'",
+      "output_text": "Elena",
+      "prompt_tokens": 184,
+      "output_tokens": 2,
+      "time_seconds": 0.2977278232574463,
+      "tokens_per_sec": 6.717544830435928,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.762687504,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-SA01-01",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Aurora'",
+      "output_text": "The current project name is Aurora.",
+      "prompt_tokens": 93,
+      "output_tokens": 7,
+      "time_seconds": 0.4637010097503662,
+      "tokens_per_sec": 15.09593434736848,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.762687504,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-SA01-02",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'Nadia'",
+      "output_text": "Nadia owns the 'Deploy beta' task.",
+      "prompt_tokens": 94,
+      "output_tokens": 10,
+      "time_seconds": 0.535513162612915,
+      "tokens_per_sec": 18.673677321407503,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.762687504,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-SA01-03",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains '14pt'",
+      "output_text": "The current font size is 14pt.",
+      "prompt_tokens": 84,
+      "output_tokens": 10,
+      "time_seconds": 0.5499703884124756,
+      "tokens_per_sec": 18.18279712997937,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.762687504,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    },
+    {
+      "task_id": "DV-SA01-04",
+      "gauntlet": "SA01",
+      "passed": true,
+      "score": 1.0,
+      "evaluation_details": "Contains 'eu-west'",
+      "output_text": "The server is in the eu-west region.",
+      "prompt_tokens": 80,
+      "output_tokens": 9,
+      "time_seconds": 0.5354781150817871,
+      "tokens_per_sec": 16.807409577561113,
+      "finish_reason": "stop",
+      "peak_memory_gb": 8.762687504,
+      "executed_generation_config": {
+        "max_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_tokens": [
+          248044,
+          248046
+        ],
+        "seed": 0,
+        "max_kv_size": 131072
+      }
+    }
+  ]
+}

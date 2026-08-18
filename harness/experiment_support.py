@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-from contract.evidence import hash_task
+from contract.evidence import hash_task, hash_taskset
 from contract.schema import ExperimentCell, Partition
 
 
@@ -60,6 +60,16 @@ def _materialize_generator_spec(data: dict, manifest_path: Path) -> list[dict]:
             raise ValueError(
                 f"generated family counts differ from frozen manifest: {actual_counts} != {expected_counts}"
             )
+
+    expected_taskset_hash = str(data.get("materialised_taskset_hash", ""))
+    if not expected_taskset_hash:
+        raise ValueError("construct generator manifest requires materialised_taskset_hash")
+    actual_taskset_hash = hash_taskset(tasks)
+    if actual_taskset_hash != expected_taskset_hash:
+        raise ValueError(
+            "materialised taskset hash mismatch: "
+            f"expected {expected_taskset_hash}, got {actual_taskset_hash}"
+        )
     return tasks
 
 

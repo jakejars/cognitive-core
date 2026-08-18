@@ -1,8 +1,8 @@
 """Pre-pilot construct guards.
 
 This gate is intentionally separate from the final construct-validity gate. It
-freezes how typed-output failures and O1/S1 retrieval observations are
-interpreted before any pilot results exist.
+freezes typed-output failure handling, O1/S1 interpretation, and pilot
+predictions before any pilot results exist.
 """
 
 from __future__ import annotations
@@ -28,6 +28,15 @@ EXPECTED_RETRIEVAL_INTERPRETATION = {
     "near_semantic_distractors": "separate_experiment",
 }
 EXPECTED_RETRIEVAL_NONCLAIMS = {"retrieval_quality", "address_space_scaling"}
+
+EXPECTED_PILOT_PREDICTIONS = {
+    "s1_full_oracle_recovery": "15/15",
+    "o1_minus_s1": "approximately_zero",
+    "b1_supported_correct": "near_zero_on_substrate_required_families",
+    "b2_supported_correct": "near_zero_on_substrate_required_families",
+    "o1_invalid_rate_max": 0.10,
+    "frozen_before_pilot": True,
+}
 
 
 def _record(project_root: str) -> dict:
@@ -62,8 +71,20 @@ def _check_retrieval_interpretation(data: dict) -> None:
         )
 
 
+def _check_pilot_predictions(data: dict) -> None:
+    predictions = data.get("pilot_predictions")
+    if not isinstance(predictions, dict):
+        raise ContractViolation("construct pilot predictions must be frozen before pilot")
+
+    for key, expected in EXPECTED_PILOT_PREDICTIONS.items():
+        if predictions.get(key) != expected:
+            raise ContractViolation(
+                f"construct pilot predictions {key} must be {expected!r}"
+            )
+
+
 def check_construct_pilot_ready(project_root: str = None) -> None:
-    """Validate pre-pilot interpretation rules and typed-output policy.
+    """Validate pre-pilot interpretation rules, predictions, and typed-output policy.
 
     If pilot O1 invalid-rate later exceeds the pre-registered threshold, the
     result is BENCHMARK_DEFECT_REVISE_FORMAT, not construct invalidation.
@@ -95,6 +116,7 @@ def check_construct_pilot_ready(project_root: str = None) -> None:
         raise ContractViolation("construct pilot O1 invalid-rate threshold must be in [0,1]")
 
     _check_retrieval_interpretation(data)
+    _check_pilot_predictions(data)
 
     pilot = data.get("pilot") or {}
     invalid_rate = pilot.get("o1_invalid_rate")
@@ -109,5 +131,5 @@ def check_construct_pilot_ready(project_root: str = None) -> None:
         "  [Contract] Construct pilot policy frozen: "
         f"normalization={policy['string_value_normalization']}, "
         f"O1 invalid defect threshold={threshold:.1%}, "
-        "O1-S1 expected≈0 as attribution control only"
+        "O1-S1 expected≈0 as attribution control only, pilot predictions frozen"
     )

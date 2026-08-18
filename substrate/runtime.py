@@ -28,6 +28,9 @@ from .skill_registry import SkillRegistry, SkillEntry
 from .trace_capture import TraceCapture, TraceNode, NodeType
 from .skill_miner import SkillMiner
 from .skill_verifier import SkillVerifier, build_default_pipeline, Verdict
+from .failure_guards import FailureAnalyzer
+from .resonance import ResonanceTracker, HysteresisController
+from .shadow_explorer import ShadowExplorer, CounterfactualEvaluator
 
 
 class SubstrateRuntime:
@@ -48,6 +51,11 @@ class SubstrateRuntime:
         self.tracer = TraceCapture()
         self.skill_miner = SkillMiner(min_frequency=2, min_pattern_length=2)
         self.skill_verifier = build_default_pipeline(self.skills)
+        self.failure_analyzer = FailureAnalyzer()
+        self.resonance = ResonanceTracker()
+        self.hysteresis = HysteresisController("normal")
+        self.shadow_explorer = ShadowExplorer()
+        self.counterfactual = CounterfactualEvaluator(self.skills, self.skill_verifier)
 
         # Track model context
         self._session_state: Dict[str, Any] = {}

@@ -161,3 +161,6 @@ Embedding-based hybrid retrieval also implemented (all-MiniLM-L6-v2) for semanti
 | 004 | 2026-08-18 | B→C | Multi-turn: S1 vs B1 | S1 beats B1 45.5%→36.4% → Phase C ready |
 | 005 | 2026-08-18 | C | Long-context: B1 vs S1 at 1K-100K | S1 100% at ALL lengths; B1 collapses to 20% at 100K → external memory validated |
 | 006 | 2026-08-18 | C | 1M token scaling + LCTX gauntlet suite | 1M: 100% accuracy; LCTX: 5/5 passed → million-token target achieved |
+| 007 | 2026-08-18 | D | Procedural learning pipeline | Pipeline built, 3 skills promoted from 10 traces |
+| 008 | 2026-08-18 | D | Counterfactual skill evaluation | Skills accurate but trivial for single-turn tasks |
+| 009 | 2026-08-18 | G | 4-bit MLX quantisation | **580MB (3.4× reduction), quality preserved** |

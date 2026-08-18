@@ -4,6 +4,7 @@
 
 | Date | ID | Title | Type | Phase |
 |---|---|---|---|---|
+| 2026-08-18 | — | Phase D: procedural learning pipeline built; 3 skills promoted | Checkpoint | D |
 | 2026-08-18 | DEC-001 | External memory beats native attention for long-context retrieval | Decision | C |
 | 2026-08-18 | — | 1M token scaling: 100% accuracy; LCTX suite: 5/5 passed | Checkpoint | C |
 | 2026-08-18 | — | External memory validated: 100% at all lengths, B1 collapses at 100K | Checkpoint | C |

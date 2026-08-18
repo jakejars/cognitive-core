@@ -1,6 +1,6 @@
 # Phase D — Procedural Learning
 
-**Status:** 🔄 In progress  
+**Status:** ✅ Complete  
 **Objective:** Mine, validate, promote, quarantine, and retire procedures from execution traces.
 
 ## Entry Gate
@@ -16,11 +16,11 @@
 - [x] 4. Interface inference (typed inputs/outputs from traces) — via `SkillPattern.input_keys`/`output_keys`
 - [x] 5. Runtime attachment of effects/permissions — via `SkillPattern.effects`
 - [x] 6. Replay validator — `substrate/skill_verifier.py` (verification gates)
-- [ ] 7. Failure-derived guards
-- [ ] 8. Held-out counterfactual promotion
-- [ ] 9. Resonance + quality separation
-- [ ] 10. Hysteresis for lifecycle
-- [ ] 11. Shadow exploration / counterfactual retrieval replay
+- [x] 7. Failure-derived guards — `substrate/failure_guards.py` (analyzes failed traces)
+- [x] 8. Held-out counterfactual promotion — `substrate/shadow_explorer.py` (A/B evaluation)
+- [x] 9. Resonance + quality separation — `substrate/resonance.py` (Kalman estimates)
+- [x] 10. Hysteresis for lifecycle — `substrate/resonance.py` (HysteresisController)
+- [x] 11. Shadow exploration / counterfactual retrieval replay — `substrate/shadow_explorer.py`
 
 ## Results
 
@@ -28,6 +28,11 @@
 - 10 gauntlet tasks traced → **3 skills promoted**
 - Patterns found: `gauntlet_task → generate → evaluate` (freq=10 across all traces)
 - Skills registered in `SkillRegistry` with metadata (inputs, outputs, effects, duration)
+
+### EXP-008: Counterfactual Evaluation
+- Skills promoted from 10 traces, evaluated against held-out tasks
+- Skills are accurate but trivial for single-turn tasks (no performance delta)
+- Real value expected on complex multi-turn tasks where patterns are non-trivial
 
 ## Gate
 

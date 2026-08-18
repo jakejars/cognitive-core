@@ -4,6 +4,7 @@
 
 | Date | ID | Title | Type | Phase |
 |---|---|---|---|---|
+| 2026-08-18 | DEC-001 | External memory beats native attention for long-context retrieval | Decision | C |
 | 2026-08-18 | — | Multi-turn: S1 beats B1 45.5%→36.4% | Checkpoint | B→C |
 | 2026-08-18 | — | Phase B Substrate Complete | Checkpoint | B |
 | 2026-08-18 | — | Phase A Gauntlet Evaluation | Checkpoint | A |

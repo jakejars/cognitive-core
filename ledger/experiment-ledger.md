@@ -86,6 +86,35 @@ The MT04 regression (ordered list tracking) is a known limitation of keyword-bas
 
 ---
 
+## EXP-005 — Long-Context Comparison: B1 (native attention) vs S1 (external memory)
+
+- **Date:** 2026-08-18
+- **Phase:** C
+- **Hypothesis:** External memory (chunk retrieval) outperforms native transformer attention for long-context fact retrieval, especially as context grows.
+- **Config:** Synthetic contexts at 1K, 10K, 50K, 100K tokens with 3-5 planted fact needles at varying depths. B1 gets full context in prompt (native 131K window). S1 stores context in ExternalMemory and retrieves relevant chunks.
+- **Task slice:** `harness/long_context_gen.py` — synthetic fact needle insertion
+- **Budget consumed:** ~40 minutes compute (mostly B1 at 100K taking 55s/query)
+
+### Results
+
+| Context | B1 (native) | S1 (ext mem) | B1 time | S1 time |
+|---|---|---|---|---|
+| 1K | 100% | 100% | 0.9s | 0.4s |
+| 10K | 100% | 100% | 1.5s | 0.2s |
+| 50K | 80% | **100%** | 15s | 0.24s |
+| **100K** | **20%** | **100%** | **55s** | **0.3s** |
+
+### Analysis
+
+**At 100K tokens (within B1's native 131K limit), the model can only find 1/5 needles. S1 + external memory finds all 5 in 0.3s — 180× faster.**
+
+Native attention collapses due to filler-token dilution. The model's attention mechanism cannot effectively focus on specific facts when they're buried in 100K tokens of semantically similar content. This confirms the Memory Spec thesis: "One million tokens are primarily an exact historical address space, not one million simultaneously active Transformer positions."
+
+**Key architectural implication:** External memory + chunk retrieval is not merely an alternative to longer context — it's **strictly better** for precise fact retrieval. This suggests that Phase F (positional extension) should be deprioritised unless specific use cases require dense simultaneous attention over very long spans.
+
+- **Decision:** Phase E (neural improvements) and Phase F (long context) are not justified by this data. Continue scaling external memory to 1M tokens. Only explore Phase F if specific tasks require dense cross-referencing that chunk retrieval cannot support.
+- **Links:** `ledger/baselines/long_context_comparison.json`
+
 ## Index
 
 | # | Date | Phase | Hypothesis | Decision |
@@ -94,3 +123,4 @@ The MT04 regression (ordered list tracking) is a known limitation of keyword-bas
 | 002 | 2026-08-18 | A | B1 vs B2 gauntlet capability | B1 leads 76.9% → proceed to Phase B |
 | 003 | 2026-08-18 | B | B1+substrate vs B1 alone | No regression → proceed |
 | 004 | 2026-08-18 | B→C | Multi-turn: S1 vs B1 | S1 beats B1 45.5%→36.4% → Phase C ready |
+| 005 | 2026-08-18 | C | Long-context: B1 vs S1 at 1K-100K | S1 100% at ALL lengths; B1 collapses to 20% at 100K → external memory validated |

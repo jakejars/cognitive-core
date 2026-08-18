@@ -38,5 +38,13 @@
     "affected_metrics": "Phase G work item 3 (Cactus) not needed; deployment path stays on MLX.",
     "invalidated_evidence": false,
     "new_evaluation_source": "Deployment decisions re-confirmed against the fresh confirmation matrix once available."
+  },
+  {
+    "date": "2026-08-18",
+    "reason": "Completed B1/B2/S1/S2 DEV+replication+lockbox campaign is retained as protocol/harness evidence but reclassified as construct-invalid for the headline stateful/effectful/long-lived Cognitive Core thesis. The taskset did not require multi-session state, forced external memory, meaningful effects, supersession cognition, or tool use; the substrate path also wrote the current prompt into memory before retrieving it. The lockbox is therefore consumed and non-diagnostic, not reusable.",
+    "observed_results": "DEV B1=17/20 (85%), B2=16/20 (80%), S1=14/20 (70%), S2=14/20 (70%). Replication B1=S1=10/12 and B2=S2=9/12. Lockbox B1=7/8, B2=6/8, S1=6/8, S2=6/8. S1/B1 DEV latency ratio approximately 2.55x, violating frozen C_latency=0.20. Because the old S1 treatment injected redundant current-turn context, B1->S1 (-15pp) and B2->S2 (-10pp) are retained only as initial null/context-injection tax observations, not universal constants.",
+    "affected_metrics": "Headline thesis remains untested. Old receipts remain valid measurements. Permanent protocol additions: every substrate DEV probe includes S0 (same-schema length-matched off-topic null); O1 supplies perfect recall of the full relevant set rather than answer selection; construct DEV includes bare B2 size control; evaluator distinguishes supported-correct/correct-abstention/confident-wrong using deterministic typed intent fields; pilot and final DEV samples must be distinct; S1-vs-S0 uses the same one-sided exact paired statistic as Phase D; replication is blocked until construct validity passes; a new lockbox may not be created until construct-valid DEV plus independent replication demonstrate the preregistered directional separation.",
+    "invalidated_evidence": false,
+    "new_evaluation_source": "gauntlets/substrate_construct/pilot-v1.json for calibration, followed by distinct gauntlets/substrate_construct/dev-v1.json. Replication is generated only after construct-valid DEV; no new lockbox exists until check_lockbox_creation_ready passes."
   }
 ]

@@ -3,21 +3,30 @@
   "status": "PENDING_PILOT",
   "generator": {
     "path": "gauntlets/substrate_construct/generator.py",
-    "git_blob_sha": "bd07cb2fdd8d58f83ce8cb0af7de39d9f84fa701",
-    "sha256": "cb7f568e64e1dd0d72e06aabe20eff17ec250194d16bcbff10f7c8bfb74a2236"
+    "git_blob_sha": "6377b9e74b0582f9bd3b82fc009dac28d12006a4",
+    "sha256": "5b13ac2472d6ebbfdcc98bfedb2320899bbff197cd33c892bfd809267a90d97f"
+  },
+  "format_policy": {
+    "string_value_normalization": "casefold_collapse_whitespace",
+    "argument_key_policy": "exact",
+    "unexpected_keys": "reject",
+    "o1_invalid_rate_benchmark_defect_threshold": 0.10,
+    "on_threshold_breach": "BENCHMARK_DEFECT_REVISE_FORMAT",
+    "frozen_before_pilot": true
   },
   "pilot": {
     "manifest": "gauntlets/substrate_construct/pilot-v1.json",
     "seed": 41,
     "n_tasks": 15,
-    "materialised_taskset_hash": "a26324b8cc1c7076f9745880f2c28094983a38d96f5a246c177b4b18b8302b04",
-    "purpose": "calibrate/freeze thresholds only"
+    "materialised_taskset_hash": "015e33e83180df4d6275d0601db1f233773c4947a8f3afb1546a78c778725cc4",
+    "purpose": "calibrate/freeze construct thresholds only; format policy is already frozen",
+    "o1_invalid_rate": null
   },
   "final_dev": {
     "manifest": "gauntlets/substrate_construct/dev-v1.json",
     "seed": 42,
     "n_tasks": 50,
-    "materialised_taskset_hash": "893c8486fb7dd6151f2c1c0c949978c0e6e9a97af4303f2a4939e9450b02d1b1",
+    "materialised_taskset_hash": "40865fab459c78c5db34921daa3cd887a423857dafcf8c46c8f95d22469746e7",
     "family_counts": {
       "supersession": 25,
       "provenance": 7,
@@ -29,8 +38,8 @@
   },
   "arms": ["B1", "B2", "S0", "O1", "S1"],
   "criteria": null,
-  "pilot_taskset_hash": "a26324b8cc1c7076f9745880f2c28094983a38d96f5a246c177b4b18b8302b04",
-  "dev_taskset_hash": "893c8486fb7dd6151f2c1c0c949978c0e6e9a97af4303f2a4939e9450b02d1b1",
+  "pilot_taskset_hash": "015e33e83180df4d6275d0601db1f233773c4947a8f3afb1546a78c778725cc4",
+  "dev_taskset_hash": "40865fab459c78c5db34921daa3cd887a423857dafcf8c46c8f95d22469746e7",
   "benchmark_frozen": false,
   "oracle_frozen": false,
   "evaluator_frozen": false,

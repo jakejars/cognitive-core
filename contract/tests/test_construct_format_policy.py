@@ -1,0 +1,57 @@
+import json
+
+import pytest
+
+from contract.hardening import ContractViolation, check_construct_pilot_ready
+
+
+def _record():
+    return {
+        "protocol_version": "2.2",
+        "status": "PENDING_PILOT",
+        "pilot_taskset_hash": "pilot",
+        "dev_taskset_hash": "dev",
+        "format_policy": {
+            "string_value_normalization": "casefold_collapse_whitespace",
+            "argument_key_policy": "exact",
+            "unexpected_keys": "reject",
+            "o1_invalid_rate_benchmark_defect_threshold": 0.10,
+            "on_threshold_breach": "BENCHMARK_DEFECT_REVISE_FORMAT",
+        },
+        "pilot": {},
+    }
+
+
+def _write(tmp_path, record):
+    ledger = tmp_path / "ledger"
+    ledger.mkdir()
+    (ledger / "construct-validity.json").write_text(json.dumps(record))
+
+
+def test_construct_pilot_requires_format_policy_before_running(tmp_path):
+    record = _record()
+    record.pop("format_policy")
+    _write(tmp_path, record)
+    with pytest.raises(ContractViolation, match="format policy"):
+        check_construct_pilot_ready(str(tmp_path))
+
+
+def test_construct_pilot_format_policy_is_accepted_before_results_exist(tmp_path):
+    record = _record()
+    _write(tmp_path, record)
+    check_construct_pilot_ready(str(tmp_path))
+
+
+def test_o1_invalid_rate_above_preregistered_threshold_is_benchmark_defect(tmp_path):
+    record = _record()
+    record["pilot"]["o1_invalid_rate"] = 0.20
+    _write(tmp_path, record)
+    with pytest.raises(ContractViolation, match="BENCHMARK_DEFECT"):
+        check_construct_pilot_ready(str(tmp_path))
+
+
+def test_o1_invalid_rate_at_or_below_threshold_does_not_kill_construct(tmp_path):
+    record = _record()
+    record["pilot"]["o1_invalid_rate"] = 0.10
+    _write(tmp_path, record)
+    check_construct_pilot_ready(str(tmp_path))

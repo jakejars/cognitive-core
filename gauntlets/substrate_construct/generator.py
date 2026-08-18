@@ -15,6 +15,7 @@ Family weights for the 50-task DEV set:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import random
 from pathlib import Path
@@ -89,6 +90,19 @@ def _record(record_id: str, entity_id: str, content: str, *, provenance=None) ->
     }
 
 
+def _address_space_spec(task_id: str) -> dict:
+    """Deterministic background address-space spec without perturbing task RNG."""
+    digest = hashlib.sha256(task_id.encode("utf-8")).digest()
+    filler_seed = int.from_bytes(digest[:8], "big") % 1_000_000
+    return {
+        "count": 600,
+        "words_per_record": 256,
+        "seed": filler_seed,
+        "minimum_address_space_words": 153600,
+        "lexicon": "disjoint_v1",
+    }
+
+
 def _make_null_supersession(rng: random.Random, target: str, suffix: str) -> list[dict]:
     project = _other_project(rng, target)
     old_owner, new_owner, docs_owner = rng.sample(PEOPLE, 3)
@@ -137,10 +151,7 @@ def _supersession(rng: random.Random, task_id: str, index: int) -> dict:
         "family": "supersession",
         "prompt": prompt,
         "evaluator": "intent_fields",
-        "expected": {
-            "operation": "pure_call",
-            "arguments": {"deadline": new_date, "owner": new_owner},
-        },
+        "expected": {"operation": "pure_call", "arguments": {"deadline": new_date, "owner": new_owner}},
         "abstention_operations": ["retrieve", "ask_user"],
         "target_entities": [entity],
         "memory_records": records,
@@ -251,6 +262,7 @@ def _long_history(rng: random.Random, task_id: str, index: int) -> dict:
             "words_per_record": 256,
             "seed": rng.randrange(1_000_000),
             "minimum_address_space_words": 153600,
+            "lexicon": "disjoint_v1",
         },
         "difficulty": "long_history",
     }
@@ -386,7 +398,9 @@ def generate_taskset(*, seed: int, n_tasks: int, split: str) -> list[dict]:
                 "retrieval_sanity": "SAN",
             }[family]
             task_id = f"CV-{prefix}-{family_code}-{local_index + 1:03d}"
-            tasks.append(BUILDERS[family](rng, task_id, serial))
+            task = BUILDERS[family](rng, task_id, serial)
+            task.setdefault("history_filler", _address_space_spec(task_id))
+            tasks.append(task)
             serial += 1
 
     rng.shuffle(tasks)

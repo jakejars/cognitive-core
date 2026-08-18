@@ -26,12 +26,20 @@
     "near_semantic_distractors": "separate_experiment",
     "frozen_before_pilot": true
   },
+  "pilot_predictions": {
+    "s1_full_oracle_recovery": "15/15",
+    "o1_minus_s1": "approximately_zero",
+    "b1_supported_correct": "near_zero_on_substrate_required_families",
+    "b2_supported_correct": "near_zero_on_substrate_required_families",
+    "o1_invalid_rate_max": 0.10,
+    "frozen_before_pilot": true
+  },
   "pilot": {
     "manifest": "gauntlets/substrate_construct/pilot-v1.json",
     "seed": 41,
     "n_tasks": 15,
     "materialised_taskset_hash": "015e33e83180df4d6275d0601db1f233773c4947a8f3afb1546a78c778725cc4",
-    "purpose": "calibrate/freeze construct thresholds only; format and retrieval-interpretation policies are already frozen",
+    "purpose": "calibrate/freeze construct thresholds only; format, retrieval-interpretation, and pilot-prediction policies are already frozen",
     "o1_invalid_rate": null
   },
   "final_dev": {

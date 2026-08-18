@@ -1,0 +1,29 @@
+{
+  "recorded_at": "2026-08-18",
+  "classification": "engineering observation from construct-invalid campaign",
+  "universal_constant": false,
+  "source": "ledger/confirmation-record.json",
+  "observations": {
+    "MiniCPM5-1B": {
+      "bare_cell": "B1",
+      "bare_success": 0.85,
+      "redundant_substrate_cell": "historical S1",
+      "redundant_substrate_success": 0.70,
+      "success_delta_percentage_points": -15.0,
+      "bare_mean_latency_ms": 165.1,
+      "redundant_substrate_mean_latency_ms": 420.8,
+      "latency_ratio": 2.55
+    },
+    "Qwen3.5-4B": {
+      "bare_cell": "B2",
+      "bare_success": 0.80,
+      "redundant_substrate_cell": "historical S2",
+      "redundant_substrate_success": 0.70,
+      "success_delta_percentage_points": -10.0,
+      "bare_mean_latency_ms": 825.9,
+      "redundant_substrate_mean_latency_ms": 766.1
+    }
+  },
+  "interpretation": "The historical substrate treatment retrieved information seeded from the same current prompt, so it could not add task information. These values are retained as initial estimates of redundant context/compiler/retrieval tax on the old taskset. They are not the preregistered S0 result for the new construct gauntlet.",
+  "future_control": "Every construct-valid substrate DEV probe uses explicit S0: same substrate/context path and approximately matched injected load, but off-topic same-schema records from different entities."
+}

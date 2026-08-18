@@ -1,0 +1,122 @@
+{
+  "model": "S1-MiniCPM5-1B-Substrate",
+  "total_tasks": 13,
+  "passed": 9,
+  "pass_rate": 69.2,
+  "mean_score": 0.731,
+  "mean_time": 0.257,
+  "by_gauntlet": {
+    "M01": {
+      "passed": 2,
+      "total": 4,
+      "pass_rate": 50.0
+    },
+    "LCTX01": {
+      "passed": 3,
+      "total": 3,
+      "pass_rate": 100.0
+    },
+    "LCTX02": {
+      "passed": 2,
+      "total": 2,
+      "pass_rate": 100.0
+    },
+    "LCTX03": {
+      "passed": 1,
+      "total": 2,
+      "pass_rate": 50.0
+    },
+    "SA01": {
+      "passed": 1,
+      "total": 2,
+      "pass_rate": 50.0
+    }
+  },
+  "substrate_stats": {
+    "events": 9,
+    "provenance_nodes": 9,
+    "skills": 0,
+    "memory_entries": 16,
+    "registered_operations": 11
+  },
+  "tasks": [
+    {
+      "id": "M01-001",
+      "passed": true,
+      "score": 1.0,
+      "time": 0.908
+    },
+    {
+      "id": "M01-002",
+      "passed": false,
+      "score": 0.0,
+      "time": 0.097
+    },
+    {
+      "id": "M01-003",
+      "passed": true,
+      "score": 1.0,
+      "time": 0.096
+    },
+    {
+      "id": "M01-004",
+      "passed": false,
+      "score": 0.0,
+      "time": 0.096
+    },
+    {
+      "id": "LCTX01-001",
+      "passed": true,
+      "score": 1.0,
+      "time": 0.121
+    },
+    {
+      "id": "LCTX01-002",
+      "passed": true,
+      "score": 1.0,
+      "time": 0.158
+    },
+    {
+      "id": "LCTX01-003",
+      "passed": true,
+      "score": 1.0,
+      "time": 0.298
+    },
+    {
+      "id": "LCTX02-001",
+      "passed": true,
+      "score": 1.0,
+      "time": 0.168
+    },
+    {
+      "id": "LCTX02-002",
+      "passed": true,
+      "score": 1.0,
+      "time": 0.209
+    },
+    {
+      "id": "LCTX03-001",
+      "passed": true,
+      "score": 1.0,
+      "time": 0.145
+    },
+    {
+      "id": "LCTX03-002",
+      "passed": false,
+      "score": 0.0,
+      "time": 0.185
+    },
+    {
+      "id": "SA01-001",
+      "passed": false,
+      "score": 0.5,
+      "time": 0.432
+    },
+    {
+      "id": "SA01-002",
+      "passed": true,
+      "score": 1.0,
+      "time": 0.432
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cognitive Core construct-valid substrate task",
+  "type": "object",
+  "required": [
+    "id",
+    "gauntlet",
+    "family",
+    "prompt",
+    "evaluator",
+    "expected",
+    "abstention_operations",
+    "target_entities",
+    "memory_records",
+    "oracle_record_ids",
+    "null_memory_records",
+    "history_filler"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^CV-"},
+    "gauntlet": {"const": "SUBSTRATE_CONSTRUCT"},
+    "family": {
+      "enum": [
+        "supersession",
+        "provenance",
+        "long_history",
+        "effect_interpretation",
+        "retrieval_sanity"
+      ]
+    },
+    "prompt": {"type": "string"},
+    "evaluator": {"const": "intent_fields"},
+    "expected": {
+      "type": "object",
+      "required": ["operation", "arguments"],
+      "properties": {
+        "operation": {"type": "string"},
+        "arguments": {"type": "object"}
+      }
+    },
+    "abstention_operations": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "target_entities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string"}
+    },
+    "memory_records": {
+      "type": "array",
+      "minItems": 2,
+      "items": {"$ref": "#/$defs/record"}
+    },
+    "oracle_record_ids": {
+      "description": "Perfect-recall relevant set: includes current, superseded and near-miss records; never only the answer record.",
+      "type": "array",
+      "minItems": 2,
+      "items": {"type": "string"}
+    },
+    "null_memory_records": {
+      "description": "Same-schema, approximately length-matched, off-topic records whose entity IDs cannot overlap target_entities.",
+      "type": "array",
+      "minItems": 2,
+      "items": {"$ref": "#/$defs/record"}
+    },
+    "retrieve_k": {"type": "integer", "minimum": 1},
+    "history_filler": {
+      "description": "Neutral background address space present on every construct task. Generated content must score zero relevance under the actual substring keyword scorer (`query_word in content`); near-semantic distractors are a separate experiment.",
+      "type": "object",
+      "properties": {
+        "count": {"type": "integer", "minimum": 1},
+        "words_per_record": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer"},
+        "minimum_address_space_words": {"type": "integer", "minimum": 131072},
+        "lexicon": {"const": "disjoint_v1"}
+      },
+      "required": ["count", "words_per_record", "seed", "minimum_address_space_words", "lexicon"]
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "required": ["id", "entity_id", "content", "entry_type"],
+      "properties": {
+        "id": {"type": "string"},
+        "entity_id": {"type": "string"},
+        "content": {"type": "string"},
+        "entry_type": {"type": "string"},
+        "provenance": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

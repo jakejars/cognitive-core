@@ -1,0 +1,74 @@
+{
+  "protocol_version": "2.2",
+  "status": "PENDING_PILOT",
+  "generator": {
+    "path": "gauntlets/substrate_construct/generator.py",
+    "git_blob_sha": "6377b9e74b0582f9bd3b82fc009dac28d12006a4",
+    "sha256": "5b13ac2472d6ebbfdcc98bfedb2320899bbff197cd33c892bfd809267a90d97f"
+  },
+  "format_policy": {
+    "string_value_normalization": "casefold_collapse_whitespace",
+    "argument_key_policy": "exact",
+    "unexpected_keys": "reject",
+    "o1_invalid_rate_benchmark_defect_threshold": 0.10,
+    "on_threshold_breach": "BENCHMARK_DEFECT_REVISE_FORMAT",
+    "frozen_before_pilot": true
+  },
+  "retrieval_interpretation": {
+    "o1_minus_s1_expected": "approximately_zero",
+    "role": "attribution_control",
+    "meaning": "confirms_retrieval_not_bottleneck_if_prediction_holds",
+    "not_evidence_for": [
+      "retrieval_quality",
+      "address_space_scaling"
+    ],
+    "retrieval_difficulty": "neutral_address_space_only",
+    "near_semantic_distractors": "separate_experiment",
+    "frozen_before_pilot": true
+  },
+  "pilot_predictions": {
+    "s1_full_oracle_recovery": "15/15",
+    "o1_minus_s1": "approximately_zero",
+    "b1_supported_correct": "near_zero_on_substrate_required_families",
+    "b2_supported_correct": "near_zero_on_substrate_required_families",
+    "o1_invalid_rate_max": 0.10,
+    "frozen_before_pilot": true
+  },
+  "pilot": {
+    "manifest": "gauntlets/substrate_construct/pilot-v1.json",
+    "seed": 41,
+    "n_tasks": 15,
+    "materialised_taskset_hash": "015e33e83180df4d6275d0601db1f233773c4947a8f3afb1546a78c778725cc4",
+    "purpose": "calibrate/freeze construct thresholds only; format, retrieval-interpretation, and pilot-prediction policies are already frozen",
+    "o1_invalid_rate": null
+  },
+  "final_dev": {
+    "manifest": "gauntlets/substrate_construct/dev-v1.json",
+    "seed": 42,
+    "n_tasks": 50,
+    "materialised_taskset_hash": "40865fab459c78c5db34921daa3cd887a423857dafcf8c46c8f95d22469746e7",
+    "family_counts": {
+      "supersession": 25,
+      "provenance": 7,
+      "long_history": 7,
+      "effect_interpretation": 5,
+      "retrieval_sanity": 6
+    },
+    "status": "DO_NOT_RUN_UNTIL_PILOT_CRITERIA_FROZEN"
+  },
+  "arms": ["B1", "B2", "S0", "O1", "S1"],
+  "criteria": null,
+  "pilot_taskset_hash": "015e33e83180df4d6275d0601db1f233773c4947a8f3afb1546a78c778725cc4",
+  "dev_taskset_hash": "40865fab459c78c5db34921daa3cd887a423857dafcf8c46c8f95d22469746e7",
+  "benchmark_frozen": false,
+  "oracle_frozen": false,
+  "evaluator_frozen": false,
+  "replication": {
+    "status": "NOT_CREATED",
+    "reason": "Replication sample may be generated only after construct-valid final DEV passes."
+  },
+  "lockbox": {
+    "status": "PROHIBITED",
+    "reason": "A new lockbox may be created only after check_lockbox_creation_ready passes."
+  }
+}

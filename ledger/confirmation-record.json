@@ -1,5 +1,6 @@
 {
   "recorded_at": "2026-08-18T11:39:49.531505+00:00",
+  "updated_at": "2026-08-18T12:25:00+00:00",
   "contract_pin": {
     "git_head": "3058ee5d87059c8a0447c5784132753f35a3e391",
     "contract_tree_hash": "3c3f47047e913248c469a9872293aba8455501530d856ecb7422f9e733d4c679",
@@ -31,8 +32,12 @@
       "file": "/Users/jake/cognitive-core-lockbox/lockbox-v1.json",
       "n_tasks": 8,
       "taskset_hash": "ced97a3afa099f12c6766225ef0e24ad60ec4302864325f4537cb0b50e9647f3",
-      "description": "Fresh LOCKBOX gauntlet v1, untouched plaintext outside repo",
-      "plaintext_location": "outside repo (mode 600)"
+      "description": "LOCKBOX gauntlet v1 used by the completed confirmation campaign",
+      "plaintext_location": "outside repo (mode 600)",
+      "status": "consumed",
+      "reusable": false,
+      "diagnostic_value": "protocol_integrity_only",
+      "construct_valid_for_headline_thesis": false
     }
   },
   "phase_constants": {
@@ -41,110 +46,53 @@
     "C_latency": 0.2,
     "C_trust": 0.5,
     "frozen_at": "2026-08-18T11:36:42.893947+00:00",
-    "calibration_basis": "Corrected B1/B2 DEV on frozen dev-v1 taskset (20 tasks, seed 0), calibrated adapters, native chat templates: B1(MiniCPM5-1B) 85% (17/20), mean latency 165ms, peak mem 2.28GB; B2(Qwen3.5-4B) 80% (16/20), mean latency 826ms, peak mem 8.63GB. C_success 0.95 (S1 >= 95% of S2 success; baseline ratio 85/80 = 1.06), C_memory 0.50 (S1 <= 50% of S2 memory; baseline ratio 2.28/8.63 = 0.26), C_latency 0.20 (substrate p95 overhead <= 20% of vanilla), C_trust 0.50 (effect/provenance/state error <= 50% of vanilla baseline)."
+    "calibration_basis": "Corrected B1/B2 DEV on frozen dev-v1 taskset (20 tasks, seed 0), calibrated adapters, native chat templates: B1(MiniCPM5-1B) 85% (17/20), mean latency 165ms, peak mem 2.28GB; B2(Qwen3.5-4B) 80% (16/20), mean latency 826ms, peak mem 8.63GB."
   },
   "matrix": {
-    "B1/dev": {
-      "pass": 17,
-      "total": 20,
-      "rate": 0.85,
-      "latency_ms": 165.1,
-      "peak_mem_gb": 2.278936284,
-      "receipt": "721a8b1591bc7ae7"
-    },
-    "B1/lockbox": {
-      "pass": 7,
-      "total": 8,
-      "rate": 0.875,
-      "latency_ms": 192.6,
-      "peak_mem_gb": 2.287505052,
-      "receipt": "3ca8d87756e8fb32"
-    },
-    "B1/replication": {
-      "pass": 10,
-      "total": 12,
-      "rate": 0.8333333333333334,
-      "latency_ms": 142.7,
-      "peak_mem_gb": 2.272431724,
-      "receipt": "7826a2b755d61485"
-    },
-    "B2/dev": {
-      "pass": 16,
-      "total": 20,
-      "rate": 0.8,
-      "latency_ms": 825.9,
-      "peak_mem_gb": 8.629959544,
-      "receipt": "3dec4c166ac9ebc8"
-    },
-    "B2/lockbox": {
-      "pass": 6,
-      "total": 8,
-      "rate": 0.75,
-      "latency_ms": 827.2,
-      "peak_mem_gb": 8.615410432,
-      "receipt": "86c794ee84f5d980"
-    },
-    "B2/replication": {
-      "pass": 9,
-      "total": 12,
-      "rate": 0.75,
-      "latency_ms": 760.4,
-      "peak_mem_gb": 8.632400784,
-      "receipt": "800dd88d899f3c8f"
-    },
-    "S1/dev": {
-      "pass": 14,
-      "total": 20,
-      "rate": 0.7,
-      "latency_ms": 420.8,
-      "peak_mem_gb": 2.388119552,
-      "receipt": "6cae1fe20fbc022a"
-    },
-    "S1/lockbox": {
-      "pass": 6,
-      "total": 8,
-      "rate": 0.75,
-      "latency_ms": 265.8,
-      "peak_mem_gb": 2.360594344,
-      "receipt": "6fa320c4f7104183"
-    },
-    "S1/replication": {
-      "pass": 10,
-      "total": 12,
-      "rate": 0.8333333333333334,
-      "latency_ms": 344.5,
-      "peak_mem_gb": 2.391642124,
-      "receipt": "586230fb03ee6a84"
-    },
-    "S2/dev": {
-      "pass": 14,
-      "total": 20,
-      "rate": 0.7,
-      "latency_ms": 766.1,
-      "peak_mem_gb": 8.762687504,
-      "receipt": "e7a6111adbcefe2e"
-    },
-    "S2/lockbox": {
-      "pass": 6,
-      "total": 8,
-      "rate": 0.75,
-      "latency_ms": 858.0,
-      "peak_mem_gb": 8.743960436,
-      "receipt": "75fc7d08e45a9662"
-    },
-    "S2/replication": {
-      "pass": 9,
-      "total": 12,
-      "rate": 0.75,
-      "latency_ms": 694.2,
-      "peak_mem_gb": 8.7523655,
-      "receipt": "55532c105423d9ea"
-    }
+    "B1/dev": {"pass": 17, "total": 20, "rate": 0.85, "latency_ms": 165.1, "peak_mem_gb": 2.278936284, "receipt": "721a8b1591bc7ae7"},
+    "B1/lockbox": {"pass": 7, "total": 8, "rate": 0.875, "latency_ms": 192.6, "peak_mem_gb": 2.287505052, "receipt": "3ca8d87756e8fb32"},
+    "B1/replication": {"pass": 10, "total": 12, "rate": 0.8333333333333334, "latency_ms": 142.7, "peak_mem_gb": 2.272431724, "receipt": "7826a2b755d61485"},
+    "B2/dev": {"pass": 16, "total": 20, "rate": 0.8, "latency_ms": 825.9, "peak_mem_gb": 8.629959544, "receipt": "3dec4c166ac9ebc8"},
+    "B2/lockbox": {"pass": 6, "total": 8, "rate": 0.75, "latency_ms": 827.2, "peak_mem_gb": 8.615410432, "receipt": "86c794ee84f5d980"},
+    "B2/replication": {"pass": 9, "total": 12, "rate": 0.75, "latency_ms": 760.4, "peak_mem_gb": 8.632400784, "receipt": "800dd88d899f3c8f"},
+    "S1/dev": {"pass": 14, "total": 20, "rate": 0.7, "latency_ms": 420.8, "peak_mem_gb": 2.388119552, "receipt": "6cae1fe20fbc022a"},
+    "S1/lockbox": {"pass": 6, "total": 8, "rate": 0.75, "latency_ms": 265.8, "peak_mem_gb": 2.360594344, "receipt": "6fa320c4f7104183"},
+    "S1/replication": {"pass": 10, "total": 12, "rate": 0.8333333333333334, "latency_ms": 344.5, "peak_mem_gb": 2.391642124, "receipt": "586230fb03ee6a84"},
+    "S2/dev": {"pass": 14, "total": 20, "rate": 0.7, "latency_ms": 766.1, "peak_mem_gb": 8.762687504, "receipt": "e7a6111adbcefe2e"},
+    "S2/lockbox": {"pass": 6, "total": 8, "rate": 0.75, "latency_ms": 858.0, "peak_mem_gb": 8.743960436, "receipt": "75fc7d08e45a9662"},
+    "S2/replication": {"pass": 9, "total": 12, "rate": 0.75, "latency_ms": 694.2, "peak_mem_gb": 8.7523655, "receipt": "55532c105423d9ea"}
   },
-  "status": "DEV+REPLICATION complete; LOCKBOX pending authorised release; Phase D/C gate pending",
-  "updated_at": "2026-08-18T11:41:56.252628+00:00",
+  "status": "CAMPAIGN_COMPLETE_CONSTRUCT_INVALID_FOR_HEADLINE_THESIS",
+  "scientific_interpretation": {
+    "harness_protocol_validation": "supported",
+    "headline_cognitive_core_thesis": "untested",
+    "substrate_information_value": "untested",
+    "reason": [
+      "taskset did not require multi-session state",
+      "taskset did not require forced external history",
+      "taskset did not test meaningful effectful/idempotent cognition",
+      "taskset did not make supersession/conflict the dominant cognitive operation",
+      "old substrate path seeded the current prompt into memory before retrieving it"
+    ]
+  },
+  "null_context_tax_observation": {
+    "classification": "accidental_null_arm_estimate",
+    "universal_constant": false,
+    "MiniCPM5-1B": {
+      "B1_rate": 0.85,
+      "old_S1_rate": 0.70,
+      "delta_pp": -15.0,
+      "latency_ratio": 2.55
+    },
+    "Qwen3.5-4B": {
+      "B2_rate": 0.80,
+      "old_S2_rate": 0.70,
+      "delta_pp": -10.0
+    },
+    "interpretation": "Initial estimate of redundant context/substrate tax only; future DEV probes use explicit length/schema-matched off-topic S0."
+  },
   "final_gate": {
-    "check_invariants": {
+    "historical_check_invariants": {
       "pass": [
         "Chat Template Parity",
         "Lockbox Intact",
@@ -156,15 +104,20 @@
         "Budget Overrun",
         "Model Config Parity"
       ],
-      "blocked": [
-        "Phase D Gate (no counterfactual_eval.json; Phase D' not run)"
-      ]
+      "blocked": ["Phase D Gate (not run)"]
     },
-    "claim_status": "SUPPORTED_CLAIM BLOCKED until Phase C' LCTX curve and Phase D' paired counterfactual complete",
+    "claim_status": "HEADLINE THESIS UNTESTED; old lockbox cannot support or refute it",
     "substrate_gates": {
-      "C_success": "PASS (S1/S2 = 1.0 >= 0.95 on DEV)",
-      "C_memory": "PASS (S1/S2 = 0.27 <= 0.50 on DEV)",
-      "C_latency": "FAIL (S1/B1 = 2.55x; substrate overhead 155% > 20% cap) - Phase B exit gate not met"
+      "C_success": "historical DEV arithmetic passed but benchmark construct invalid",
+      "C_memory": "historical DEV arithmetic passed but benchmark construct invalid",
+      "C_latency": "FAIL (S1/B1 = 2.55x; overhead 155% > 20% cap)"
     }
+  },
+  "next_experiment": {
+    "pilot": "gauntlets/substrate_construct/pilot-v1.json",
+    "final_dev": "gauntlets/substrate_construct/dev-v1.json",
+    "arms": ["B1", "B2", "S0", "O1", "S1"],
+    "replication": "not created until construct-valid DEV passes",
+    "new_lockbox": "prohibited until check_lockbox_creation_ready passes"
   }
 }

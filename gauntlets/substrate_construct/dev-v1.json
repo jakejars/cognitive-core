@@ -1,0 +1,21 @@
+{
+  "schema_version": "construct-generator-v1",
+  "split": "dev",
+  "materialised_taskset_hash": "40865fab459c78c5db34921daa3cd887a423857dafcf8c46c8f95d22469746e7",
+  "generator_spec": {
+    "module": "gauntlets.substrate_construct.generator",
+    "function": "generate_taskset",
+    "generator_sha256": "5b13ac2472d6ebbfdcc98bfedb2320899bbff197cd33c892bfd809267a90d97f",
+    "seed": 42,
+    "n_tasks": 50,
+    "split": "dev"
+  },
+  "family_counts": {
+    "supersession": 25,
+    "provenance": 7,
+    "long_history": 7,
+    "effect_interpretation": 5,
+    "retrieval_sanity": 6
+  },
+  "purpose": "Frozen final DEV sample after pilot thresholds are preregistered. Must not be used for pilot tuning."
+}

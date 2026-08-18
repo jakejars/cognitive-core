@@ -1,17 +1,9 @@
 #!/usr/bin/env python3
-"""
-Check Research Contract Invariants — Convenience Entry Point
+"""Check Research Contract invariants."""
 
-Usage:
-    python3 check-invariants.py                    # Run all checks
-    python3 check-invariants.py --summary          # Quick status
-    python3 check-invariants.py --check-all        # Same as default
-    python3 check-invariants.py --check-template   # Single gate
-    python3 check-invariants.py --check-model-config
-    python3 check-invariants.py --state phase Phase-C
-"""
+import os
+import sys
 
-import sys, os
 script_dir = os.path.dirname(os.path.abspath(__file__))
 if script_dir not in sys.path:
     sys.path.insert(0, script_dir)
@@ -21,10 +13,13 @@ from contract import (
     check_chat_template_parity, check_phase_d_gate,
     check_phase_constants, check_compensation_hypothesis,
     check_amendment_record, check_budget_overrun, check_model_config_parity,
-    ContractViolation,
-    ClaimTransitioner,
+    check_construct_pilot_ready, check_construct_validity, check_lockbox_creation_ready,
+    ContractViolation, ClaimTransitioner,
 )
 
+# Construct validity is deliberately not in the legacy/default all-check set yet:
+# it is the gate for the *next* substrate experiment and should remain visibly
+# pending until pilot thresholds and final DEV outcomes are recorded.
 CHECKS = [
     ("Chat Template Parity (Contract §2, §3.4)", check_chat_template_parity),
     ("Lockbox Intact (Contract §3.1)", check_lockbox_intact),
@@ -38,63 +33,80 @@ CHECKS = [
     ("Phase D Gate (Contract §6)", check_phase_d_gate),
 ]
 
+
+def _check_construct_full(project_root: str) -> None:
+    check_construct_pilot_ready(project_root)
+    check_construct_validity(project_root)
+
+
+def _check_lockbox_creation_full(project_root: str) -> None:
+    check_construct_pilot_ready(project_root)
+    check_lockbox_creation_ready(project_root)
+
+
 def run_all():
     print("=" * 65)
     print("  Cognitive Core — Research Contract Invariants v2.2")
     print("=" * 65)
-
     all_pass = True
     for name, fn in CHECKS:
         print(f"\n  [{name}]")
         try:
             fn(script_dir)
-            print(f"    PASS")
-        except ContractViolation as e:
+            print("    PASS")
+        except ContractViolation as exc:
             all_pass = False
-            for line in str(e).split('\n'):
+            for line in str(exc).split("\n"):
                 print(f"    {line}")
-
     print(f"\n{'=' * 65}")
-    if all_pass:
-        print("  ALL INVARIANTS SATISFIED")
-    else:
-        print("  CONTRACT VIOLATIONS DETECTED — claims blocked")
-    print(f"{'=' * 65}")
+    print("  ALL INVARIANTS SATISFIED" if all_pass else "  CONTRACT VIOLATIONS DETECTED — claims blocked")
+    print("=" * 65)
     return 0 if all_pass else 1
 
 
 def run_summary():
-    """Quick one-line-per-check summary."""
     print("Contract Invariants:")
     all_pass = True
     for name, fn in CHECKS:
         try:
             fn(script_dir)
             print(f"  ✅ {name}")
-        except ContractViolation as e:
+        except ContractViolation as exc:
             all_pass = False
-            first_line = str(e).split('\n')[0][:80]
-            print(f"  ❌ {name}: {first_line}")
+            print(f"  ❌ {name}: {str(exc).splitlines()[0][:80]}")
+    for name, fn in (
+        ("Construct Pilot Format Policy", check_construct_pilot_ready),
+        ("Construct Validity (next substrate campaign)", _check_construct_full),
+        ("Lockbox Creation Ready (next substrate campaign)", _check_lockbox_creation_full),
+    ):
+        try:
+            fn(script_dir)
+            print(f"  ✅ {name}")
+        except ContractViolation as exc:
+            print(f"  ⏳ {name}: {str(exc).splitlines()[0][:80]}")
     return 0 if all_pass else 1
 
 
 def check_state(entity_type: str, entity_id: str):
-    """Check the current state of an entity."""
-    t = ClaimTransitioner(script_dir)
-    state = t.get_entity_state(entity_type, entity_id)
+    transitioner = ClaimTransitioner(script_dir)
+    state = transitioner.get_entity_state(entity_type, entity_id)
     print(f"  {entity_type}/{entity_id}: {state.value if state else 'UNKNOWN'}")
     return 0
 
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser(description="Check Research Contract Invariants")
-    parser.add_argument("--summary", action="store_true", help="Quick summary")
-    parser.add_argument("--state", nargs=2, metavar=("TYPE", "ID"),
-                        help="Check entity state (e.g. phase Phase-C)")
-    parser.add_argument("--check-all", action="store_true", help="Run all checks")
+    parser.add_argument("--summary", action="store_true")
+    parser.add_argument("--state", nargs=2, metavar=("TYPE", "ID"))
+    parser.add_argument("--check-all", action="store_true")
     parser.add_argument("--check-template", action="store_true")
     parser.add_argument("--check-lockbox", action="store_true")
+    parser.add_argument("--check-lockbox-pass", action="store_true")
+    parser.add_argument("--check-lockbox-creation", action="store_true")
+    parser.add_argument("--check-construct-pilot", action="store_true")
+    parser.add_argument("--check-construct", action="store_true")
     parser.add_argument("--check-matrix", action="store_true")
     parser.add_argument("--check-phase-d", action="store_true")
     parser.add_argument("--check-constants", action="store_true")
@@ -107,10 +119,13 @@ if __name__ == "__main__":
     if args.state:
         sys.exit(check_state(args.state[0], args.state[1]))
 
-    # Map single-check flags to functions
     check_map = {
         "check_template": check_chat_template_parity,
         "check_lockbox": check_lockbox_intact,
+        "check_lockbox_pass": check_lockbox_pass,
+        "check_lockbox_creation": _check_lockbox_creation_full,
+        "check_construct_pilot": check_construct_pilot_ready,
+        "check_construct": _check_construct_full,
         "check_matrix": check_experiment_matrix,
         "check_phase_d": check_phase_d_gate,
         "check_constants": check_phase_constants,
@@ -121,11 +136,10 @@ if __name__ == "__main__":
         if getattr(args, flag, False):
             try:
                 fn(script_dir)
-                print(f"PASS")
+                print("PASS")
                 sys.exit(0)
-            except ContractViolation as e:
-                print(f"FAIL: {e}")
+            except ContractViolation as exc:
+                print(f"FAIL: {exc}")
                 sys.exit(1)
 
-    # Default: run all
     sys.exit(run_all())

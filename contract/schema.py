@@ -19,9 +19,11 @@ from typing import Any, Dict, List, Optional, Set
 # ── Experiment Cell Identities ─────────────────────────────────────────────
 
 class ExperimentCell(str, Enum):
-    """Cells of the 2×2 factorial baseline (Contract §2)."""
+    """Cells of the 2×2 factorial baseline plus auxiliary construct controls."""
     B1 = "B1"   # MiniCPM5-1B — vanilla
     B2 = "B2"   # Qwen3.5-4B — vanilla
+    S0 = "S0"   # Auxiliary: MiniCPM5-1B + off-topic null substrate
+    O1 = "O1"   # Auxiliary: MiniCPM5-1B + oracle perfect-recall substrate
     S1 = "S1"   # MiniCPM5-1B + Substrate
     S2 = "S2"   # Qwen3.5-4B + Substrate
     B3 = "B3"   # Optional: ~8B vanilla
@@ -118,7 +120,7 @@ class GenerationManifest:
     seed: Optional[int] = None  # Random seed for reproducibility (Contract §3.4)
 
 
-# ── Substrate Configuration (for S1, S2 runs) ────────────────────────────
+# ── Substrate Configuration (for S0, O1, S1, S2 runs) ────────────────────
 
 @dataclass
 class SubstrateManifest:
@@ -188,7 +190,7 @@ class ExperimentReceipt:
     """
     Single immutable record of one experiment run.
 
-    A cell (B1/B2/S1/S2) EXISTS only if a validated receipt exists for it.
+    A cell EXISTS only if a validated receipt exists for it.
     File existence does not constitute an experiment.
     """
     run_id: str
@@ -199,7 +201,7 @@ class ExperimentReceipt:
     model: ModelManifest
     generation: GenerationManifest
     tasks: TaskManifest
-    substrate: Optional[SubstrateManifest]  # None for B1/B2
+    substrate: Optional[SubstrateManifest]  # None for B1/B2/B3
 
     result: RunResult
     protocol: ProtocolInfo
@@ -234,7 +236,7 @@ class ExperimentReceipt:
             errors.append("receipt not finalized (call finalize())")
         elif not self.verify_hash():
             errors.append("receipt_hash mismatch — data has been tampered with")
-        if self.cell in (ExperimentCell.S1, ExperimentCell.S2) and self.substrate is None:
+        if self.cell in (ExperimentCell.S0, ExperimentCell.O1, ExperimentCell.S1, ExperimentCell.S2) and self.substrate is None:
             errors.append(f"{self.cell.value} requires substrate manifest")
         if self.result.metrics.n_total == 0:
             errors.append("n_total must be > 0")
@@ -285,17 +287,14 @@ class LockboxLedger:
                 if count > 1:
                     return False  # More than 1 evaluation per cell
         else:
-            # Legacy: fall back to global evaluation_count check
             if entry.evaluation_count > 1:
                 return False
-        # Check researcher exposure happened after authorised release
         if entry.first_researcher_exposure_at and entry.authorised_release_at:
             if entry.first_researcher_exposure_at < entry.authorised_release_at:
                 return False
-        # Check exposure_history for contamination
         for h in entry.exposure_history:
             if h.get("type") in ("training", "retrieval", "skill_mining"):
-                return False  # These exposure types are never acceptable
+                return False
         return True
 
 
@@ -328,7 +327,6 @@ class PhaseBudget:
 
 # ── Phase State Machine ────────────────────────────────────────────────────
 
-# Valid transitions between phase states
 VALID_TRANSITIONS: Dict[PhaseState, Set[PhaseState]] = {
     PhaseState.UNIMPLEMENTED: {PhaseState.IMPLEMENTED},
     PhaseState.IMPLEMENTED: {PhaseState.RUN, PhaseState.WITHDRAWN},

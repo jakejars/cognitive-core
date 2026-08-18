@@ -525,3 +525,107 @@ The research agent may propose amendments. It may not silently apply them.
 - MLX autoresearch adaptation: https://github.com/trevin-creator/autoresearch-mlx
 
 **Source lineage:** distilled and tightened from `cognitive-core-gen2-revised-research-spec-v2.1.md`; this v2.2 split incorporates the subsequent review concerning factorial baselines, pre-registration, wall-clock/experiment budgets, and the narrower stateful-agent thesis.
+
+---
+
+# 14. Integrated amendment — construct validity before protected evaluation (2026-08-18)
+
+This dated section is part of the Research Contract and supersedes any conflicting earlier instruction, specifically the requirement in §3.1 / Phase-A item 6 that replication and final lockbox partitions be created before the treatment has demonstrated construct validity.
+
+The completed 2026-08-18 B1/B2/S1/S2 campaign is retained as valid protocol/harness evidence but is classified as **construct-invalid for the headline thesis**. Its lockbox is consumed and may not be reused.
+
+## 14.1 Construct-validation controls
+
+Before a new substrate hypothesis may enter protected replication, exploratory DEV must use the same frozen task sample with:
+
+```text
+B1  bare MiniCPM5-1B
+B2  bare strong ~4B size control
+S0  MiniCPM5-1B + null substrate context
+O1  MiniCPM5-1B + oracle perfect-recall substrate
+S1  MiniCPM5-1B + real substrate retrieval
+```
+
+`S0` and `O1` are auxiliary construct controls, not replacements for the final B1/B2/S1/S2 factorial. The full factorial remains mandatory for any protected small-executive/substrate-generalisation claim.
+
+`S0` must use the same substrate/context-compiler path and approximately matched injected load as S1, but its records must be **same-schema and off-topic**, from entities that cannot answer the task. Stale-on-topic records are not a valid S0 null.
+
+`O1` is **perfect recall, not perfect selection**. It receives the complete frozen relevant set by record ID, including current, superseded, and near-miss records where the task requires them. The model remains responsible for selection, supersession, composition, and action choice.
+
+The current evaluation turn may not be written to memory before retrieval for that turn.
+
+## 14.2 Construct-validity questions
+
+Before replication, record explicit answers backed by DEV evidence:
+
+1. What capability does the treatment uniquely provide?
+2. Is that capability actually required to solve the task?
+3. Can the bare small control solve the task without that capability?
+4. Does O1 prove the task is solvable when the relevant external state is available?
+5. Does S0 show the expected context/compiler/retrieval tax without adding task information?
+6. Does the evaluator measure cognition over the supplied capability rather than merely the existence of a database/tool?
+7. Are supported correctness, correct abstention, confident error, and invalid output distinguishable deterministically?
+8. Does the bare larger sibling B2 also fail the capability ceiling without the external state? If B2 succeeds from the information already available to it, the benchmark does not establish the intended small-plus-substrate construct.
+
+Possible gate states are `CONSTRUCT_VALID`, `CONSTRUCT_INVALID`, and `INCONCLUSIVE`.
+
+## 14.3 Evaluator requirements
+
+Substrate-required tasks must use deterministic machine-checkable outputs wherever feasible. For supersession/state/action tasks, use the existing grammar-constrained typed Intent mechanism and exact field comparison; do not use substring scoring or an LLM judge when typed fields can express the target.
+
+Report at least:
+
+```text
+supported_correct
+correct_abstention
+confident_wrong
+invalid
+```
+
+A bare model that correctly states it lacks historical evidence has not completed the task, but that response must not be conflated with a hallucinated stale/current value.
+
+For effect/idempotency tasks, the deterministic substrate owns duplicate prevention. The model is scored on its requested action after trusted state is supplied (`replay`, `ask`, `issue`, etc.), not on whether a database can detect a prior effect.
+
+## 14.4 Pilot, freeze, final DEV
+
+Pilot calibration and final DEV may not use the same materialised task sample.
+
+```text
+separate pilot sample
+→ inspect/calibrate benchmark and freeze criteria
+→ distinct frozen final DEV sample
+→ run B1/B2/S0/O1/S1 once under frozen criteria
+```
+
+A threshold freeze after observing the same sample used for final DEV is invalid.
+
+## 14.5 Statistical gate
+
+`S1 - S0` is the primary information-value contrast. It must meet the preregistered minimum effect and the **same one-sided exact paired statistic used by the Phase-D counterfactual gate**, computed from per-task paired outcomes. Do not create a second inferential implementation for this comparison.
+
+Always report:
+
+```text
+S0 - B1  = context/substrate tax
+S1 - S0  = useful external-information value
+O1 - S1  = retrieval-system loss
+S1 - B1  = net substrate effect
+```
+
+## 14.6 Protected-resource creation gate
+
+A new replication sample is generated only after final DEV is `CONSTRUCT_VALID` under frozen criteria.
+
+A new final lockbox may be **created/frozen only after**:
+
+```text
+construct-valid final DEV
+AND
+independent replication shows the preregistered directional separation
+AND
+task generator / evaluator / oracle are frozen
+AND
+no material benchmark redesign is planned
+```
+
+`check_construct_validity` is the executable DEV gate. `check_lockbox_creation_ready` is the executable lockbox-creation gate. A lockbox created before those preconditions is not a valid final lockbox for this hypothesis.

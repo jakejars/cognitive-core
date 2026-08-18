@@ -1,0 +1,21 @@
+{
+  "schema_version": "construct-generator-v1",
+  "split": "pilot",
+  "materialised_taskset_hash": "015e33e83180df4d6275d0601db1f233773c4947a8f3afb1546a78c778725cc4",
+  "generator_spec": {
+    "module": "gauntlets.substrate_construct.generator",
+    "function": "generate_taskset",
+    "generator_sha256": "5b13ac2472d6ebbfdcc98bfedb2320899bbff197cd33c892bfd809267a90d97f",
+    "seed": 41,
+    "n_tasks": 15,
+    "split": "pilot"
+  },
+  "family_counts": {
+    "supersession": 8,
+    "provenance": 2,
+    "long_history": 2,
+    "effect_interpretation": 1,
+    "retrieval_sanity": 2
+  },
+  "purpose": "Threshold calibration only. Never reused as frozen final DEV evidence."
+}

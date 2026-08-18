@@ -12,7 +12,7 @@ from harness.experiment_support import (
 
 
 def test_replication_requires_explicit_task_file(tmp_path):
-    with pytest.raises(ValueError, match=r"task[- ]file"):
+    with pytest.raises(ValueError, match="task[- ]file"):
         load_partition_tasks(str(tmp_path), Partition.REPLICATION, task_file=None)
 
 
@@ -24,6 +24,28 @@ def test_lockbox_task_file_must_be_outside_project(tmp_path):
 
     with pytest.raises(ValueError, match="outside"):
         load_partition_tasks(str(project), Partition.LOCKBOX, task_file=str(task_file))
+
+
+def test_pinned_construct_manifests_materialise_distinct_samples():
+    project = Path(__file__).resolve().parents[2]
+    pilot = load_partition_tasks(
+        str(project),
+        Partition.DEV,
+        task_file=str(project / "gauntlets" / "substrate_construct" / "pilot-v1.json"),
+    )
+    final = load_partition_tasks(
+        str(project),
+        Partition.DEV,
+        task_file=str(project / "gauntlets" / "substrate_construct" / "dev-v1.json"),
+    )
+    assert len(pilot) == 15
+    assert len(final) == 50
+    assert set(task["id"] for task in pilot).isdisjoint(task["id"] for task in final)
+    assert sum(task["family"] == "supersession" for task in final) == 25
+    assert sum(task["family"] == "provenance" for task in final) == 7
+    assert sum(task["family"] == "long_history" for task in final) == 7
+    assert sum(task["family"] == "effect_interpretation" for task in final) == 5
+    assert sum(task["family"] == "retrieval_sanity" for task in final) == 6
 
 
 def test_lockbox_taskset_must_match_frozen_hashes(tmp_path):

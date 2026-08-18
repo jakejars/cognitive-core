@@ -145,9 +145,23 @@ class ContextCompiler:
             return 0.0
         probs = [s / total for s in scores]
         entropy = -sum(p * math.log2(p) for p in probs if p > 0)
-        # Normalize to 0-1 range
         max_entropy = math.log2(len(scores)) if len(scores) > 1 else 1.0
         return min(entropy / max_entropy, 1.0)
+
+    @staticmethod
+    def _append_entry(packet: ContextPacket, entry: MemoryEntry) -> None:
+        """Append one selected entry using the existing packet semantics."""
+        if entry.entry_type == "claim":
+            packet.relevant_claims.append({"claim": entry.content, "confidence": entry.confidence})
+        elif entry.entry_type == "evidence":
+            packet.relevant_evidence.append({"content": entry.content, "source": entry.metadata.get("source", "unknown")})
+        elif entry.entry_type == "skill":
+            packet.active_skills.append(entry.content)
+        elif entry.entry_type == "observation":
+            packet.relevant_evidence.append({"content": entry.content, "type": "observation"})
+
+        if entry.provenance:
+            packet.provenance_summary.extend(entry.provenance)
 
     def compile(self, query: str, k: int = 5) -> ContextPacket:
         """
@@ -156,65 +170,59 @@ class ContextCompiler:
         This is a simple scoring baseline (Substrate Spec §22.2).
         Future versions will add learned reranking, MMR diversity, etc.
         """
-        # Score all entries by simple keyword overlap
         scored = []
         query_lower = query.lower()
         query_words = set(query_lower.split())
 
         for entry in self._memory_store:
-            # Apply hard gates
             if self._hard_gates and not all(g(entry) for g in self._hard_gates):
                 continue
 
-            # Simple relevance: word overlap
             content_lower = entry.content.lower()
             overlap = sum(1 for w in query_words if w in content_lower)
             relevance = overlap / max(len(query_words), 1)
-
-            # Combine with freshness and confidence
             score = (0.5 * relevance +
                      0.3 * entry.freshness +
                      0.2 * entry.confidence)
             scored.append((score, entry))
 
-        # Sort by score
         scored.sort(key=lambda x: x[0], reverse=True)
         top_k = scored[:k]
-
-        # Compute entropy
         scores = [s for s, _ in scored] if scored else [0.0]
         entropy = self.compute_entropy(scores)
 
-        # Build packet
         packet = ContextPacket(
             retrieval_entropy=round(entropy, 3),
             confidence_summary=round(sum(s[0] for s in top_k) / max(len(top_k), 1), 3) if top_k else 0.0,
         )
 
-        for score, entry in top_k:
-            if entry.entry_type == "claim":
-                packet.relevant_claims.append({"claim": entry.content, "confidence": entry.confidence})
-            elif entry.entry_type == "evidence":
-                packet.relevant_evidence.append({"content": entry.content, "source": entry.metadata.get("source", "unknown")})
-            elif entry.entry_type == "skill":
-                packet.active_skills.append(entry.content)
-            elif entry.entry_type == "observation":
-                packet.relevant_evidence.append({"content": entry.content, "type": "observation"})
+        for _, entry in top_k:
+            self._append_entry(packet, entry)
 
-            if entry.provenance:
-                packet.provenance_summary.extend(entry.provenance)
+        return packet
 
+    def compile_by_ids(self, record_ids: List[str]) -> ContextPacket:
+        """Oracle perfect-recall path over a frozen relevant record set.
+
+        The caller supplies the full relevant set (including superseded and
+        near-miss records); this bypasses retrieval ranking but does not perform
+        answer selection. The model still reasons over the returned packet.
+        """
+        index = {entry.id: entry for entry in self._memory_store}
+        missing = [record_id for record_id in record_ids if record_id not in index]
+        if missing:
+            raise ValueError(f"oracle record IDs not present in memory: {missing}")
+
+        packet = ContextPacket(retrieval_entropy=0.0, confidence_summary=1.0)
+        for record_id in record_ids:
+            self._append_entry(packet, index[record_id])
         return packet
 
 
 def quick_test():
     """Demonstrate the context compiler."""
     compiler = ContextCompiler()
-
-    # Register a hard gate: reject entries with low confidence
     compiler.register_hard_gate(lambda e: e.confidence >= 0.3)
-
-    # Store some entries
     compiler.store(MemoryEntry(
         id="c1", content="Paris is the capital of France",
         entry_type="claim", confidence=0.95,
@@ -229,14 +237,12 @@ def quick_test():
     ))
     compiler.store(MemoryEntry(
         id="c4", content="The project language is Python",
-        entry_type="claim", confidence=0.2,  # Will be gated out
+        entry_type="claim", confidence=0.2,
     ))
 
-    # Compile for a query
     packet = compiler.compile("What is the capital of France?", k=3)
     print("=== Context Packet ===")
     print(packet.serialize())
-
     print(f"\nRetrieval entropy: {packet.retrieval_entropy:.3f}")
     print(f"Confidence summary: {packet.confidence_summary:.3f}")
 

@@ -1,18 +1,16 @@
-"""Shared experiment support for all B1/B2/S1/S2 runners.
-
-This module owns partition loading and lockbox accounting. Confirmation runners
-must not turn ordinary DEV tasks into a lockbox merely by changing a label.
-"""
+"""Shared experiment support for confirmation and construct-validity runners."""
 
 from __future__ import annotations
 
+import hashlib
+import importlib
 import json
 import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-from contract.evidence import hash_task
+from contract.evidence import hash_task, hash_taskset
 from contract.schema import ExperimentCell, Partition
 
 
@@ -26,12 +24,66 @@ def _parse_time(value: str) -> datetime:
     return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
 
+def _materialize_generator_spec(data: dict, manifest_path: Path) -> list[dict]:
+    spec = data.get("generator_spec")
+    if not isinstance(spec, dict):
+        raise ValueError(f"task file {manifest_path} has no tasks or generator_spec")
+
+    module_name = spec.get("module")
+    function_name = spec.get("function")
+    if module_name != "gauntlets.substrate_construct.generator" or function_name != "generate_taskset":
+        raise ValueError("only the pinned substrate_construct generator is allowed in task manifests")
+
+    module = importlib.import_module(module_name)
+    module_path = Path(module.__file__).resolve()
+    expected_sha = str(spec.get("generator_sha256", ""))
+    if not expected_sha:
+        raise ValueError("generator_spec.generator_sha256 is required")
+    actual_sha = hashlib.sha256(module_path.read_bytes()).hexdigest()
+    if actual_sha != expected_sha:
+        raise ValueError(
+            f"construct generator hash mismatch: expected {expected_sha}, got {actual_sha}"
+        )
+
+    tasks = getattr(module, function_name)(
+        seed=int(spec["seed"]),
+        n_tasks=int(spec["n_tasks"]),
+        split=str(spec["split"]),
+    )
+    expected_counts = data.get("family_counts")
+    if expected_counts:
+        actual_counts = {
+            family: sum(task.get("family") == family for task in tasks)
+            for family in expected_counts
+        }
+        if actual_counts != expected_counts:
+            raise ValueError(
+                f"generated family counts differ from frozen manifest: {actual_counts} != {expected_counts}"
+            )
+
+    expected_taskset_hash = str(data.get("materialised_taskset_hash", ""))
+    if not expected_taskset_hash:
+        raise ValueError("construct generator manifest requires materialised_taskset_hash")
+    actual_taskset_hash = hash_taskset(tasks)
+    if actual_taskset_hash != expected_taskset_hash:
+        raise ValueError(
+            "materialised taskset hash mismatch: "
+            f"expected {expected_taskset_hash}, got {actual_taskset_hash}"
+        )
+    return tasks
+
+
 def _load_json_tasks(path: Path) -> list[dict]:
     with path.open() as f:
         data = json.load(f)
-    tasks = data.get("tasks") if isinstance(data, dict) else data
+
+    if isinstance(data, dict) and "generator_spec" in data:
+        tasks = _materialize_generator_spec(data, path)
+    else:
+        tasks = data.get("tasks") if isinstance(data, dict) else data
+
     if not isinstance(tasks, list) or not tasks:
-        raise ValueError(f"task file {path} must contain a non-empty list or {{'tasks': [...]}}")
+        raise ValueError(f"task file {path} must materialise a non-empty task list")
     if any(not isinstance(task, dict) or not task.get("id") or not task.get("prompt") for task in tasks):
         raise ValueError(f"task file {path} contains malformed tasks")
     ids = [str(task["id"]) for task in tasks]
@@ -49,9 +101,10 @@ def load_partition_tasks(
 ) -> list[dict]:
     """Load the actual evaluation partition.
 
-    DEV may use the historical in-repo gauntlets for exploratory work. REPLICATION
-    and LOCKBOX always require an explicit frozen task file. LOCKBOX plaintext must
-    be outside the project/research workspace.
+    DEV may use historical gauntlets for exploratory work. REPLICATION and
+    LOCKBOX require an explicit frozen task file. LOCKBOX plaintext must remain
+    outside the project/research workspace. Construct generator manifests may be
+    used for pilot/DEV/replication, but the generator itself refuses lockbox.
     """
     root = Path(project_root).resolve()
 
@@ -110,7 +163,6 @@ def validate_lockbox_taskset(
     *,
     now: Optional[str] = None,
 ) -> None:
-    """Fail before inference if plaintext or authorisation differs from frozen ledger."""
     _, data = _load_lockbox(project_root)
     entries = data["entries"]
     now_dt = _parse_time(now or _utc_now())
@@ -173,7 +225,6 @@ def mark_lockbox_evaluated(
     *,
     timestamp: Optional[str] = None,
 ) -> None:
-    """Record an attempted model evaluation even if scoring/receipt creation later fails."""
     path, data = _load_lockbox(project_root)
     entry = data["entries"].get(str(task_id))
     if not entry:

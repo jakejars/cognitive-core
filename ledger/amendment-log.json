@@ -46,5 +46,13 @@
     "affected_metrics": "Headline thesis remains untested. Old receipts remain valid measurements. Permanent protocol additions: every substrate DEV probe includes S0 (same-schema length-matched off-topic null); O1 supplies perfect recall of the full relevant set rather than answer selection; construct DEV includes bare B2 size control; evaluator distinguishes supported-correct/correct-abstention/confident-wrong using deterministic typed intent fields; pilot and final DEV samples must be distinct; S1-vs-S0 uses the same one-sided exact paired statistic as Phase D; replication is blocked until construct validity passes; a new lockbox may not be created until construct-valid DEV plus independent replication demonstrate the preregistered directional separation.",
     "invalidated_evidence": false,
     "new_evaluation_source": "gauntlets/substrate_construct/pilot-v1.json for calibration, followed by distinct gauntlets/substrate_construct/dev-v1.json. Replication is generated only after construct-valid DEV; no new lockbox exists until check_lockbox_creation_ready passes."
+  },
+  {
+    "date": "2026-08-18",
+    "reason": "Pre-pilot construct audit found O1 and S1 structurally identical on most task families because only long-history tasks had a background address space, and the initial filler vocabulary was non-neutral under the actual substring keyword scorer. Typed Intent formatting also lacked a pre-registered benchmark-defect rule.",
+    "observed_results": "Before correction, O1/S1 retrieved the same record set on 36/43 non-long-history tasks; the original long-history filler could displace all oracle records. After correction, every construct task has a deterministic >=153,600-word background address-space proxy, filler is generated to have zero overlap under the actual `query_word in content` scorer, and the preflight test recovers the full oracle record set with S1 on sampled tasks from every family.",
+    "affected_metrics": "O1-S1 is now interpretable as retrieval-system loss across all construct families. Typed string values are pre-registered as casefolded with collapsed whitespace; argument key sets remain exact and unexpected keys fail. Pilot O1 invalid-rate >10% is classified as BENCHMARK_DEFECT_REVISE_FORMAT, not construct invalidation. `check_construct_pilot_ready` / `--check-construct-pilot` enforce this before pilot/final interpretation.",
+    "invalidated_evidence": false,
+    "new_evaluation_source": "Refreshed deterministic pilot-v1/dev-v1 materialisations after the pre-pilot fixes; no pilot model run had occurred before these changes."
   }
 ]

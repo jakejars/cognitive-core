@@ -1,7 +1,8 @@
-"""Pre-pilot construct-format guard.
+"""Pre-pilot construct guards.
 
 This gate is intentionally separate from the final construct-validity gate. It
-freezes how typed-output failures are interpreted before any pilot results exist.
+freezes how typed-output failures and O1/S1 retrieval observations are
+interpreted before any pilot results exist.
 """
 
 from __future__ import annotations
@@ -19,6 +20,15 @@ EXPECTED_FORMAT_POLICY = {
     "on_threshold_breach": "BENCHMARK_DEFECT_REVISE_FORMAT",
 }
 
+EXPECTED_RETRIEVAL_INTERPRETATION = {
+    "o1_minus_s1_expected": "approximately_zero",
+    "role": "attribution_control",
+    "meaning": "confirms_retrieval_not_bottleneck_if_prediction_holds",
+    "retrieval_difficulty": "neutral_address_space_only",
+    "near_semantic_distractors": "separate_experiment",
+}
+EXPECTED_RETRIEVAL_NONCLAIMS = {"retrieval_quality", "address_space_scaling"}
+
 
 def _record(project_root: str) -> dict:
     path = Path(project_root) / "ledger" / "construct-validity.json"
@@ -31,11 +41,37 @@ def _record(project_root: str) -> dict:
     return data
 
 
+def _check_retrieval_interpretation(data: dict) -> None:
+    interpretation = data.get("retrieval_interpretation")
+    if not isinstance(interpretation, dict):
+        raise ContractViolation(
+            "construct pilot retrieval interpretation must be frozen before pilot"
+        )
+
+    for key, expected in EXPECTED_RETRIEVAL_INTERPRETATION.items():
+        if interpretation.get(key) != expected:
+            raise ContractViolation(
+                f"construct pilot retrieval interpretation {key} must be {expected!r}"
+            )
+
+    nonclaims = set(interpretation.get("not_evidence_for", []))
+    if not EXPECTED_RETRIEVAL_NONCLAIMS.issubset(nonclaims):
+        raise ContractViolation(
+            "construct pilot retrieval interpretation must explicitly exclude "
+            "retrieval_quality and address_space_scaling claims"
+        )
+
+
 def check_construct_pilot_ready(project_root: str = None) -> None:
-    """Validate the typed-output policy before pilot and interpret O1 invalids.
+    """Validate pre-pilot interpretation rules and typed-output policy.
 
     If pilot O1 invalid-rate later exceeds the pre-registered threshold, the
     result is BENCHMARK_DEFECT_REVISE_FORMAT, not construct invalidation.
+
+    O1≈S1 is pre-registered as an attribution-control prediction for this
+    neutral-address-space benchmark. A near-zero delta means retrieval was not
+    the observed bottleneck; it is not evidence of general retrieval quality or
+    address-space scaling.
     """
     pr = project_root or "."
     data = _record(pr)
@@ -58,6 +94,8 @@ def check_construct_pilot_ready(project_root: str = None) -> None:
     if not (0.0 <= threshold <= 1.0):
         raise ContractViolation("construct pilot O1 invalid-rate threshold must be in [0,1]")
 
+    _check_retrieval_interpretation(data)
+
     pilot = data.get("pilot") or {}
     invalid_rate = pilot.get("o1_invalid_rate")
     if invalid_rate is not None and float(invalid_rate) > threshold:
@@ -68,7 +106,8 @@ def check_construct_pilot_ready(project_root: str = None) -> None:
         )
 
     print(
-        "  [Contract] Construct pilot format policy frozen: "
+        "  [Contract] Construct pilot policy frozen: "
         f"normalization={policy['string_value_normalization']}, "
-        f"O1 invalid defect threshold={threshold:.1%}"
+        f"O1 invalid defect threshold={threshold:.1%}, "
+        "O1-S1 expected≈0 as attribution control only"
     )

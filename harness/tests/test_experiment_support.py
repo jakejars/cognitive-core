@@ -12,7 +12,7 @@ from harness.experiment_support import (
 
 
 def test_replication_requires_explicit_task_file(tmp_path):
-    with pytest.raises(ValueError, match="task file"):
+    with pytest.raises(ValueError, match=r"task[- ]file"):
         load_partition_tasks(str(tmp_path), Partition.REPLICATION, task_file=None)
 
 

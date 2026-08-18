@@ -1,0 +1,30 @@
+# Cognitive Core Gen-2 .gitignore
+
+# Virtual environment
+.venv/
+.envrc
+
+# Model weights (large, downloaded separately)
+models/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# HuggingFace cache
+.cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Logs
+*.log

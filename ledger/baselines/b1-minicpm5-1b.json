@@ -1,0 +1,42 @@
+{
+  "model": "B1-MiniCPM5-1B",
+  "path": "/Users/jake/Projects/cognitive core/models/MiniCPM5-1B",
+  "n_prompts": 4,
+  "mean_time": 1.356,
+  "median_time": 1.761,
+  "mean_tokens_per_sec": 102.5,
+  "total_output_tokens": 613,
+  "results": {
+    "factual": {
+      "prompt": "What is the capital of France? Answer concisely.",
+      "prompt_tokens": 26,
+      "output_tokens": 8,
+      "time_seconds": 0.931,
+      "tokens_per_sec": 8.6
+    },
+    "reasoning": {
+      "prompt": "If I have 3 apples and buy 5 more, then give away 2, how many do I have? Show your working step by step.",
+      "prompt_tokens": 46,
+      "output_tokens": 111,
+      "time_seconds": 0.853,
+      "tokens_per_sec": 130.1
+    },
+    "coding": {
+      "prompt": "Write a short Python function that checks if a string is a palindrome.",
+      "prompt_tokens": 31,
+      "output_tokens": 257,
+      "time_seconds": 1.88,
+      "tokens_per_sec": 136.7
+    },
+    "explanation": {
+      "prompt": "Explain the difference between TCP and UDP in one sentence each.",
+      "prompt_tokens": 27,
+      "output_tokens": 237,
+      "time_seconds": 1.761,
+      "tokens_per_sec": 134.6
+    }
+  },
+  "estimated_model_memory_gb": 2.0,
+  "n_layers": 24,
+  "n_params_b": 1.08
+}

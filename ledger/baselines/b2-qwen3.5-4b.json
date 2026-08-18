@@ -1,0 +1,42 @@
+{
+  "model": "B2-Qwen3.5-4B",
+  "path": "/Users/jake/Projects/cognitive core/models/Qwen3.5-4B",
+  "n_prompts": 4,
+  "mean_time": 7.793,
+  "median_time": 8.491,
+  "mean_tokens_per_sec": 29.2,
+  "total_output_tokens": 906,
+  "results": {
+    "factual": {
+      "prompt": "What is the capital of France? Answer concisely.",
+      "prompt_tokens": 20,
+      "output_tokens": 256,
+      "time_seconds": 9.515,
+      "tokens_per_sec": 26.9
+    },
+    "reasoning": {
+      "prompt": "If I have 3 apples and buy 5 more, then give away 2, how many do I have? Show your working step by step.",
+      "prompt_tokens": 39,
+      "output_tokens": 138,
+      "time_seconds": 4.683,
+      "tokens_per_sec": 29.5
+    },
+    "coding": {
+      "prompt": "Write a short Python function that checks if a string is a palindrome.",
+      "prompt_tokens": 22,
+      "output_tokens": 256,
+      "time_seconds": 8.483,
+      "tokens_per_sec": 30.2
+    },
+    "explanation": {
+      "prompt": "Explain the difference between TCP and UDP in one sentence each.",
+      "prompt_tokens": 21,
+      "output_tokens": 256,
+      "time_seconds": 8.491,
+      "tokens_per_sec": 30.2
+    }
+  },
+  "estimated_model_memory_gb": 8.0,
+  "n_layers": 32,
+  "n_params_b": 4.0
+}

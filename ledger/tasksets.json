@@ -1,0 +1,24 @@
+{
+  "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+  "sets": {
+    "dev": {
+      "file": "gauntlets/frozen/dev-v1.json",
+      "n_tasks": 20,
+      "taskset_hash": "1436e9421c2194be8fdb094e39d74ee07832a46f40affee1e14cda4d99ba0604",
+      "description": "Fresh DEV gauntlet v1 for Phase A'/B' confirmation, stratified across M01/LCTX01/LCTX02/LCTX03/SA01"
+    },
+    "replication": {
+      "file": "gauntlets/frozen/rep-v1.json",
+      "n_tasks": 12,
+      "taskset_hash": "ce873587f32370db3c16026a530ad1f775b14b7571b2becd2dc0ae37ff3b5618",
+      "description": "Fresh REPLICATION gauntlet v1, distinct content from DEV"
+    },
+    "lockbox": {
+      "file": "/Users/jake/cognitive-core-lockbox/lockbox-v1.json",
+      "n_tasks": 8,
+      "taskset_hash": "ced97a3afa099f12c6766225ef0e24ad60ec4302864325f4537cb0b50e9647f3",
+      "description": "Fresh LOCKBOX gauntlet v1, untouched plaintext outside repo",
+      "plaintext_location": "outside repo (mode 600)"
+    }
+  }
+}

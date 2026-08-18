@@ -1,0 +1,259 @@
+{
+  "tasks": [
+    {
+      "id": "DV-M01-01",
+      "gauntlet": "M01",
+      "prompt": "Consider these two procedures.\n\nProcedure A:\n1. Read the report file\n2. Extract the total column\n3. Save summary to output.csv\n\nProcedure B:\n1. Read the report file\n2. Extract the total column\n3. Save summary to output.csv\n\nAre the two procedures identical in behaviour? Output exactly one letter: A or B, and nothing else.",
+      "evaluator": "exact_match",
+      "expected": "A",
+      "difficulty": "basic",
+      "tags": [
+        "structural_identity",
+        "equivalence"
+      ]
+    },
+    {
+      "id": "DV-M01-02",
+      "gauntlet": "M01",
+      "prompt": "Consider these two procedures.\n\nProcedure A:\n1. Read the report file\n2. Extract the total column\n3. Save summary to output.csv\n\nProcedure B:\n1. Read the report file\n2. Extract the total column\n3. Email summary to the team\n\nAre the two procedures different in behaviour? Output exactly one letter: A or B, and nothing else.",
+      "evaluator": "exact_match",
+      "expected": "B",
+      "difficulty": "basic",
+      "tags": [
+        "structural_identity",
+        "difference_detection"
+      ]
+    },
+    {
+      "id": "DV-M01-03",
+      "gauntlet": "M01",
+      "prompt": "Consider these two procedures.\n\nProcedure A:\ndef score(items):\n    total = 0\n    for item in items:\n        total += item['value']\n    return total\n\nProcedure B:\ndef score(items):\n    s = 0\n    for i in items:\n        s += i['value']\n    return s\n\nAre the two procedures identical in behaviour? Output exactly one letter: A or B, and nothing else.",
+      "evaluator": "exact_match",
+      "expected": "A",
+      "difficulty": "intermediate",
+      "tags": [
+        "structural_identity",
+        "renaming"
+      ]
+    },
+    {
+      "id": "DV-M01-04",
+      "gauntlet": "M01",
+      "prompt": "Consider these two procedures.\n\nProcedure A:\ndef score(items):\n    total = 0\n    for item in items:\n        total += item['value']\n    return total\n\nProcedure B:\ndef score(items):\n    total = 0\n    for item in items:\n        total -= item['value']\n    return total\n\nAre the two procedures different in behaviour? Output exactly one letter: A or B, and nothing else.",
+      "evaluator": "exact_match",
+      "expected": "B",
+      "difficulty": "intermediate",
+      "tags": [
+        "structural_identity",
+        "semantic_difference"
+      ]
+    },
+    {
+      "id": "DV-LCTX01-01",
+      "gauntlet": "LCTX01",
+      "prompt": "Here is some text:\n\nThe deepest point of the ocean is the Mariana Trench. Sharks have no bones. The Amazon flows through Brazil.\n\nQuestion: What is the deepest point of the ocean? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "Mariana Trench",
+      "difficulty": "basic",
+      "tags": [
+        "recall",
+        "needle"
+      ]
+    },
+    {
+      "id": "DV-LCTX01-02",
+      "gauntlet": "LCTX01",
+      "prompt": "Here is some text:\n\nThe Great Barrier Reef lies off the coast of Queensland. Koalas sleep up to 20 hours a day. Uluru is in central Australia.\n\nQuestion: Where does the Great Barrier Reef lie? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "Queensland",
+      "difficulty": "basic",
+      "tags": [
+        "recall",
+        "needle"
+      ]
+    },
+    {
+      "id": "DV-LCTX01-03",
+      "gauntlet": "LCTX01",
+      "prompt": "Here is some text:\n\nThe first programmable electronic computer was the Z3, built in 1941. Ada Lovelace wrote notes on the Analytical Engine.\n\nQuestion: What was the first programmable electronic computer? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "Z3",
+      "difficulty": "basic",
+      "tags": [
+        "recall",
+        "needle"
+      ]
+    },
+    {
+      "id": "DV-LCTX01-04",
+      "gauntlet": "LCTX01",
+      "prompt": "Here is some text:\n\nThe Nile flows north. Mount Kilimanjaro is the highest peak in Africa. The Sahara is the largest hot desert.\n\nQuestion: What is the highest peak in Africa? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "Kilimanjaro",
+      "difficulty": "basic",
+      "tags": [
+        "recall",
+        "needle"
+      ]
+    },
+    {
+      "id": "DV-LCTX02-01",
+      "gauntlet": "LCTX02",
+      "prompt": "Here are several facts:\n\n1. Jupiter has the shortest day of all the planets.\n2. Neptune was discovered by mathematical prediction, not direct observation.\n3. Mars has two moons.\n\nQuestion: Name the planet with the shortest day and the planet discovered by mathematical prediction.",
+      "evaluator": "contains_all",
+      "expected": [
+        "Jupiter",
+        "Neptune"
+      ],
+      "difficulty": "basic",
+      "tags": [
+        "multi_fact",
+        "recall"
+      ]
+    },
+    {
+      "id": "DV-LCTX02-02",
+      "gauntlet": "LCTX02",
+      "prompt": "Here are several facts:\n\n1. The Amazon is the largest river by water volume.\n2. The Nile is traditionally the longest river.\n3. The Yangtze is the longest river in Asia.\n\nQuestion: Which river is largest by volume and which is traditionally the longest?",
+      "evaluator": "contains_all",
+      "expected": [
+        "Amazon",
+        "Nile"
+      ],
+      "difficulty": "basic",
+      "tags": [
+        "multi_fact",
+        "recall"
+      ]
+    },
+    {
+      "id": "DV-LCTX02-03",
+      "gauntlet": "LCTX02",
+      "prompt": "Here are several facts:\n\n1. Titan is the largest moon of Saturn.\n2. Europa is an icy moon of Jupiter.\n3. Phobos orbits Mars.\n\nQuestion: Name Saturn's largest moon and Jupiter's icy moon.",
+      "evaluator": "contains_all",
+      "expected": [
+        "Titan",
+        "Europa"
+      ],
+      "difficulty": "basic",
+      "tags": [
+        "multi_fact",
+        "recall"
+      ]
+    },
+    {
+      "id": "DV-LCTX02-04",
+      "gauntlet": "LCTX02",
+      "prompt": "Here are several facts:\n\n1. Lake Baikal is the deepest lake on Earth.\n2. Lake Titicaca is the highest large navigable lake.\n3. The Caspian Sea is the largest enclosed body of water.\n\nQuestion: Which lake is the deepest and which is the highest large navigable lake?",
+      "evaluator": "contains_all",
+      "expected": [
+        "Baikal",
+        "Titicaca"
+      ],
+      "difficulty": "basic",
+      "tags": [
+        "multi_fact",
+        "recall"
+      ]
+    },
+    {
+      "id": "DV-LCTX03-01",
+      "gauntlet": "LCTX03",
+      "prompt": "At Acme Corp: Ethan reports to Ava. Ava reports to Leo. Leo reports to Zara.\n\nQuestion: Who is exactly two levels of management above Ethan? Output only the answer.",
+      "evaluator": "contains",
+      "expected": "Leo",
+      "difficulty": "intermediate",
+      "tags": [
+        "multi_hop",
+        "reasoning"
+      ]
+    },
+    {
+      "id": "DV-LCTX03-02",
+      "gauntlet": "LCTX03",
+      "prompt": "Priya bought a gift for Sam. Sam bought a gift for Tom. Tom bought a gift for Ana.\n\nQuestion: Who is two links down the gift chain from Priya? Output only the answer.",
+      "evaluator": "contains",
+      "expected": "Tom",
+      "difficulty": "intermediate",
+      "tags": [
+        "multi_hop",
+        "reasoning"
+      ]
+    },
+    {
+      "id": "DV-LCTX03-03",
+      "gauntlet": "LCTX03",
+      "prompt": "The final report depends on the analysis. The analysis depends on the cleaned data. The cleaned data depends on the raw survey.\n\nQuestion: What is the second-level dependency of the final report? Output only the answer.",
+      "evaluator": "contains",
+      "expected": "data",
+      "difficulty": "intermediate",
+      "tags": [
+        "multi_hop",
+        "reasoning"
+      ]
+    },
+    {
+      "id": "DV-LCTX03-04",
+      "gauntlet": "LCTX03",
+      "prompt": "Isla is Kai's mother. Maya is Isla's mother. Elena is Maya's mother.\n\nQuestion: Who is two generations above Kai? Output only the answer.",
+      "evaluator": "contains",
+      "expected": "Maya",
+      "difficulty": "intermediate",
+      "tags": [
+        "multi_hop",
+        "reasoning"
+      ]
+    },
+    {
+      "id": "DV-SA01-01",
+      "gauntlet": "SA01",
+      "prompt": "Session transcript:\nUser: Create a project called Aurora.\nAssistant: Project Aurora created.\nUser: Set the language to Python.\nAssistant: Language set to Python.\nUser: Add a task: 'Write unit tests'.\nAssistant: Task added.\n\nUser: What is the name of the current project?\n\nQuestion: What is the current project name? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "Aurora",
+      "difficulty": "intermediate",
+      "tags": [
+        "stateful",
+        "continuity"
+      ]
+    },
+    {
+      "id": "DV-SA01-02",
+      "gauntlet": "SA01",
+      "prompt": "Session transcript:\nUser: Set the weekly budget to 5000.\nAssistant: Budget set to 5000.\nUser: Assign owner Nadia to the task 'Deploy beta'.\nAssistant: Nadia owns 'Deploy beta'.\n\nUser: Who owns the 'Deploy beta' task?\n\nQuestion: Who owns the 'Deploy beta' task? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "Nadia",
+      "difficulty": "intermediate",
+      "tags": [
+        "stateful",
+        "continuity"
+      ]
+    },
+    {
+      "id": "DV-SA01-03",
+      "gauntlet": "SA01",
+      "prompt": "Session transcript:\nUser: Switch the editor theme to dark.\nAssistant: Theme set to dark.\nUser: Set the editor font size to 14pt.\nAssistant: Font size set to 14pt.\n\nUser: What is the current font size?\n\nQuestion: What is the current font size? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "14pt",
+      "difficulty": "intermediate",
+      "tags": [
+        "stateful",
+        "continuity"
+      ]
+    },
+    {
+      "id": "DV-SA01-04",
+      "gauntlet": "SA01",
+      "prompt": "Session transcript:\nUser: Name the server falcon-2.\nAssistant: Server named falcon-2.\nUser: Set the region to eu-west.\nAssistant: Region set to eu-west.\n\nUser: Which region is the server in?\n\nQuestion: Which region is the server in? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "eu-west",
+      "difficulty": "intermediate",
+      "tags": [
+        "stateful",
+        "continuity"
+      ]
+    }
+  ],
+  "partition": "dev",
+  "created": "2026-08-18",
+  "description": "Fresh DEV gauntlet v1 for Phase A'/B' confirmation, stratified across M01/LCTX01/LCTX02/LCTX03/SA01"
+}

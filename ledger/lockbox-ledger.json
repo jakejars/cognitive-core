@@ -1,0 +1,157 @@
+{
+  "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+  "entries": {
+    "LBX-M01-01": {
+      "content_hash": "90da3815169060481ab045d7ace7b8130c4397aa4d3c351d44c3c8b732d5c089",
+      "partition": "lockbox",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "authorised_release_at": "2026-12-31T00:00:00+00:00",
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "first_evaluated_at": null,
+      "evaluation_count": 0,
+      "cell_evaluations": {},
+      "authorised_cells": [
+        "B1",
+        "B2",
+        "S1",
+        "S2"
+      ],
+      "exposure_history": []
+    },
+    "LBX-M01-02": {
+      "content_hash": "f930870cb806fdbccfe240b689962318aae52221715bc36946e7879a1c34e649",
+      "partition": "lockbox",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "authorised_release_at": "2026-12-31T00:00:00+00:00",
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "first_evaluated_at": null,
+      "evaluation_count": 0,
+      "cell_evaluations": {},
+      "authorised_cells": [
+        "B1",
+        "B2",
+        "S1",
+        "S2"
+      ],
+      "exposure_history": []
+    },
+    "LBX-LCTX01-01": {
+      "content_hash": "ea9c387298ac770ea750693215e1830b3efbee1942f384d6b01f6106363eb1ee",
+      "partition": "lockbox",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "authorised_release_at": "2026-12-31T00:00:00+00:00",
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "first_evaluated_at": null,
+      "evaluation_count": 0,
+      "cell_evaluations": {},
+      "authorised_cells": [
+        "B1",
+        "B2",
+        "S1",
+        "S2"
+      ],
+      "exposure_history": []
+    },
+    "LBX-LCTX01-02": {
+      "content_hash": "a77941867020259371c025fa9ff5abc18aa16ff003db6506d40419cac713b641",
+      "partition": "lockbox",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "authorised_release_at": "2026-12-31T00:00:00+00:00",
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "first_evaluated_at": null,
+      "evaluation_count": 0,
+      "cell_evaluations": {},
+      "authorised_cells": [
+        "B1",
+        "B2",
+        "S1",
+        "S2"
+      ],
+      "exposure_history": []
+    },
+    "LBX-LCTX02-01": {
+      "content_hash": "68a1d43639c726f6732ad33dbca4a271c090147bff2578779fec072d32962ce2",
+      "partition": "lockbox",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "authorised_release_at": "2026-12-31T00:00:00+00:00",
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "first_evaluated_at": null,
+      "evaluation_count": 0,
+      "cell_evaluations": {},
+      "authorised_cells": [
+        "B1",
+        "B2",
+        "S1",
+        "S2"
+      ],
+      "exposure_history": []
+    },
+    "LBX-LCTX02-02": {
+      "content_hash": "a180483491fe22c5b0d09843029fb1ab5769d2dd42b2af87924a6841d98a1e18",
+      "partition": "lockbox",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "authorised_release_at": "2026-12-31T00:00:00+00:00",
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "first_evaluated_at": null,
+      "evaluation_count": 0,
+      "cell_evaluations": {},
+      "authorised_cells": [
+        "B1",
+        "B2",
+        "S1",
+        "S2"
+      ],
+      "exposure_history": []
+    },
+    "LBX-LCTX03-01": {
+      "content_hash": "3b042ee68f2a2ab99f363658fce96e04fca8c3f1f540ab1e4ec9252cc36a0519",
+      "partition": "lockbox",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "authorised_release_at": "2026-12-31T00:00:00+00:00",
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "first_evaluated_at": null,
+      "evaluation_count": 0,
+      "cell_evaluations": {},
+      "authorised_cells": [
+        "B1",
+        "B2",
+        "S1",
+        "S2"
+      ],
+      "exposure_history": []
+    },
+    "LBX-SA01-01": {
+      "content_hash": "0c551b88865320e54524e5558d686a09a984d7dcaea2fbfece18b9dd008b859e",
+      "partition": "lockbox",
+      "created_at": "2026-08-18T11:34:44.919939+00:00",
+      "frozen_at": "2026-08-18T11:34:44.919939+00:00",
+      "authorised_release_at": "2026-12-31T00:00:00+00:00",
+      "first_exposed_at": null,
+      "first_researcher_exposure_at": null,
+      "first_evaluated_at": null,
+      "evaluation_count": 0,
+      "cell_evaluations": {},
+      "authorised_cells": [
+        "B1",
+        "B2",
+        "S1",
+        "S2"
+      ],
+      "exposure_history": []
+    }
+  }
+}

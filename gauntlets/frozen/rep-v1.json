@@ -1,0 +1,157 @@
+{
+  "tasks": [
+    {
+      "id": "RP-M01-01",
+      "gauntlet": "M01",
+      "prompt": "Consider these two procedures.\n\nProcedure A:\n1. Connect to the database\n2. Load the orders table\n3. Aggregate revenue by month\n\nProcedure B:\n1. Connect to the database\n2. Load the orders table\n3. Aggregate revenue by month\n\nAre the two procedures identical in behaviour? Output exactly one letter: A or B, and nothing else.",
+      "evaluator": "exact_match",
+      "expected": "A",
+      "difficulty": "basic",
+      "tags": [
+        "structural_identity",
+        "equivalence"
+      ]
+    },
+    {
+      "id": "RP-M01-02",
+      "gauntlet": "M01",
+      "prompt": "Consider these two procedures.\n\nProcedure A:\n1. Connect to the database\n2. Load the orders table\n3. Aggregate revenue by month\n\nProcedure B:\n1. Connect to the database\n2. Load the orders table\n3. Delete revenue by month\n\nAre the two procedures different in behaviour? Output exactly one letter: A or B, and nothing else.",
+      "evaluator": "exact_match",
+      "expected": "B",
+      "difficulty": "basic",
+      "tags": [
+        "structural_identity",
+        "difference_detection"
+      ]
+    },
+    {
+      "id": "RP-M01-03",
+      "gauntlet": "M01",
+      "prompt": "Consider these two procedures.\n\nProcedure A:\ndef lookup(key, store):\n    return store.get(key)\n\ndef lookup(key, store):\n    if key in store:\n        return store[key]\n    return None\n\nProcedure B:\ndef lookup(key, store):\n    if key in store:\n        return store[key]\n    return None\n\nAre the two procedures identical in behaviour? Output exactly one letter: A or B, and nothing else.",
+      "evaluator": "exact_match",
+      "expected": "A",
+      "difficulty": "intermediate",
+      "tags": [
+        "structural_identity",
+        "equivalence"
+      ]
+    },
+    {
+      "id": "RP-LCTX01-01",
+      "gauntlet": "LCTX01",
+      "prompt": "Here is some text:\n\nThe Curiosity rover landed on Mars in 2012. The Moon has no atmosphere. Venus rotates backwards.\n\nQuestion: In which year did the Curiosity rover land on Mars? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "2012",
+      "difficulty": "basic",
+      "tags": [
+        "recall",
+        "needle"
+      ]
+    },
+    {
+      "id": "RP-LCTX01-02",
+      "gauntlet": "LCTX01",
+      "prompt": "Here is some text:\n\nThe Panama Canal connects the Atlantic and Pacific oceans. Chile borders Argentina. The Danube flows through Vienna.\n\nQuestion: What does the Panama Canal connect? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "Atlantic",
+      "difficulty": "basic",
+      "tags": [
+        "recall",
+        "needle"
+      ]
+    },
+    {
+      "id": "RP-LCTX01-03",
+      "gauntlet": "LCTX01",
+      "prompt": "Here is some text:\n\nThe first animal in space was a dog named Laika. The first satellite was Sputnik 1. Neil Armstrong walked on the Moon in 1969.\n\nQuestion: What was the first satellite? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "Sputnik",
+      "difficulty": "basic",
+      "tags": [
+        "recall",
+        "needle"
+      ]
+    },
+    {
+      "id": "RP-LCTX02-01",
+      "gauntlet": "LCTX02",
+      "prompt": "Here are several facts:\n\n1. Mercury has no moons.\n2. Venus has no moons.\n3. Saturn has more than 100 moons.\n\nQuestion: Which two planets have no moons?",
+      "evaluator": "contains_all",
+      "expected": [
+        "Mercury",
+        "Venus"
+      ],
+      "difficulty": "basic",
+      "tags": [
+        "multi_fact",
+        "recall"
+      ]
+    },
+    {
+      "id": "RP-LCTX02-02",
+      "gauntlet": "LCTX02",
+      "prompt": "Here are several facts:\n\n1. The cheetah is the fastest land animal.\n2. The peregrine falcon is the fastest bird.\n3. The sailfish is the fastest fish.\n\nQuestion: Which animal is the fastest land animal and which is the fastest bird?",
+      "evaluator": "contains_all",
+      "expected": [
+        "cheetah",
+        "peregrine"
+      ],
+      "difficulty": "basic",
+      "tags": [
+        "multi_fact",
+        "recall"
+      ]
+    },
+    {
+      "id": "RP-LCTX03-01",
+      "gauntlet": "LCTX03",
+      "prompt": "In Bright Labs: Omar manages Yara. Yara manages Finn. Finn manages Tess.\n\nQuestion: Who is exactly two levels of management above Tess? Output only the answer.",
+      "evaluator": "contains",
+      "expected": "Yara",
+      "difficulty": "intermediate",
+      "tags": [
+        "multi_hop",
+        "reasoning"
+      ]
+    },
+    {
+      "id": "RP-LCTX03-02",
+      "gauntlet": "LCTX03",
+      "prompt": "The web app depends on the API. The API depends on the database schema. The schema depends on the product spec.\n\nQuestion: What is the second-level dependency of the web app? Output only the answer.",
+      "evaluator": "contains",
+      "expected": "schema",
+      "difficulty": "intermediate",
+      "tags": [
+        "multi_hop",
+        "reasoning"
+      ]
+    },
+    {
+      "id": "RP-SA01-01",
+      "gauntlet": "SA01",
+      "prompt": "Session transcript:\nUser: Create a repository called delta.\nAssistant: Repository delta created.\nUser: Set the default branch to dev.\nAssistant: Default branch set to dev.\n\nUser: What is the default branch?\n\nQuestion: What is the default branch? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "dev",
+      "difficulty": "intermediate",
+      "tags": [
+        "stateful",
+        "continuity"
+      ]
+    },
+    {
+      "id": "RP-SA01-02",
+      "gauntlet": "SA01",
+      "prompt": "Session transcript:\nUser: Set reminders to on.\nAssistant: Reminders enabled.\nUser: Set the reminder time to 9am.\nAssistant: Reminder time set to 9am.\n\nUser: What time are reminders set to?\n\nQuestion: What time are reminders set to? Answer in one line.",
+      "evaluator": "contains",
+      "expected": "9am",
+      "difficulty": "intermediate",
+      "tags": [
+        "stateful",
+        "continuity"
+      ]
+    }
+  ],
+  "partition": "replication",
+  "created": "2026-08-18",
+  "description": "Fresh REPLICATION gauntlet v1, distinct content from DEV"
+}

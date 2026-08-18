@@ -1,5 +1,4 @@
 import copy
-import re
 
 from gauntlets.substrate_construct.generator import generate_taskset
 from harness.gauntlet_evaluators import evaluate_task
@@ -15,16 +14,12 @@ def _one_per_family():
     return list(selected.values())
 
 
-def _words(text: str) -> set[str]:
-    return set(re.findall(r"[a-z0-9_-]+", text.casefold()))
-
-
 def test_every_construct_family_has_background_address_space():
     for task in generate_taskset(seed=42, n_tasks=50, split="dev"):
         assert task.get("history_filler"), f"{task['family']} has no address-space filler"
 
 
-def test_history_filler_lexicon_is_disjoint_from_task_prompt():
+def test_history_filler_is_zero_overlap_under_actual_keyword_scorer():
     for task in _one_per_family():
         assert task.get("history_filler"), task["family"]
         probe = copy.deepcopy(task)
@@ -36,13 +31,19 @@ def test_history_filler_lexicon_is_disjoint_from_task_prompt():
         }
         rt = SubstrateRuntime()
         prepare_substrate(rt, probe, arm="S1")
-        filler_text = " ".join(
-            entry.content
+        query_words = set(task["prompt"].casefold().split())
+        filler_entries = [
+            entry
             for entry in rt.compiler._memory_store
             if entry.metadata.get("source") == "synthetic_history_filler"
-        )
-        overlap = _words(filler_text) & _words(task["prompt"])
-        assert not overlap, f"{task['family']} filler overlaps prompt lexicon: {sorted(overlap)}"
+        ]
+        assert filler_entries
+        for entry in filler_entries:
+            content = entry.content.casefold()
+            matched = sorted(word for word in query_words if word in content)
+            assert not matched, (
+                f"{task['family']} filler is not neutral to actual scorer: {matched}"
+            )
 
 
 def test_s1_recovers_oracle_record_set_with_background_address_space():

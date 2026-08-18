@@ -1,14 +1,17 @@
 {
   "model_id": "MiniCPM5-1B",
   "revision": "87179e5c1f455ef22e6223592d2d61351b525bfc",
-  "template_source": "hardcoded_adapter_v1",
-  "template_string": "<|user|>\n{prompt}<|end|>\n<|assistant|>\n",
+  "template_source": "apply_chat_template",
+  "template_string": "<s><|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+  "template_kwargs": {
+    "enable_thinking": false
+  },
   "tokenizer_class": "PreTrainedTokenizerFast",
   "golden_tokenisation_test": {
     "prompt": "What is the capital of France?",
-    "test_input": "<|user|>\nWhat is the capital of France?<|end|>\n<|assistant|>\n",
-    "description": "Simple factual prompt in MiniCPM format",
-    "expected_token_ids": [151337, 151338, 151339, 46087, 338, 544, 1706, 9466, 2459, 315, 456, 151340, 151339, 151337, 151341, 151339]
+    "test_input": "<s><|im_start|>user\nWhat is the capital of France?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "description": "MiniCPM5-1B native chat-template rendering (built-in <think> template, enable_thinking=false). Calibrated against local pinned checkpoint 87179e5c1f455ef22e6223592d2d61351b525bfc (all files hash-verified vs openbmb/MiniCPM5-1B main).",
+    "expected_token_ids": [0, 0, 130072, 8448, 220, 2928, 357, 285, 4894, 304, 6918, 52, 130073, 220, 130072, 130071, 220, 8, 130063, 9, 130063]
   },
   "generation_config": {
     "thinking_mode": false,

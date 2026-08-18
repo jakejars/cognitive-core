@@ -1,17 +1,17 @@
 {
   "model_id": "Qwen3.5-4B",
-  "revision": "main",
+  "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
   "template_source": "apply_chat_template",
-  "template_string": "<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n",
+  "template_string": "<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
   "template_kwargs": {
     "enable_thinking": false
   },
   "tokenizer_class": "PreTrainedTokenizerFast",
   "golden_tokenisation_test": {
     "prompt": "What is the capital of France?",
-    "test_input": "<|im_start|>user\nWhat is the capital of France?<|im_end|>\n<|im_start|>assistant\n",
-    "description": "Qwen native chat-template rendering with thinking disabled",
-    "expected_token_ids": [151644, 198, 15225, 338, 544, 1706, 9466, 2459, 315, 456, 151645, 198, 151644, 198, 15225]
+    "test_input": "<|im_start|>user\nWhat is the capital of France?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "description": "Qwen3.5-4B native chat-template rendering with thinking disabled. Empty <think></think> block is the official template behaviour at enable_thinking=false. Calibrated against local pinned checkpoint 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a (all files hash-verified vs Qwen/Qwen3.5-4B main).",
+    "expected_token_ids": [248045, 846, 198, 3710, 369, 279, 6511, 314, 9338, 30, 248046, 198, 248045, 74455, 198, 248068, 271, 248069, 271]
   },
   "generation_config": {
     "thinking_mode": false,
@@ -20,6 +20,6 @@
     "temperature": 0.0,
     "top_p": 0.0,
     "stop_policy": "explicit_plus_eos",
-    "stop_tokens": [151645, 151643]
+    "stop_tokens": [248046, 248044]
   }
 }

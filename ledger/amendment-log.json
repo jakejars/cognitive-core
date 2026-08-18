@@ -1,18 +1,42 @@
 [
-    {
-        "date": "2026-08-18",
-        "reason": "Initial protocol audit: reclassify all prior experiments as DEV/exploratory. B2 template bug, missing S2, contaminated lockbox, incomplete LCTX, Phase D gate not passed.",
-        "observed_results": "B2 received MiniCPM chat template (46.2% invalid). S2 never run. Lockbox tasks contaminated. LCTX 5/10 implemented. Phase D gate not passed.",
-        "affected_metrics": "All prior experiment conclusions withdrawn. B1 vs B2 comparison invalid. Small-executive thesis unresolved.",
-        "invalidated_evidence": true,
-        "new_evaluation_source": "Fresh confirmation campaign with corrected per-model templates, S2 runner, lockbox isolation, and executable invariants."
-    },
-    {
-        "date": "2026-08-18",
-        "reason": "Phase E (neural improvements) and Phase F (long-context extension) skipped pending confirmation campaign results. External memory retrieval at 1M tokens suggests neural attention extension may not be needed, but formal decision deferred until clean matrix is established.",
-        "observed_results": "External memory achieves 100% retrieval at 1M tokens. Native attention collapses to 20% at 100K. Decision record DEC-001 documents the rationale.",
-        "affected_metrics": "Phase E/F removed from critical path. Budget reallocation to confirmation campaign.",
-        "invalidated_evidence": false,
-        "new_evaluation_source": "Lockbox evaluation after confirmation campaign will determine if Phase E/F are needed."
-    }
+  {
+    "date": "2026-08-18",
+    "reason": "Initial protocol audit: reclassify all prior experiments as DEV/exploratory. B2 template bug, missing S2, contaminated lockbox, incomplete LCTX, Phase D gate not passed.",
+    "observed_results": "B2 received MiniCPM chat template (46.2% invalid). S2 never run. Lockbox tasks contaminated. LCTX 5/10 implemented. Phase D gate not passed.",
+    "affected_metrics": "All prior experiment conclusions withdrawn. B1 vs B2 comparison invalid. Small-executive thesis unresolved.",
+    "invalidated_evidence": true,
+    "new_evaluation_source": "Fresh confirmation campaign with corrected per-model templates, S2 runner, lockbox isolation, and executable invariants."
+  },
+  {
+    "date": "2026-08-18",
+    "reason": "Phase E (neural improvements) and Phase F (long-context extension) skipped pending confirmation campaign results. External memory retrieval at 1M tokens suggests neural attention extension may not be needed, but formal decision deferred until clean matrix is established.",
+    "observed_results": "External memory achieves 100% retrieval at 1M tokens. Native attention collapses to 20% at 100K. Decision record DEC-001 documents the rationale.",
+    "affected_metrics": "Phase E/F removed from critical path. Budget reallocation to confirmation campaign.",
+    "invalidated_evidence": false,
+    "new_evaluation_source": "Lockbox evaluation after confirmation campaign will determine if Phase E/F are needed."
+  },
+  {
+    "date": "2026-08-18",
+    "reason": "phase-c--external-memory LongRoPE positional extension not needed (DEC-001: external memory dominates native attention; 100% retrieval at 1M tokens vs 20% native at 100K). Positional extension removed from critical path pending clean confirmation matrix.",
+    "observed_results": "External memory achieves 100% retrieval at 1M tokens; native attention collapses to 20% at 100K. Decision record DEC-001 documents the rationale.",
+    "affected_metrics": "Phase C work item 7 (LongRoPE positional extension) marked not needed; Phase F deferred.",
+    "invalidated_evidence": false,
+    "new_evaluation_source": "Fresh confirmation campaign matrix; LCTX capability curve at 131K/200K/256K/512K/1M will re-test the ceiling empirically."
+  },
+  {
+    "date": "2026-08-18",
+    "reason": "Local adapter calibration on M5 Pro: MiniCPM5-1B switched from hardcoded MiniCPM3-format template to its native apply_chat_template (im_start format, built-in <think> template per openbmb README); Qwen3.5-4B revision pinned to 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a; both golden tokenisation fixtures recalibrated to the actual local pinned checkpoints (hash-verified). No confirmatory receipts existed before this calibration.",
+    "observed_results": "Golden token IDs in committed adapters did not match the local MiniCPM5-1B / Qwen3.5-4B tokenizers (they were from a MiniCPM3/Qwen3-era vocab). Qwen adapter left revision: main. Both adapters now verified against actual local checkpoint bytes.",
+    "affected_metrics": "Adapter golden fixtures, Qwen stop tokens (151645/151643 -> 248046/248044), MiniCPM template_source -> apply_chat_template.",
+    "invalidated_evidence": false,
+    "new_evaluation_source": "Calibrated adapters are the verification gate for the fresh confirmation campaign."
+  },
+  {
+    "date": "2026-08-18",
+    "reason": "phase-g--deployment Cactus feasibility assessed and not needed: MLX is superior on Apple Silicon for the local stack; 4-bit quantisation already delivers 2GB -> 580MB (3.4x) with quality preserved.",
+    "observed_results": "Cactus runtime assessed; MLX-native 4-bit quantisation meets deployment targets without introducing a second runtime.",
+    "affected_metrics": "Phase G work item 3 (Cactus) not needed; deployment path stays on MLX.",
+    "invalidated_evidence": false,
+    "new_evaluation_source": "Deployment decisions re-confirmed against the fresh confirmation matrix once available."
+  }
 ]

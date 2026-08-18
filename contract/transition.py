@@ -1,12 +1,8 @@
-"""
-State-transition API — the only mechanism capable of promoting experiment/phase/claim status.
+"""State-transition authority for Research Contract v2.2.
 
-Contract §2, §3.4: No research runner should write CONFIRMED, PHASE_GATE_PASS,
-or SUPPORTED_CLAIM directly. All transitions go through this API, which:
-1. Validates the current state of the entity
-2. Verifies the transition is in the allowed matrix
-3. Runs applicable contract invariants
-4. Commits the transition with a cryptographically signed receipt
+Transition records are integrity-hashed and stored separately from experiment
+receipts. Authenticity still depends on the external/read-only supervisor trust
+boundary described in SUPERVISOR.md.
 """
 
 from __future__ import annotations
@@ -14,27 +10,31 @@ from __future__ import annotations
 import json
 import os
 import uuid
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import List
 
-from contract.invariants import (
-    check_experiment_matrix, check_lockbox_intact, check_lockbox_pass,
-    check_chat_template_parity, check_phase_d_gate, check_phase_constants,
-    check_compensation_hypothesis, check_amendment_record,
-    check_budget_overrun, check_model_config_parity, ContractViolation,
+from contract.evidence import hash_json
+from contract.hardening import (
+    ContractViolation,
+    check_amendment_record,
+    check_budget_overrun,
+    check_chat_template_parity,
+    check_compensation_hypothesis,
+    check_experiment_matrix,
+    check_lockbox_intact,
+    check_lockbox_pass,
+    check_model_config_parity,
+    check_phase_constants,
+    check_phase_d_gate,
 )
-from contract.schema import (
-    EvidenceManifest, ExperimentReceipt, PhaseState, VALID_TRANSITIONS,
-    PhaseConstants, CompensationHypothesis, AmendmentRecord, Partition,
-)
+from contract.schema import EvidenceManifest, Partition, PhaseState, VALID_TRANSITIONS
 
 
 @dataclass
 class TransitionRequest:
-    """Request to transition an entity from one state to another."""
-    entity_type: str       # "experiment", "phase", "claim"
-    entity_id: str         # e.g. "EXP-011", "Phase-C", "SMALL_EXECUTIVE_THESIS"
+    entity_type: str
+    entity_id: str
     from_state: PhaseState
     to_state: PhaseState
     evidence: EvidenceManifest
@@ -44,7 +44,6 @@ class TransitionRequest:
 
 @dataclass
 class TransitionResult:
-    """Result of a transition request."""
     accepted: bool
     receipt_id: str = ""
     violations: List[str] = field(default_factory=list)
@@ -65,174 +64,85 @@ class ClaimTransitioner:
             project_root = _root()
         self.project_root = project_root
         self.ledger_dir = os.path.join(project_root, "ledger")
-        self.receipts_dir = os.path.join(self.ledger_dir, "receipts")
-        os.makedirs(self.receipts_dir, exist_ok=True)
+        self.transitions_dir = os.path.join(self.ledger_dir, "transitions")
+        os.makedirs(self.transitions_dir, exist_ok=True)
 
     def request_transition(self, req: TransitionRequest) -> TransitionResult:
-        """
-        Submit a transition request. Validates evidence against contract,
-        verifies current state, then either commits or rejects.
-        """
-        violations = []
-        warnings = []
+        violations: list[str] = []
+        warnings: list[str] = []
 
-        # ── 1. Verify current state matches from_state ──
         actual_state = self.get_entity_state(req.entity_type, req.entity_id)
         if actual_state != req.from_state:
             violations.append(
-                f"Entity {req.entity_type}/{req.entity_id} is in state "
-                f"{actual_state.value}, but transition requests from {req.from_state.value}. "
-                f"from_state must match the entity's current state."
+                f"Entity {req.entity_type}/{req.entity_id} is in state {actual_state.value}, "
+                f"but transition requests from {req.from_state.value}."
             )
 
-        # ── 2. Validate transition is legal ──
         allowed = VALID_TRANSITIONS.get(req.from_state, set())
         if req.to_state not in allowed:
             violations.append(
-                f"Transition {req.from_state.value} → {req.to_state.value} "
-                f"is not in the allowed transition matrix."
+                f"Transition {req.from_state.value} → {req.to_state.value} is not in the allowed transition matrix."
             )
 
-        # ── 3. Validate and store evidence receipt ──
-        if req.evidence.experiment_receipts:
-            for r in req.evidence.experiment_receipts:
-                errs = r.validate()
-                if errs:
-                    violations.extend(f"Receipt {r.run_id}: {e}" for e in errs)
+        for receipt in req.evidence.experiment_receipts:
+            errors = receipt.validate()
+            if errors:
+                violations.extend(f"Receipt {receipt.run_id}: {error}" for error in errors)
 
-        # ── 4. Run applicable invariants ──
-        # Which invariants to check depends on the target state
+        def run_check(fn, *args, **kwargs):
+            try:
+                fn(*args, **kwargs)
+            except ContractViolation as exc:
+                violations.append(str(exc))
 
         if req.to_state == PhaseState.SUPPORTED_CLAIM:
-            # Major claims require full matrix across all tiers
-            try:
-                check_experiment_matrix(self.project_root, require_tier=Partition.DEV)
-            except ContractViolation as e:
-                violations.append(str(e))
-            try:
-                check_experiment_matrix(self.project_root, require_tier=Partition.REPLICATION)
-            except ContractViolation as e:
-                violations.append(str(e))
-            try:
-                check_experiment_matrix(self.project_root, require_tier=Partition.LOCKBOX)
-            except ContractViolation as e:
-                violations.append(str(e))
-
-            try:
-                check_lockbox_intact(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-
-            try:
-                check_lockbox_pass(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-
-            try:
-                check_chat_template_parity(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-
-            try:
-                check_phase_constants(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-
-            try:
-                check_compensation_hypothesis(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-
-            try:
-                check_amendment_record(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-
-            try:
-                check_budget_overrun(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-
-            try:
-                check_model_config_parity(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
+            run_check(check_experiment_matrix, self.project_root, require_tier=Partition.DEV)
+            run_check(check_experiment_matrix, self.project_root, require_tier=Partition.REPLICATION)
+            run_check(check_experiment_matrix, self.project_root, require_tier=Partition.LOCKBOX)
+            run_check(check_lockbox_intact, self.project_root)
+            run_check(check_lockbox_pass, self.project_root)
+            run_check(check_chat_template_parity, self.project_root)
+            run_check(check_phase_constants, self.project_root)
+            run_check(check_compensation_hypothesis, self.project_root)
+            run_check(check_amendment_record, self.project_root)
+            run_check(check_budget_overrun, self.project_root)
+            run_check(check_model_config_parity, self.project_root)
 
         if req.to_state == PhaseState.LOCKBOX_PASS:
-            try:
-                check_lockbox_intact(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-            try:
-                check_lockbox_pass(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-            try:
-                check_experiment_matrix(self.project_root, require_tier=Partition.LOCKBOX)
-            except ContractViolation as e:
-                violations.append(str(e))
+            run_check(check_lockbox_intact, self.project_root)
+            run_check(check_lockbox_pass, self.project_root)
+            run_check(check_experiment_matrix, self.project_root, require_tier=Partition.LOCKBOX)
+            run_check(check_model_config_parity, self.project_root)
 
         if req.to_state == PhaseState.REPLICATED:
-            try:
-                check_experiment_matrix(self.project_root, require_tier=Partition.REPLICATION)
-            except ContractViolation as e:
-                violations.append(str(e))
+            run_check(check_experiment_matrix, self.project_root, require_tier=Partition.REPLICATION)
+            run_check(check_model_config_parity, self.project_root)
 
         if req.to_state == PhaseState.DEV_PASS:
-            try:
-                check_experiment_matrix(self.project_root, require_tier=Partition.DEV)
-            except ContractViolation as e:
-                violations.append(str(e))
-            try:
-                check_chat_template_parity(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
+            run_check(check_experiment_matrix, self.project_root, require_tier=Partition.DEV)
+            run_check(check_chat_template_parity, self.project_root)
+            run_check(check_model_config_parity, self.project_root)
 
         if req.to_state == PhaseState.PHASE_GATE_PASS:
-            try:
-                check_experiment_matrix(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-            try:
-                check_lockbox_intact(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-            try:
-                check_chat_template_parity(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-            try:
-                check_phase_constants(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
-            try:
-                check_amendment_record(self.project_root)
-            except ContractViolation as e:
-                violations.append(str(e))
+            run_check(check_experiment_matrix, self.project_root)
+            run_check(check_chat_template_parity, self.project_root)
+            run_check(check_phase_constants, self.project_root)
+            run_check(check_amendment_record, self.project_root)
+            run_check(check_budget_overrun, self.project_root)
+            run_check(check_model_config_parity, self.project_root)
 
-        # ── 5. Phase-specific gates ──
         if req.entity_type == "phase":
-            phase_lower = req.entity_id.lower()
-            if "d" in phase_lower or "procedural" in phase_lower:
+            phase_id = req.entity_id.lower()
+            if phase_id in {"phase-d", "d", "procedural"} or "procedural" in phase_id:
                 if req.to_state in (PhaseState.PHASE_GATE_PASS, PhaseState.SUPPORTED_CLAIM):
-                    try:
-                        check_phase_d_gate(self.project_root)
-                    except ContractViolation as e:
-                        violations.append(str(e))
+                    run_check(check_phase_d_gate, self.project_root)
 
-        # ── 6. Commit or reject ──
         if violations:
-            return TransitionResult(
-                accepted=False,
-                violations=violations,
-                warnings=warnings,
-            )
+            return TransitionResult(False, violations=violations, warnings=warnings)
 
-        # Commit the transition
         receipt_id = str(uuid.uuid4())
         timestamp = datetime.now(timezone.utc).isoformat()
-
-        transition_record = {
+        record = {
             "receipt_id": receipt_id,
             "entity_type": req.entity_type,
             "entity_id": req.entity_id,
@@ -242,18 +152,23 @@ class ClaimTransitioner:
             "evidence_summary": self._summarize_evidence(req.evidence),
             "committed_at": timestamp,
         }
+        record["record_hash"] = hash_json(record)
 
-        receipt_path = os.path.join(
-            self.receipts_dir,
-            f"{timestamp[:10]}_{req.entity_id}_{req.to_state.value}.json",
+        path = os.path.join(
+            self.transitions_dir,
+            f"{timestamp[:10]}_{req.entity_id}_{req.to_state.value}_{receipt_id[:8]}.json",
         )
-        with open(receipt_path, "w") as f:
-            json.dump(transition_record, f, indent=2)
+        tmp = path + ".tmp"
+        with open(tmp, "w") as f:
+            json.dump(record, f, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
 
         return TransitionResult(
-            accepted=True,
+            True,
             receipt_id=receipt_id,
-            new_receipt_path=receipt_path,
+            new_receipt_path=path,
             warnings=warnings,
         )
 
@@ -267,58 +182,39 @@ class ClaimTransitioner:
         }
 
     def get_entity_state(self, entity_type: str, entity_id: str) -> PhaseState:
-        """Determine current state of an entity from its transition receipts."""
-        if not os.path.isdir(self.receipts_dir):
+        if not os.path.isdir(self.transitions_dir):
             return PhaseState.UNIMPLEMENTED
         current = PhaseState.UNIMPLEMENTED
-        for fn in sorted(os.listdir(self.receipts_dir)):
-            if not fn.endswith(".json"):
+        for filename in sorted(os.listdir(self.transitions_dir)):
+            if not filename.endswith(".json"):
                 continue
-            with open(os.path.join(self.receipts_dir, fn)) as f:
-                data = json.load(f)
+            try:
+                with open(os.path.join(self.transitions_dir, filename)) as f:
+                    data = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                continue
+            stored_hash = data.pop("record_hash", "")
+            if not stored_hash or stored_hash != hash_json(data):
+                continue
             if data.get("entity_type") == entity_type and data.get("entity_id") == entity_id:
                 try:
                     current = PhaseState(data["to_state"])
-                except ValueError:
-                    pass
+                except (KeyError, ValueError):
+                    continue
         return current
 
 
-def request_claim(
-    claim_id: str,
-    evidence: EvidenceManifest,
-    project_root: str = None,
-    reason: str = "",
-) -> TransitionResult:
-    """Convenience: request a SUPPORTED_CLAIM transition."""
+def request_claim(claim_id: str, evidence: EvidenceManifest, project_root: str = None, reason: str = "") -> TransitionResult:
     transitioner = ClaimTransitioner(project_root)
     current = transitioner.get_entity_state("claim", claim_id)
-    req = TransitionRequest(
-        entity_type="claim",
-        entity_id=claim_id,
-        from_state=current,
-        to_state=PhaseState.SUPPORTED_CLAIM,
-        evidence=evidence,
-        reason=reason,
+    return transitioner.request_transition(
+        TransitionRequest("claim", claim_id, current, PhaseState.SUPPORTED_CLAIM, evidence, reason)
     )
-    return transitioner.request_transition(req)
 
 
-def request_phase_gate(
-    phase_id: str,
-    evidence: EvidenceManifest,
-    project_root: str = None,
-    reason: str = "",
-) -> TransitionResult:
-    """Convenience: request a phase gate pass."""
+def request_phase_gate(phase_id: str, evidence: EvidenceManifest, project_root: str = None, reason: str = "") -> TransitionResult:
     transitioner = ClaimTransitioner(project_root)
     current = transitioner.get_entity_state("phase", phase_id)
-    req = TransitionRequest(
-        entity_type="phase",
-        entity_id=phase_id,
-        from_state=current,
-        to_state=PhaseState.PHASE_GATE_PASS,
-        evidence=evidence,
-        reason=reason,
+    return transitioner.request_transition(
+        TransitionRequest("phase", phase_id, current, PhaseState.PHASE_GATE_PASS, evidence, reason)
     )
-    return transitioner.request_transition(req)

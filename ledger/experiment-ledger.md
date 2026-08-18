@@ -164,3 +164,4 @@ Embedding-based hybrid retrieval also implemented (all-MiniLM-L6-v2) for semanti
 | 007 | 2026-08-18 | D | Procedural learning pipeline | Pipeline built, 3 skills promoted from 10 traces |
 | 008 | 2026-08-18 | D | Counterfactual skill evaluation | Skills accurate but trivial for single-turn tasks |
 | 009 | 2026-08-18 | G | 4-bit MLX quantisation | **580MB (3.4× reduction), quality preserved** |
+| 010 | 2026-08-18 | G | Phase G completion | Escalation, Cactus assessment, performance tuning |

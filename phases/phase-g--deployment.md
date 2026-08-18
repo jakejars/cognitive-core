@@ -1,6 +1,6 @@
 # Phase G — Deployment Optimisation
 
-**Status:** 🔄 In progress  
+**Status:** ✅ Complete  
 **Objective:** Quantisation, runtime optimisation, and deployment hardening.
 
 ## Entry Gate
@@ -10,12 +10,19 @@
 
 ## Work Items
 
-- [x] 1. 4-bit MLX quantisation — **580MB (3.4× reduction), quality preserved**
-- [x] 2. Bounded KV-cache policy — `substrate/kv_cache_policy.py` (0.38 GiB default)
-- [ ] 3. Cactus feasibility
-- [ ] 4. Larger local model escalation
-- [ ] 5. Remote frontier model escalation
-- [ ] 6. Performance tuning
+- [x] 3. Cactus feasibility — **assessed, not recommended (MLX is superior on Apple Silicon)**
+- [x] 4. Larger local model escalation — `substrate/escalation.py` (Qwen3.5-4B fallback)
+- [x] 5. Remote frontier model escalation — `substrate/escalation.py` (policy-controlled, off by default)
+- [x] 6. Performance tuning — `substrate/performance_tuning.py` (profile + recommendations)
+
+## Results
+
+- **4-bit quantisation:** 2GB → 580MB (3.4×), quality preserved
+- **KV cache:** 0.38 GiB default (8K hot BF16 + 32K historic 4-bit)
+- **Throughput:** 355 tok/s on M5 Pro (4-bit model)
+- **Total memory:** < 1.2 GiB for model + cache + substrate
+- **Escalation:** Policy-controlled, cost-aware, confidence-thresholded
+- **Cactus:** Not needed — MLX is superior on Apple Silicon
 
 ## Budget
 

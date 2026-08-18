@@ -37,17 +37,10 @@ ARM_MODEL = {
 SUBSTRATE_ARMS = {"S0", "O1", "S1"}
 ABSTENTION_ALLOWED_ARMS = {"B1", "B2", "S0"}
 
-# Intentionally disjoint from construct-task vocabulary. This filler is an
-# address-space load, not an adversarial semantic distractor. Near-semantic
-# distractors belong in a separate experiment.
-FILLER_VOCABULARY = (
-    "azurite banyan cobalt dahlia garnet hemlock isotope jasmine kestrel lichen "
-    "monsoon nectarine obsidian papyrus quasar rhodium saffron topaz uranium "
-    "verdigris wombat xylem yucca zircon acacia bismuth citrine dolomite "
-    "eucalyptus fluorite gneiss hibiscus iridium jacaranda kaolin lignite "
-    "malachite neodymium opal pumice quince rutile selenium tamarind vanadium "
-    "wolfram xerophyte yttrium zeolite"
-).split()
+# Consonant-heavy alphabet used to synthesize scorer-neutral opaque words.
+# Words are rejected if any actual query token is a substring, matching the
+# current ContextCompiler scorer exactly (`word in content_lower`).
+_FILLER_ALPHABET = "bcdfghjklmnpqstvwxyz"
 
 
 def _record_words(records: list[dict]) -> int:
@@ -105,6 +98,8 @@ def validate_construct_task(task: dict) -> None:
             raise ValueError(
                 "history filler must meet its declared minimum external address-space word proxy"
             )
+        if filler.get("lexicon") not in (None, "disjoint_v1"):
+            raise ValueError("unsupported construct filler lexicon")
 
 
 def _entry(record: dict) -> MemoryEntry:
@@ -123,6 +118,26 @@ def _entry(record: dict) -> MemoryEntry:
     )
 
 
+def _neutral_filler_pool(task: dict, rng: random.Random, size: int = 64) -> list[str]:
+    """Create opaque words with zero overlap under the actual substring scorer."""
+    forbidden = {word for word in str(task["prompt"]).casefold().split() if word}
+    pool: list[str] = []
+    seen = set()
+    attempts = 0
+    while len(pool) < size and attempts < 10000:
+        attempts += 1
+        candidate = "".join(rng.choice(_FILLER_ALPHABET) for _ in range(12))
+        if candidate in seen:
+            continue
+        if any(word in candidate for word in forbidden):
+            continue
+        seen.add(candidate)
+        pool.append(candidate)
+    if len(pool) < size:
+        raise ValueError("could not construct query-disjoint filler vocabulary")
+    return pool
+
+
 def _history_filler(task: dict) -> list[MemoryEntry]:
     spec = task.get("history_filler")
     if not spec:
@@ -131,11 +146,10 @@ def _history_filler(task: dict) -> list[MemoryEntry]:
     rng = random.Random(int(spec["seed"]))
     count = int(spec["count"])
     words_per_record = int(spec["words_per_record"])
+    vocabulary = _neutral_filler_pool(task, rng)
     entries = []
     for index in range(count):
-        # No task-domain prefix is included in content. IDs/entity IDs stay in
-        # metadata and therefore cannot win the keyword scorer.
-        tokens = [rng.choice(FILLER_VOCABULARY) for _ in range(words_per_record)]
+        tokens = [rng.choice(vocabulary) for _ in range(words_per_record)]
         entity_id = f"filler-space-{int(spec['seed'])}-{index:04d}"
         entries.append(MemoryEntry(
             id=f"filler-{int(spec['seed'])}-{index:04d}",

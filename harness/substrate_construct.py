@@ -37,6 +37,18 @@ ARM_MODEL = {
 SUBSTRATE_ARMS = {"S0", "O1", "S1"}
 ABSTENTION_ALLOWED_ARMS = {"B1", "B2", "S0"}
 
+# Intentionally disjoint from construct-task vocabulary. This filler is an
+# address-space load, not an adversarial semantic distractor. Near-semantic
+# distractors belong in a separate experiment.
+FILLER_VOCABULARY = (
+    "azurite banyan cobalt dahlia garnet hemlock isotope jasmine kestrel lichen "
+    "monsoon nectarine obsidian papyrus quasar rhodium saffron topaz uranium "
+    "verdigris wombat xylem yucca zircon acacia bismuth citrine dolomite "
+    "eucalyptus fluorite gneiss hibiscus iridium jacaranda kaolin lignite "
+    "malachite neodymium opal pumice quince rutile selenium tamarind vanadium "
+    "wolfram xerophyte yttrium zeolite"
+).split()
+
 
 def _record_words(records: list[dict]) -> int:
     return sum(len(str(record.get("content", "")).split()) for record in records)
@@ -91,7 +103,7 @@ def validate_construct_task(task: dict) -> None:
         minimum = int(filler.get("minimum_address_space_words", 0))
         if count <= 0 or words <= 0 or count * words < minimum:
             raise ValueError(
-                "long-history filler must meet its declared minimum external address-space word proxy"
+                "history filler must meet its declared minimum external address-space word proxy"
             )
 
 
@@ -119,23 +131,12 @@ def _history_filler(task: dict) -> list[MemoryEntry]:
     rng = random.Random(int(spec["seed"]))
     count = int(spec["count"])
     words_per_record = int(spec["words_per_record"])
-    vocabulary = (
-        "historical operational project backup retention encryption deadline owner "
-        "decision provenance archive policy review staging recovery audit configuration "
-        "superseded current record migration release service storage compliance"
-    ).split()
     entries = []
     for index in range(count):
-        entity_id = f"filler-project-{int(spec['seed'])}-{index:04d}"
-        prefix = [
-            "Historical",
-            "operational",
-            "record",
-            f"filler-{index:04d}",
-            f"entity-{int(spec['seed'])}-{index:04d}",
-        ]
-        remaining = max(words_per_record - len(prefix), 0)
-        tokens = prefix + [rng.choice(vocabulary) for _ in range(remaining)]
+        # No task-domain prefix is included in content. IDs/entity IDs stay in
+        # metadata and therefore cannot win the keyword scorer.
+        tokens = [rng.choice(FILLER_VOCABULARY) for _ in range(words_per_record)]
+        entity_id = f"filler-space-{int(spec['seed'])}-{index:04d}"
         entries.append(MemoryEntry(
             id=f"filler-{int(spec['seed'])}-{index:04d}",
             content=" ".join(tokens),
@@ -154,7 +155,6 @@ def prepare_substrate(rt: SubstrateRuntime, task: dict, *, arm: str) -> None:
     validate_construct_task(task)
 
     # The same deterministic background address space is present for S0/O1/S1.
-    # It contains no target entity IDs and therefore cannot answer the task.
     filler = _history_filler(task)
     if filler:
         rt.compiler.store_many(filler)

@@ -4,7 +4,7 @@
   "generator_spec": {
     "module": "gauntlets.substrate_construct.generator",
     "function": "generate_taskset",
-    "generator_sha256": "cb7f568e64e1dd0d72e06aabe20eff17ec250194d16bcbff10f7c8bfb74a2236",
+    "generator_sha256": "5b13ac2472d6ebbfdcc98bfedb2320899bbff197cd33c892bfd809267a90d97f",
     "seed": 41,
     "n_tasks": 15,
     "split": "pilot"

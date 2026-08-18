@@ -26,8 +26,11 @@ def _supersession_task():
             "r-old-deadline", "r-new-deadline", "r-old-owner", "r-new-owner", "r-near-miss"
         ],
         "null_memory_records": [
-            {"id": "n1", "entity_id": "project-borealis", "content": "Project Borealis deadline is 2026-08-03.", "entry_type": "observation"},
-            {"id": "n2", "entity_id": "project-borealis", "content": "Project Borealis owner is Daniel.", "entry_type": "observation"},
+            {"id": "n-old-deadline", "entity_id": "project-borealis", "content": "Project Borealis deadline was 2026-05-10.", "entry_type": "observation"},
+            {"id": "n-new-deadline", "entity_id": "project-borealis", "content": "Project Borealis deadline is now 2026-09-02; this supersedes 2026-05-10.", "entry_type": "observation"},
+            {"id": "n-old-owner", "entity_id": "project-borealis", "content": "Project Borealis owner was Elena.", "entry_type": "observation"},
+            {"id": "n-new-owner", "entity_id": "project-borealis", "content": "Project Borealis owner is now Marcus; Elena is superseded.", "entry_type": "observation"},
+            {"id": "n-near-miss", "entity_id": "project-borealis-docs", "content": "Project Borealis documentation review owner is Felix.", "entry_type": "observation"},
         ],
     }
 

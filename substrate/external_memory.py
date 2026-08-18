@@ -83,14 +83,22 @@ class ExternalMemory:
       - Raw history store (L4)
       - Chunk index (L2)
       - Simple retrieval for materialisation
+      
+    Supports three retrieval modes:
+      - 'keyword': Fast keyword overlap (default)
+      - 'embedding': Semantic similarity via sentence-transformers
+      - 'hybrid': Weighted combination of keyword + embedding
     """
 
-    def __init__(self, chunk_size_tokens: int = 256):
+    def __init__(self, chunk_size_tokens: int = 256, 
+                 retrieval_mode: str = "keyword"):
         self.chunk_size = chunk_size_tokens
+        self.retrieval_mode = retrieval_mode
         self._history: List[HistoryEntry] = []
         self._chunks: Dict[str, Chunk] = {}  # chunk_id → Chunk
         self._keyword_index: Dict[str, List[str]] = {}  # keyword → [chunk_id]
         self._total_tokens: int = 0
+        self._embedding = None  # Lazy-loaded EmbeddingRetriever
 
     def append(self, text: str, source: str = "system",
                metadata: Optional[Dict] = None) -> Chunk:
@@ -163,9 +171,33 @@ class ExternalMemory:
         """
         Retrieve relevant chunks for a query.
 
-        Uses simple keyword overlap scoring (InfLLM-style baseline).
+        Uses the configured retrieval_mode:
+          - 'keyword': Simple keyword overlap scoring
+          - 'embedding': Semantic similarity via sentence-transformers
+          - 'hybrid': Weighted combination of both
+
         Returns list of (score, chunk) sorted by relevance.
         """
+        if self.retrieval_mode == "embedding":
+            return self._retrieve_embedding(query, k, min_importance)
+        elif self.retrieval_mode == "hybrid":
+            return self._retrieve_hybrid(query, k, min_importance)
+        else:
+            return self._retrieve_keyword(query, k, min_importance)
+
+    def _ensure_embedding(self):
+        """Lazy-load the embedding retriever."""
+        if self._embedding is None:
+            from .embedding_retriever import EmbeddingRetriever
+            self._embedding = EmbeddingRetriever()
+            # Index all existing chunks
+            for cid, chunk in self._chunks.items():
+                text = " ".join(chunk.tokens)
+                self._embedding.index_chunk(cid, text)
+
+    def _retrieve_keyword(self, query: str, k: int = 5,
+                          min_importance: float = 0.0) -> List[Tuple[float, Chunk]]:
+        """Keyword overlap retrieval."""
         query_lower = query.lower()
         query_words = set(
             w.strip(".,!?;:()[]{}'\"") for w in query_lower.split()
@@ -185,12 +217,65 @@ class ExternalMemory:
                 continue
 
             # Combined score: relevance + importance + recency
-            recency = 1.0 - (time.time() - chunk.timestamp) / 86400  # Decay over 1 day
+            recency = 1.0 - (time.time() - chunk.timestamp) / 86400
             score = (0.5 * relevance +
                      0.3 * chunk.importance +
                      0.2 * max(0, recency))
             scored.append((score, chunk))
 
+        scored.sort(key=lambda x: x[0], reverse=True)
+        return scored[:k]
+
+    def _retrieve_embedding(self, query: str, k: int = 5,
+                            min_importance: float = 0.0) -> List[Tuple[float, Chunk]]:
+        """Embedding-based semantic retrieval."""
+        self._ensure_embedding()
+        
+        # Get all chunk IDs
+        all_ids = list(self._chunks.keys())
+        chunk_texts = {cid: " ".join(self._chunks[cid].tokens) for cid in all_ids}
+        
+        # Retrieve via embeddings
+        results = self._embedding.retrieve(query, all_ids, chunk_texts, k=k * 2)
+        
+        # Map back to Chunk objects and apply importance filter
+        scored = []
+        for score, cid in results:
+            chunk = self._chunks.get(cid)
+            if chunk and chunk.importance >= min_importance:
+                scored.append((score, chunk))
+        
+        return scored[:k]
+
+    def _retrieve_hybrid(self, query: str, k: int = 5,
+                         min_importance: float = 0.0) -> List[Tuple[float, Chunk]]:
+        """Hybrid keyword + embedding retrieval."""
+        # Get keyword results
+        kw_results = self._retrieve_keyword(query, k=k * 3, min_importance=min_importance)
+        
+        # Get embedding results
+        self._ensure_embedding()
+        all_ids = list(self._chunks.keys())
+        chunk_texts = {cid: " ".join(self._chunks[cid].tokens) for cid in all_ids}
+        emb_results = self._embedding.retrieve(query, all_ids, chunk_texts, k=k * 3)
+        
+        # Build combined scores using chunk_id as the key
+        kw_scores = {c.chunk_id: s for s, c in kw_results}
+        emb_scores = {cid: s for s, cid in emb_results}
+        max_kw = max(kw_scores.values()) if kw_scores else 1.0
+        
+        combined = {}
+        for s, c in kw_results:
+            cid = c.chunk_id
+            combined[cid] = (c, 0.3 * (kw_scores.get(cid, 0) / max_kw) + 0.7 * emb_scores.get(cid, 0))
+        for s, cid in emb_results:
+            if cid in combined:
+                continue  # Already scored from keyword
+            chunk = self._chunks.get(cid)
+            if chunk and chunk.importance >= min_importance:
+                combined[cid] = (chunk, 0.7 * s)
+        
+        scored = [(s, c) for c, s in combined.values()]
         scored.sort(key=lambda x: x[0], reverse=True)
         return scored[:k]
 
@@ -227,13 +312,17 @@ class ExternalMemory:
                 for e in entries]
 
     def statistics(self) -> dict:
-        return {
+        stats = {
             "total_tokens": self._total_tokens,
             "chunks": len(self._chunks),
             "history_entries": len(self._history),
             "keyword_index_size": len(self._keyword_index),
             "chunk_size": self.chunk_size,
+            "retrieval_mode": self.retrieval_mode,
         }
+        if self._embedding is not None:
+            stats["embedding"] = self._embedding.statistics()
+        return stats
 
 
 def quick_test():

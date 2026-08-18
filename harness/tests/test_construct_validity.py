@@ -119,6 +119,19 @@ def test_current_prompt_is_not_stored_before_s1_retrieval():
     assert all(record["content"] in stored for record in task["memory_records"])
 
 
+def test_long_history_materialises_external_store_beyond_native_window_word_proxy():
+    from gauntlets.substrate_construct.generator import generate_taskset
+    from harness.substrate_construct import prepare_substrate
+    from substrate.runtime import SubstrateRuntime
+
+    task = next(task for task in generate_taskset(seed=42, n_tasks=50, split="dev") if task["family"] == "long_history")
+    rt = SubstrateRuntime()
+    prepare_substrate(rt, task, arm="S1")
+    words = sum(len(entry.content.split()) for entry in rt.compiler._memory_store)
+    assert words >= task["history_filler"]["minimum_address_space_words"]
+    assert len(rt.compiler._memory_store) >= task["history_filler"]["count"] + len(task["memory_records"])
+
+
 def test_pilot_and_final_samples_are_distinct():
     from gauntlets.substrate_construct.generator import generate_taskset
     from contract.evidence import hash_taskset

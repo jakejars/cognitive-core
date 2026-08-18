@@ -1,6 +1,7 @@
 {
   "schema_version": "construct-generator-v1",
   "split": "dev",
+  "materialised_taskset_hash": "40865fab459c78c5db34921daa3cd887a423857dafcf8c46c8f95d22469746e7",
   "generator_spec": {
     "module": "gauntlets.substrate_construct.generator",
     "function": "generate_taskset",

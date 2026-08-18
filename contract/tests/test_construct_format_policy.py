@@ -26,6 +26,14 @@ def _record():
             "retrieval_difficulty": "neutral_address_space_only",
             "near_semantic_distractors": "separate_experiment",
         },
+        "pilot_predictions": {
+            "s1_full_oracle_recovery": "15/15",
+            "o1_minus_s1": "approximately_zero",
+            "b1_supported_correct": "near_zero_on_substrate_required_families",
+            "b2_supported_correct": "near_zero_on_substrate_required_families",
+            "o1_invalid_rate_max": 0.10,
+            "frozen_before_pilot": True,
+        },
         "pilot": {},
     }
 
@@ -57,6 +65,22 @@ def test_construct_pilot_rejects_retrieval_quality_claim_from_neutral_address_sp
     record["retrieval_interpretation"]["not_evidence_for"] = ["address_space_scaling"]
     _write(tmp_path, record)
     with pytest.raises(ContractViolation, match="retrieval interpretation"):
+        check_construct_pilot_ready(str(tmp_path))
+
+
+def test_construct_pilot_requires_predictions_before_running(tmp_path):
+    record = _record()
+    record.pop("pilot_predictions")
+    _write(tmp_path, record)
+    with pytest.raises(ContractViolation, match="pilot predictions"):
+        check_construct_pilot_ready(str(tmp_path))
+
+
+def test_construct_pilot_rejects_changed_predictions(tmp_path):
+    record = _record()
+    record["pilot_predictions"]["s1_full_oracle_recovery"] = "14/15"
+    _write(tmp_path, record)
+    with pytest.raises(ContractViolation, match="pilot predictions"):
         check_construct_pilot_ready(str(tmp_path))
 
 

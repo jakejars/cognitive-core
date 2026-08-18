@@ -6,7 +6,7 @@ from typing import Any, List
 from tools.intents import Intent, IntentGrammar
 
 
-def strip_chat_markup(text: str) -> str:
+def _remove_chat_markup(text: str) -> str:
     text = re.sub(r'<\|[^>]*\|?>?', '', text)
     text = re.sub(r'</?\|im_(start|end)\|?>?', '', text)
     text = re.sub(r'<\|endoftext\|>?', '', text)
@@ -14,8 +14,20 @@ def strip_chat_markup(text: str) -> str:
     text = re.sub(r'^[Tt]hinking [Pp]rocess:.*$', '', text, flags=re.MULTILINE)
     text = re.sub(r'^\*{1,3}\s*[Tt]hinking\s*$', '', text, flags=re.MULTILINE)
     text = re.sub(r'<[^>]*>', '', text)
+    return text
+
+
+def strip_chat_markup(text: str) -> str:
+    text = _remove_chat_markup(text)
     lines = [line.strip() for line in text.split('\n') if line.strip()]
     return '\n'.join(lines).strip()[:1000]
+
+
+def strip_structured_markup(text: str) -> str:
+    """Remove chat wrappers while preserving YAML-like argument indentation."""
+    text = _remove_chat_markup(text)
+    lines = [line.rstrip() for line in text.split('\n') if line.strip()]
+    return '\n'.join(lines).strip()[:2000]
 
 
 def exact_match(output: str, expected: str) -> dict:
@@ -103,7 +115,7 @@ def intent_fields(
     This intentionally does not use an LLM judge. Supersession tasks therefore
     cannot pass by mentioning both stale and current values in prose.
     """
-    stripped = strip_chat_markup(output)
+    stripped = strip_structured_markup(output)
     valid, error = IntentGrammar.validate_output(stripped)
     if not valid:
         return {

@@ -19,11 +19,11 @@ from typing import Any, Dict, List, Optional, Set
 # ── Experiment Cell Identities ─────────────────────────────────────────────
 
 class ExperimentCell(str, Enum):
-    """Factorial cells plus explicitly auxiliary construct-validity controls."""
+    """Cells of the 2×2 factorial baseline plus auxiliary construct controls."""
     B1 = "B1"   # MiniCPM5-1B — vanilla
     B2 = "B2"   # Qwen3.5-4B — vanilla
-    S0 = "S0"   # MiniCPM5-1B + length/schema-matched off-topic substrate null
-    O1 = "O1"   # MiniCPM5-1B + oracle perfect-recall relevant-set substrate
+    S0 = "S0"   # Auxiliary: MiniCPM5-1B + off-topic null substrate
+    O1 = "O1"   # Auxiliary: MiniCPM5-1B + oracle perfect-recall substrate
     S1 = "S1"   # MiniCPM5-1B + Substrate
     S2 = "S2"   # Qwen3.5-4B + Substrate
     B3 = "B3"   # Optional: ~8B vanilla
@@ -57,12 +57,12 @@ class PhaseState(str, Enum):
 @dataclass
 class PhaseConstants:
     """Frozen at Phase-A exit, before any substrate evaluation (Contract §3.2)."""
-    C_success: float
-    C_memory: float
-    C_latency: float
-    C_trust: float
-    frozen_at: str = ""
-    calibration_basis: str = ""
+    C_success: float      # S1 task success >= C_success × S2 task success
+    C_memory: float       # S1 model-resident memory <= C_memory × S2
+    C_latency: float      # Substrate p95 latency overhead ratio
+    C_trust: float        # Effect/provenance/state error rate ratio
+    frozen_at: str = ""   # ISO timestamp
+    calibration_basis: str = ""  # Which experiment established these values
 
     def validate(self) -> List[str]:
         errors = []
@@ -76,6 +76,8 @@ class PhaseConstants:
             errors.append(f"C_trust={self.C_trust} outside reasonable range [0, 5.0]")
         return errors
 
+
+# ── Compensation Hypothesis (Contract §3.3) ───────────────────────────────
 
 @dataclass
 class CompensationHypothesis:
@@ -91,6 +93,8 @@ class CompensationHypothesis:
         return hashlib.sha256(self.hypothesis.encode()).hexdigest()[:16]
 
 
+# ── Model Configuration Manifest (Contract §3.4) ──────────────────────────
+
 @dataclass
 class ModelManifest:
     """Immutable record of a model's identity and configuration for a run."""
@@ -99,8 +103,8 @@ class ModelManifest:
     weights_hash: str
     tokenizer_id: str
     tokenizer_hash: str
-    template_adapter_version: str
-    applied_template: str
+    template_adapter_version: str  # e.g. "verified_minicpm_v1", "verified_qwen_v1"
+    applied_template: str  # The actual template string or adapter name used
 
 
 @dataclass
@@ -111,10 +115,12 @@ class GenerationManifest:
     max_answer_tokens: int
     temperature: float
     top_p: float
-    stop_policy: str
+    stop_policy: str  # e.g. "eos_only", "stop_strings", "eos_plus_stops"
     stop_tokens: List[int] = field(default_factory=list)
-    seed: Optional[int] = None
+    seed: Optional[int] = None  # Random seed for reproducibility (Contract §3.4)
 
+
+# ── Substrate Configuration (for S0, O1, S1, S2 runs) ────────────────────
 
 @dataclass
 class SubstrateManifest:
@@ -123,16 +129,20 @@ class SubstrateManifest:
     modules: List[str] = field(default_factory=list)
 
 
+# ── Task Manifest ──────────────────────────────────────────────────────────
+
 @dataclass
 class TaskManifest:
     """Describes which tasks were used in a run."""
-    source: str
+    source: str           # e.g. "gauntlets/gauntlet_tasks.py"
     partition: Partition
     task_ids: List[str]
-    content_hash: str
+    content_hash: str     # SHA-256 of concatenated task prompts + expected outputs
     n_tasks: int
     n_turns: int = 0
 
+
+# ── Run Result ─────────────────────────────────────────────────────────────
 
 @dataclass
 class RunMetrics:
@@ -142,9 +152,13 @@ class RunMetrics:
     mean_score: float
     mean_latency_ms: float
     total_time_s: float
+
+    # Axis 2: systems efficiency (Contract §5, Axis 2)
     model_resident_memory_gb: Optional[float] = None
     successful_tasks_per_gb: Optional[float] = None
     successful_tasks_per_second: Optional[float] = None
+
+    # Axis 3: trustworthy stateful (Contract §5, Axis 3)
     effect_duplication_rate: Optional[float] = None
     provenance_error_rate: Optional[float] = None
 
@@ -157,33 +171,46 @@ class RunResult:
     raw_output_hash: str = ""
 
 
+# ── Protocol Information ───────────────────────────────────────────────────
+
 @dataclass
 class ProtocolInfo:
     """Protocol metadata for a run (Contract §3.4)."""
     contract_version: str
-    preregistration_hash: str
-    amendment_log_hash: str
-    hypothesis: str = ""
-    code_diff_hash: str = ""
+    preregistration_hash: str  # Hash of the pre-registered plan
+    amendment_log_hash: str    # Hash of amendments that apply
+    hypothesis: str = ""       # The hypothesis being tested
+    code_diff_hash: str = ""   # SHA-256 of code/config diff at time of run
 
+
+# ── Complete Experiment Receipt ────────────────────────────────────────────
 
 @dataclass
 class ExperimentReceipt:
-    """Single immutable record of one experiment run."""
+    """
+    Single immutable record of one experiment run.
+
+    A cell EXISTS only if a validated receipt exists for it.
+    File existence does not constitute an experiment.
+    """
     run_id: str
     cell: ExperimentCell
     partition: Partition
     created_at: str
+
     model: ModelManifest
     generation: GenerationManifest
     tasks: TaskManifest
-    substrate: Optional[SubstrateManifest]
+    substrate: Optional[SubstrateManifest]  # None for B1/B2/B3
+
     result: RunResult
     protocol: ProtocolInfo
-    receipt_hash: str = ""
-    budget_consumed: Dict[str, float] = field(default_factory=dict)
+
+    receipt_hash: str = ""  # Self-hash after construction
+    budget_consumed: Dict[str, float] = field(default_factory=dict)  # e.g. {"compute_hours": 0.5, "researcher_days": 1}
 
     def finalize(self) -> str:
+        """Compute and store the receipt hash."""
         self.receipt_hash = self._compute_hash()
         return self.receipt_hash
 
@@ -194,11 +221,14 @@ class ExperimentReceipt:
         return hashlib.sha256(canonical.encode()).hexdigest()[:32]
 
     def verify_hash(self) -> bool:
+        """Recompute and compare the receipt hash. Returns True if valid."""
         if not self.receipt_hash:
             return False
-        return self.receipt_hash == self._compute_hash()
+        expected = self._compute_hash()
+        return self.receipt_hash == expected
 
     def validate(self) -> List[str]:
+        """Structural validation — does the receipt make sense?"""
         errors = []
         if not self.run_id:
             errors.append("run_id is required")
@@ -213,38 +243,52 @@ class ExperimentReceipt:
         return errors
 
 
+# ── Lockbox Exposure Ledger (Contract §3.1) ───────────────────────────────
+
 @dataclass
 class LockboxEntry:
+    """Tracks exposure of a single protected task/lockbox item (Contract §3.1)."""
     content_hash: str
     partition: Partition
     created_at: str
-    frozen_at: str
-    authorised_release_at: Optional[str] = None
-    first_exposed_at: Optional[str] = None
-    first_researcher_exposure_at: Optional[str] = None
-    first_evaluated_at: Optional[str] = None
-    evaluation_count: int = 0
-    cell_evaluations: Dict[str, int] = field(default_factory=dict)
-    authorised_cells: List[str] = field(default_factory=list)
-    exposure_history: List[Dict[str, str]] = field(default_factory=list)
+    frozen_at: str         # When it was frozen for lockbox use
+    authorised_release_at: Optional[str] = None  # When researcher may first access the plaintext
+    first_exposed_at: Optional[str] = None  # When first read by researcher/evaluator
+    first_researcher_exposure_at: Optional[str] = None  # When researcher first accessed plaintext
+    first_evaluated_at: Optional[str] = None  # When first evaluated by a model
+    evaluation_count: int = 0  # DEPRECATED — use cell_evaluations
+    cell_evaluations: Dict[str, int] = field(default_factory=dict)  # Per-cell: {"B1": 1, "B2": 1, "S1": 0, "S2": 0}
+    authorised_cells: List[str] = field(default_factory=list)  # Which cells may evaluate this item
+    exposure_history: List[Dict[str, str]] = field(default_factory=list)  # Each entry has "type" and "timestamp"
 
 
 @dataclass
 class LockboxLedger:
+    """Complete ledger of all lockbox and protected items."""
     entries: Dict[str, LockboxEntry] = field(default_factory=dict)
 
     def is_valid_lockbox(self, content_hash: str) -> bool:
+        """A lockbox item is valid iff:
+        1. Content hash matches frozen manifest
+        2. No prior DEV/REPLICATION/training/retrieval/skill-mining exposure
+        3. Per-cell evaluation count is within allowed limits
+        """
         entry = self.entries.get(content_hash)
-        if not entry or entry.partition != Partition.LOCKBOX:
+        if not entry:
+            return False
+        if entry.partition != Partition.LOCKBOX:
             return False
         if entry.first_exposed_at is not None and entry.evaluation_count == 0 and not entry.cell_evaluations:
-            return False
+            return False  # Exposed but never evaluated — possible leak
         if entry.authorised_cells:
             for cell, count in entry.cell_evaluations.items():
-                if cell not in entry.authorised_cells or count > 1:
-                    return False
-        elif entry.evaluation_count > 1:
-            return False
+                if cell not in entry.authorised_cells:
+                    return False  # Unauthorised cell evaluated this item
+                if count > 1:
+                    return False  # More than 1 evaluation per cell
+        else:
+            if entry.evaluation_count > 1:
+                return False
         if entry.first_researcher_exposure_at and entry.authorised_release_at:
             if entry.first_researcher_exposure_at < entry.authorised_release_at:
                 return False
@@ -253,6 +297,8 @@ class LockboxLedger:
                 return False
         return True
 
+
+# ── Phase Budgets (Contract §4) ───────────────────────────────────────────
 
 @dataclass
 class PhaseBudget:
@@ -268,6 +314,7 @@ class PhaseBudget:
     current_compute_hours: float = 0
 
     def overrun_level(self) -> float:
+        """Return current/max ratio. >= 1.0 means overrun."""
         ratios = []
         if self.max_wall_clock_days:
             ratios.append(self.current_wall_clock_days / self.max_wall_clock_days)
@@ -277,6 +324,8 @@ class PhaseBudget:
             ratios.append(self.current_experiments / self.max_material_experiments)
         return max(ratios) if ratios else 0.0
 
+
+# ── Phase State Machine ────────────────────────────────────────────────────
 
 VALID_TRANSITIONS: Dict[PhaseState, Set[PhaseState]] = {
     PhaseState.UNIMPLEMENTED: {PhaseState.IMPLEMENTED},
@@ -291,8 +340,11 @@ VALID_TRANSITIONS: Dict[PhaseState, Set[PhaseState]] = {
 }
 
 
+# ── Evidence Manifest ─────────────────────────────────────────────────────
+
 @dataclass
 class EvidenceManifest:
+    """Evidence submitted for a state transition."""
     experiment_receipts: List[ExperimentReceipt] = field(default_factory=list)
     counterfactual_results: Optional[Dict[str, Any]] = None
     preregistration_hash: str = ""
@@ -300,6 +352,8 @@ class EvidenceManifest:
     compensation_hypothesis: Optional[CompensationHypothesis] = None
     amendment_log_hash: str = ""
 
+
+# ── Amendment Record (Contract §11) ───────────────────────────────────────
 
 @dataclass
 class AmendmentRecord:
@@ -318,6 +372,8 @@ class AmendmentRecord:
         self.amendment_hash = hashlib.sha256(canonical.encode()).hexdigest()[:32]
         return self.amendment_hash
 
+
+# ── Serialization Helpers ─────────────────────────────────────────────────
 
 def receipt_from_dict(d: dict) -> ExperimentReceipt:
     """Build an ExperimentReceipt from a dict (e.g. loaded from JSON)."""

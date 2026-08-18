@@ -3,8 +3,8 @@
 These tests cover the failure modes found in the final forensic audit:
 - task hashes must bind prompts/expected outputs, not only IDs
 - non-DEV receipts must carry immutable provenance fields
+- every run records a seed, including exploratory DEV runs
 - adapter rendering must be the rendering actually used by the runner
-- lockbox receipts must bind to ledger task hashes
 """
 
 import json
@@ -114,7 +114,21 @@ def test_replication_receipt_rejects_missing_provenance_fields(tmp_path):
         writer.persist(r)
 
 
-def test_dev_receipt_may_be_exploratory_but_still_binds_tasks_and_results(tmp_path):
+def test_dev_receipt_may_omit_expensive_checkpoint_provenance_but_keeps_seed(tmp_path):
+    r = _receipt(Partition.DEV)
+    r.model.weights_hash = ""
+    r.model.tokenizer_hash = ""
+    r.protocol.preregistration_hash = ""
+    r.protocol.code_diff_hash = ""
+    r.finalize()
+
+    writer = ReceiptWriter(str(tmp_path))
+    persisted = writer.persist(r)
+    assert persisted.receipt_hash
+    assert persisted.generation.seed == 0
+
+
+def test_dev_receipt_rejects_missing_seed(tmp_path):
     r = _receipt(Partition.DEV)
     r.model.weights_hash = ""
     r.model.tokenizer_hash = ""
@@ -123,9 +137,8 @@ def test_dev_receipt_may_be_exploratory_but_still_binds_tasks_and_results(tmp_pa
     r.generation.seed = None
     r.finalize()
 
-    writer = ReceiptWriter(str(tmp_path))
-    persisted = writer.persist(r)
-    assert persisted.receipt_hash
+    with pytest.raises(ValueError, match="seed"):
+        ReceiptWriter(str(tmp_path)).persist(r)
 
 
 def test_adapter_render_is_checked_against_golden_prompt():

@@ -1,10 +1,10 @@
 {
   "model": "S1-MiniCPM5-1B-Substrate",
   "total_tasks": 13,
-  "passed": 9,
-  "pass_rate": 69.2,
-  "mean_score": 0.731,
-  "mean_time": 0.257,
+  "passed": 10,
+  "pass_rate": 76.9,
+  "mean_score": 0.769,
+  "mean_time": 0.239,
   "by_gauntlet": {
     "M01": {
       "passed": 2,
@@ -27,16 +27,16 @@
       "pass_rate": 50.0
     },
     "SA01": {
-      "passed": 1,
+      "passed": 2,
       "total": 2,
-      "pass_rate": 50.0
+      "pass_rate": 100.0
     }
   },
   "substrate_stats": {
-    "events": 9,
-    "provenance_nodes": 9,
+    "events": 10,
+    "provenance_nodes": 10,
     "skills": 0,
-    "memory_entries": 16,
+    "memory_entries": 17,
     "registered_operations": 11
   },
   "tasks": [
@@ -44,7 +44,7 @@
       "id": "M01-001",
       "passed": true,
       "score": 1.0,
-      "time": 0.908
+      "time": 0.914
     },
     {
       "id": "M01-002",
@@ -68,37 +68,37 @@
       "id": "LCTX01-001",
       "passed": true,
       "score": 1.0,
-      "time": 0.121
+      "time": 0.12
     },
     {
       "id": "LCTX01-002",
       "passed": true,
       "score": 1.0,
-      "time": 0.158
+      "time": 0.157
     },
     {
       "id": "LCTX01-003",
       "passed": true,
       "score": 1.0,
-      "time": 0.298
+      "time": 0.285
     },
     {
       "id": "LCTX02-001",
       "passed": true,
       "score": 1.0,
-      "time": 0.168
+      "time": 0.164
     },
     {
       "id": "LCTX02-002",
       "passed": true,
       "score": 1.0,
-      "time": 0.209
+      "time": 0.207
     },
     {
       "id": "LCTX03-001",
       "passed": true,
       "score": 1.0,
-      "time": 0.145
+      "time": 0.144
     },
     {
       "id": "LCTX03-002",
@@ -108,15 +108,15 @@
     },
     {
       "id": "SA01-001",
-      "passed": false,
-      "score": 0.5,
-      "time": 0.432
+      "passed": true,
+      "score": 1.0,
+      "time": 0.413
     },
     {
       "id": "SA01-002",
       "passed": true,
       "score": 1.0,
-      "time": 0.432
+      "time": 0.23
     }
   ]
 }

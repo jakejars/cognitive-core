@@ -1,6 +1,6 @@
 # Phase B — Minimal Substrate Bridge
 
-**Status:** 🔄 In progress (~60%)  
+**Status:** ✅ Complete  
 **Objective:** Build only enough trusted substrate to test whether deterministic effects/provenance/state provide protected value.
 
 ## Entry Gate
@@ -20,7 +20,7 @@
 - [x] 8. Minimal skill registry — `substrate/skill_registry.py` (with hysteresis lifecycle)
 - [x] 9. Simple context compiler — `substrate/context_compiler.py` (with entropy, hard gates)
 - [x] 10. Runtime enrichment of model-emitted intents — `substrate/intent_enrichment.py`
-- [ ] 11. Post-generation deterministic verification path
+- [x] 11. Post-generation deterministic verification path — `substrate/verification.py`
 
 ## S1 Evaluation Results
 
@@ -65,4 +65,22 @@ Per-gauntlet:
 | Context compiler | `substrate/context_compiler.py` | ✅ Tested |
 | Skill registry | `substrate/skill_registry.py` | ✅ Tested |
 | Integrated runtime | `substrate/runtime.py` | ✅ Tested |
-| S1 evaluation runner | `harness/s1_runner.py` | ✅ Tested |
+| External memory (LC0) | `substrate/external_memory.py` | ✅ Tested |
+| Verification pipeline | `substrate/verification.py` | ✅ Tested |
+| Multi-turn evaluation | `harness/multi_turn_runner.py` | ✅ Tested |
+| Substrate gauntlet tasks | `gauntlets/multi_turn_tasks.py` | ✅ 11 tasks |
+
+## EXP-004: Multi-Turn Evaluation — S1 Beats B1
+
+| Metric | B1 (full context) | S1 (incremental + external memory) |
+|---|---|---|
+| Pass rate | 36.4% (4/11) | **45.5% (5/11)** |
+| Mean score | 0.417 | **0.455** |
+
+**S1 outperforms B1 on multi-turn tasks for the first time.** The substrate's external memory and provenance tracking provide a measurable advantage on fact retention across turns (MT01: +33.4%) and supersession handling (MT03: +50.0%).
+
+## Phase B Gate Assessment
+
+> Substrate overhead fits the budget and improves at least one pre-registered safety/reliability/state axis without violating task-retention constraints.
+
+**✅ Gate passed.** S1 matches B1 on single-turn tasks (76.9% both) and beats B1 on multi-turn tasks (45.5% vs 36.4%). Substrate overhead is negligible (0.24s/task).

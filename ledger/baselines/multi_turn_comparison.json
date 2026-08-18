@@ -1,0 +1,124 @@
+{
+  "b1": {
+    "pass_rate": 36.4,
+    "mean_score": 0.417,
+    "results": [
+      {
+        "id": "MT01-001",
+        "passed": true,
+        "score": 1.0
+      },
+      {
+        "id": "MT01-002",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT01-003",
+        "passed": false,
+        "score": 0.25
+      },
+      {
+        "id": "MT02-001",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT02-002",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT02-003",
+        "passed": true,
+        "score": 1.0
+      },
+      {
+        "id": "MT03-001",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT03-002",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT04-001",
+        "passed": false,
+        "score": 0.3333333333333333
+      },
+      {
+        "id": "MT04-002",
+        "passed": true,
+        "score": 1.0
+      },
+      {
+        "id": "MT05-001",
+        "passed": true,
+        "score": 1.0
+      }
+    ]
+  },
+  "s1": {
+    "pass_rate": 45.5,
+    "mean_score": 0.455,
+    "results": [
+      {
+        "id": "MT01-001",
+        "passed": true,
+        "score": 1.0
+      },
+      {
+        "id": "MT01-002",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT01-003",
+        "passed": true,
+        "score": 1.0
+      },
+      {
+        "id": "MT02-001",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT02-002",
+        "passed": true,
+        "score": 1.0
+      },
+      {
+        "id": "MT02-003",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT03-001",
+        "passed": true,
+        "score": 1.0
+      },
+      {
+        "id": "MT03-002",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT04-001",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT04-002",
+        "passed": false,
+        "score": 0.0
+      },
+      {
+        "id": "MT05-001",
+        "passed": true,
+        "score": 1.0
+      }
+    ]
+  }
+}

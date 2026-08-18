@@ -5,8 +5,8 @@
   "failed": 3,
   "pass_rate": 76.9,
   "mean_score": 0.769,
-  "mean_time": 0.277,
-  "total_time": 3.6,
+  "mean_time": 0.28,
+  "total_time": 3.64,
   "by_gauntlet": {
     "M01": {
       "total": 4,
@@ -58,55 +58,55 @@
       "id": "M01-001",
       "passed": true,
       "score": 1.0,
-      "time": 0.915
+      "time": 0.927
     },
     {
       "id": "M01-002",
       "passed": false,
       "score": 0.0,
-      "time": 0.095
+      "time": 0.096
     },
     {
       "id": "M01-003",
       "passed": true,
       "score": 1.0,
-      "time": 0.096
+      "time": 0.097
     },
     {
       "id": "M01-004",
       "passed": false,
       "score": 0.0,
-      "time": 0.095
+      "time": 0.098
     },
     {
       "id": "LCTX01-001",
       "passed": true,
       "score": 1.0,
-      "time": 0.2
+      "time": 0.202
     },
     {
       "id": "LCTX01-002",
       "passed": true,
       "score": 1.0,
-      "time": 0.151
+      "time": 0.152
     },
     {
       "id": "LCTX01-003",
       "passed": true,
       "score": 1.0,
-      "time": 0.275
+      "time": 0.283
     },
     {
       "id": "LCTX02-001",
       "passed": true,
       "score": 1.0,
-      "time": 0.15
+      "time": 0.153
     },
     {
       "id": "LCTX02-002",
       "passed": true,
       "score": 1.0,
-      "time": 0.195
+      "time": 0.196
     },
     {
       "id": "LCTX03-001",
@@ -118,19 +118,19 @@
       "id": "LCTX03-002",
       "passed": false,
       "score": 0.0,
-      "time": 0.413
+      "time": 0.415
     },
     {
       "id": "SA01-001",
       "passed": true,
       "score": 1.0,
-      "time": 0.412
+      "time": 0.414
     },
     {
       "id": "SA01-002",
       "passed": true,
       "score": 1.0,
-      "time": 0.229
+      "time": 0.231
     }
   ]
 }

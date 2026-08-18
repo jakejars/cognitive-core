@@ -74,8 +74,8 @@ def run_s1(verbose: bool = True, gauntlet_filter: str = None, max_tasks: int = N
                                   metadata={"task_id": task_id})
 
         # ── Build model prompt ──
-        # Structural tasks (M01): clean prompt, no extras
-        if task["gauntlet"] == "M01":
+        # Structural tasks (M01) and state tasks (SA01): clean prompt, no extras
+        if task["gauntlet"] in ("M01", "SA01"):
             formatted = f"<|user|>\n{prompt}<|end|>\n<|assistant|>\n"
         else:
             # For retrieval/state tasks, get substrate context

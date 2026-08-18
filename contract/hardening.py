@@ -102,13 +102,13 @@ def check_model_config_parity(project_root: str = None) -> None:
         if not required.issubset(by_cell):
             continue
         selected = [by_cell[cell] for cell in sorted(required, key=lambda c: c.value)]
-        task_ids = [tuple(r.tasks.task_ids) for r in selected]
+        task_ids = [tuple(receipt.tasks.task_ids) for receipt in selected]
         if len(set(task_ids)) != 1:
             issues.append(f"{partition.value}: factorial cells do not use identical ordered task IDs")
-        seeds = {r.generation.seed for r in selected}
+        seeds = {receipt.generation.seed for receipt in selected}
         if len(seeds) != 1:
             issues.append(f"{partition.value}: factorial cells use different seeds {sorted(seeds)}")
-        answer_budgets = {r.generation.max_answer_tokens for r in selected}
+        answer_budgets = {receipt.generation.max_answer_tokens for receipt in selected}
         if len(answer_budgets) != 1:
             issues.append(
                 f"{partition.value}: factorial cells use different answer budgets {sorted(answer_budgets)}"
@@ -199,11 +199,6 @@ def _matched_b1_b2(receipts):
 
 
 def check_compensation_hypothesis(project_root: str = None) -> None:
-    """Apply the Phase-A mechanical gate to matched B1/B2 evidence.
-
-    B2 dominance means it is non-worse on task success and non-worse on both
-    successful-tasks/GB and successful-tasks/second for the same frozen DEV taskset.
-    """
     pr = project_root or os.getcwd()
     ld = os.path.join(pr, "ledger")
     matched = _matched_b1_b2(_receipts(ld))
@@ -259,8 +254,147 @@ def _one_sided_binomial_tail(successes: int, trials: int) -> float:
     return sum(math.comb(trials, k) for k in range(successes, trials + 1)) / (2 ** trials)
 
 
+def paired_exact_improvement(
+    pairs: list[dict],
+    *,
+    baseline_key: str = "baseline_passed",
+    treatment_key: str = "treatment_passed",
+) -> dict:
+    """One-sided exact paired test reused by Phase D and construct validation."""
+    harmed = sum(
+        bool(pair.get(baseline_key)) and not bool(pair.get(treatment_key))
+        for pair in pairs
+    )
+    improved = sum(
+        not bool(pair.get(baseline_key)) and bool(pair.get(treatment_key))
+        for pair in pairs
+    )
+    discordant = harmed + improved
+    p_value = _one_sided_binomial_tail(improved, discordant) if improved > harmed else 1.0
+    return {
+        "improved": improved,
+        "harmed": harmed,
+        "discordant": discordant,
+        "p_value": p_value,
+    }
+
+
+def _construct_record(project_root: str) -> dict:
+    path = Path(project_root) / "ledger" / "construct-validity.json"
+    if not path.is_file():
+        raise ContractViolation("ledger/construct-validity.json is required")
+    with path.open() as f:
+        data = json.load(f)
+    if not isinstance(data, dict):
+        raise ContractViolation("construct-validity.json must be an object")
+    return data
+
+
+def check_construct_validity(project_root: str = None) -> None:
+    """Require a benchmark that actually needs the substrate before protection.
+
+    The DEV gate uses B1/B2/S0/O1/S1. B1 and B2 must both lack supported
+    access to the answer, O1 must establish solvability from perfect recall,
+    and S1 must beat the length-matched null S0 using the same paired exact
+    statistic as the Phase-D gate.
+    """
+    pr = project_root or os.getcwd()
+    data = _construct_record(pr)
+    if data.get("protocol_version") != "2.2":
+        raise ContractViolation("construct validity: protocol_version must be '2.2'")
+    if data.get("status") != "CONSTRUCT_VALID":
+        raise ContractViolation("construct validity status is not CONSTRUCT_VALID")
+    if not data.get("pilot_taskset_hash") or not data.get("dev_taskset_hash"):
+        raise ContractViolation("construct validity requires pilot and DEV taskset hashes")
+    if data["pilot_taskset_hash"] == data["dev_taskset_hash"]:
+        raise ContractViolation("construct validity pilot and frozen DEV samples must be distinct")
+
+    criteria = data.get("criteria", {})
+    required_criteria = (
+        "s1_vs_s0_min_delta",
+        "paired_alpha",
+        "oracle_min_supported_correct",
+        "bare_max_supported_correct",
+    )
+    missing = [key for key in required_criteria if key not in criteria]
+    if missing:
+        raise ContractViolation(f"construct validity criteria missing: {missing}")
+
+    arms = data.get("arms", {})
+    for arm in ("B1", "B2", "S0", "O1", "S1"):
+        if arm not in arms or "supported_correct_rate" not in arms[arm]:
+            raise ContractViolation(f"construct validity missing arm metrics for {arm}")
+
+    bare_max = float(criteria["bare_max_supported_correct"])
+    for arm in ("B1", "B2"):
+        rate = float(arms[arm]["supported_correct_rate"])
+        if rate > bare_max:
+            raise ContractViolation(
+                f"construct validity {arm} supported-correct rate {rate:.1%} exceeds bare-model ceiling {bare_max:.1%}"
+            )
+
+    oracle_rate = float(arms["O1"]["supported_correct_rate"])
+    oracle_min = float(criteria["oracle_min_supported_correct"])
+    if oracle_rate < oracle_min:
+        raise ContractViolation(
+            f"construct validity O1 supported-correct rate {oracle_rate:.1%} below oracle floor {oracle_min:.1%}"
+        )
+
+    s0_rate = float(arms["S0"]["supported_correct_rate"])
+    s1_rate = float(arms["S1"]["supported_correct_rate"])
+    delta = s1_rate - s0_rate
+    min_delta = float(criteria["s1_vs_s0_min_delta"])
+    if delta < min_delta:
+        raise ContractViolation(
+            f"construct validity S1-S0 delta {delta:+.1%} below preregistered minimum {min_delta:+.1%}"
+        )
+
+    pairs = data.get("pairs_s0_s1")
+    if not isinstance(pairs, list) or not pairs:
+        raise ContractViolation("construct validity requires paired S0/S1 task outcomes")
+    paired = paired_exact_improvement(
+        pairs,
+        baseline_key="s0_passed",
+        treatment_key="s1_passed",
+    )
+    alpha = float(criteria["paired_alpha"])
+    if paired["p_value"] > alpha:
+        raise ContractViolation(
+            f"construct validity paired exact p={paired['p_value']:.4f} exceeds alpha={alpha:.4f}"
+        )
+
+    for key in ("benchmark_frozen", "oracle_frozen", "evaluator_frozen"):
+        if data.get(key) is not True:
+            raise ContractViolation(f"construct validity requires {key}=true")
+
+    print(
+        f"  [Contract] Construct valid: S1-S0={delta:+.1%}, "
+        f"paired p={paired['p_value']:.4f}, O1={oracle_rate:.1%}, "
+        f"B1={float(arms['B1']['supported_correct_rate']):.1%}, "
+        f"B2={float(arms['B2']['supported_correct_rate']):.1%}"
+    )
+
+
+def check_lockbox_creation_ready(project_root: str = None) -> None:
+    """A new lockbox may be frozen only after construct-valid DEV + replication."""
+    pr = project_root or os.getcwd()
+    check_construct_validity(pr)
+    data = _construct_record(pr)
+    replication = data.get("replication", {})
+    if replication.get("status") != "DIRECTION_REPLICATED":
+        raise ContractViolation("lockbox creation blocked: replication has not shown directional separation")
+    if not replication.get("taskset_hash"):
+        raise ContractViolation("lockbox creation blocked: replication taskset hash missing")
+    if replication.get("taskset_hash") == data.get("dev_taskset_hash"):
+        raise ContractViolation("lockbox creation blocked: replication must use an independent task sample")
+    if float(replication.get("s1_vs_s0_delta", 0.0)) <= 0.0:
+        raise ContractViolation("lockbox creation blocked: replication S1-S0 delta is not positive")
+    if float(replication.get("paired_p_value", 1.0)) > float(data["criteria"]["paired_alpha"]):
+        raise ContractViolation("lockbox creation blocked: replication paired test did not pass")
+    print("  [Contract] Lockbox creation gate passed: construct-valid DEV + replicated separation")
+
+
 def check_phase_d_gate(project_root: str = None) -> None:
-    """Require fresh paired counterfactual evidence and the preregistered delta/statistical gate."""
     pr = project_root or os.getcwd()
     ld = os.path.join(pr, "ledger")
     path = os.path.join(ld, "counterfactual_eval.json")
@@ -319,29 +453,19 @@ def check_phase_d_gate(project_root: str = None) -> None:
             f"Phase D delta={delta:+.1%} is below preregistered threshold={float(threshold):+.1%}"
         )
 
-    harmed = sum(
-        bool(pair.get("baseline_passed")) and not bool(pair.get("treatment_passed"))
-        for pair in pairs
-    )
-    improved = sum(
-        not bool(pair.get("baseline_passed")) and bool(pair.get("treatment_passed"))
-        for pair in pairs
-    )
-    discordant = harmed + improved
-    p_value = _one_sided_binomial_tail(improved, discordant) if improved > harmed else 1.0
-    if p_value > float(alpha):
+    paired = paired_exact_improvement(pairs)
+    if paired["p_value"] > float(alpha):
         raise ContractViolation(
-            f"Phase D paired exact p={p_value:.4f} exceeds preregistered alpha={float(alpha):.4f}"
+            f"Phase D paired exact p={paired['p_value']:.4f} exceeds preregistered alpha={float(alpha):.4f}"
         )
 
     print(
-        f"  [Contract] Phase D: delta={delta:+.1%}, paired p={p_value:.4f}, "
-        f"improved={improved}, harmed={harmed}"
+        f"  [Contract] Phase D: delta={delta:+.1%}, paired p={paired['p_value']:.4f}, "
+        f"improved={paired['improved']}, harmed={paired['harmed']}"
     )
 
 
 def check_budget_overrun(project_root: str = None) -> None:
-    """Enforce the contract's 100/125/150 percent overrun policy."""
     pr = Path(project_root or os.getcwd())
     path = pr / "ledger" / "budgets.json"
     if not path.is_file():
@@ -395,4 +519,7 @@ __all__ = [
     "check_amendment_record",
     "check_budget_overrun",
     "check_model_config_parity",
+    "paired_exact_improvement",
+    "check_construct_validity",
+    "check_lockbox_creation_ready",
 ]

@@ -1,8 +1,8 @@
 """
 Cognitive Core Gen-2 — baseline inference harness.
 
-The harness exposes the generation knobs and peak-memory observation recorded in
-experiment receipts so the receipt describes the generation that actually ran.
+The module is import-safe on non-Apple CI so protocol/support tests can run there;
+actual inference still fails closed unless MLX + mlx-lm are installed.
 """
 
 import json
@@ -10,15 +10,24 @@ import time
 from pathlib import Path
 from typing import Optional, Sequence
 
-import mlx.core as mx
-from mlx_lm import load, stream_generate
-from mlx_lm.sample_utils import make_sampler
+try:
+    import mlx.core as mx
+    from mlx_lm import load, stream_generate
+    from mlx_lm.sample_utils import make_sampler
+except ImportError:  # Protocol tests run on Linux CI where MLX is unavailable.
+    mx = None
+    load = None
+    stream_generate = None
+    make_sampler = None
 
 
 class Harness:
     """Baseline evaluation harness for Cognitive Core Gen-2."""
 
     def __init__(self, model_path: str, max_kv_size: int = 131072):
+        if mx is None or load is None or stream_generate is None or make_sampler is None:
+            raise RuntimeError("MLX/MLX-LM is required for inference; protocol-only CI may import without it")
+
         self.model_path = str(Path(model_path).resolve()) if Path(model_path).exists() else model_path
         self.max_kv_size = max_kv_size
 

@@ -1,8 +1,8 @@
 """
 Cognitive Core Gen-2 — baseline inference harness.
 
-The harness now exposes the generation knobs that are recorded in experiment
-receipts so the receipt describes the generation that actually ran.
+The harness exposes the generation knobs and peak-memory observation recorded in
+experiment receipts so the receipt describes the generation that actually ran.
 """
 
 import json
@@ -59,6 +59,7 @@ class Harness:
         chunks = []
         n_output = 0
         finish_reason = "length"
+        peak_memory_gb = 0.0
         t0 = time.time()
 
         for response in stream_generate(
@@ -69,7 +70,7 @@ class Harness:
             sampler=sampler,
             max_kv_size=self.max_kv_size,
         ):
-            # Explicit stop tokens are not included in returned text.
+            peak_memory_gb = max(peak_memory_gb, float(getattr(response, "peak_memory", 0.0) or 0.0))
             if response.token in explicit_stops:
                 finish_reason = "stop"
                 break
@@ -92,6 +93,7 @@ class Harness:
             "tokens_per_sec": n_output / elapsed if elapsed > 0 else 0,
             "time_seconds": elapsed,
             "finish_reason": finish_reason,
+            "peak_memory_gb": peak_memory_gb or None,
             "generation_config": {
                 "max_tokens": max_tokens,
                 "temperature": temperature,
@@ -103,10 +105,10 @@ class Harness:
         }
 
     def benchmark(self, prompt: str, max_tokens: int = 256, n_runs: int = 3) -> dict:
-        results = []
-        for _ in range(n_runs):
-            results.append(self.generate(prompt, max_tokens=max_tokens, temperature=0.0, seed=0))
-
+        results = [
+            self.generate(prompt, max_tokens=max_tokens, temperature=0.0, seed=0)
+            for _ in range(n_runs)
+        ]
         times = [r["time_seconds"] for r in results]
         tokens = [r["output_tokens"] for r in results]
         tps = [r["tokens_per_sec"] for r in results]
@@ -118,6 +120,7 @@ class Harness:
             "p95_time": sorted(times)[min(len(times) - 1, int(len(times) * 0.95))],
             "mean_tokens_per_sec": sum(tps) / len(tps),
             "total_output_tokens": sum(tokens),
+            "peak_memory_gb": max((r.get("peak_memory_gb") or 0.0) for r in results),
             "sample_output": results[-1]["text"][:200] if results else "",
         }
 
@@ -132,9 +135,7 @@ class Harness:
 
 def quick_test():
     h = Harness("models/MiniCPM5-1B")
-    info = h.get_model_info()
-    print(f"\nModel info: {json.dumps(info, indent=2)}")
-
+    print(f"\nModel info: {json.dumps(h.get_model_info(), indent=2)}")
     result = h.generate("Hello! What can you help me with today?", max_tokens=100)
     print(
         f"\nGeneration: {result['output_tokens']} tokens in {result['time_seconds']:.2f}s "

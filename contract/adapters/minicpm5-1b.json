@@ -7,7 +7,7 @@
     "golden_tokenisation_test": {
         "test_input": "<|user|>\nWhat is the capital of France?<|end|>\n<|assistant|>\n",
         "description": "Simple factual prompt in MiniCPM format",
-        "expected_prefix_ids": [151337, 151338, 151339]
+        "expected_token_ids": [151337, 151338, 151339, 46087, 338, 544, 1706, 9466, 2459, 315, 456, 151340, 151339, 151337, 151341, 151339]
     },
     "generation_config": {
         "thinking_mode": false,

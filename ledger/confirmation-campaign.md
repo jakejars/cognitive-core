@@ -52,35 +52,35 @@ Before any experiment runs, the following must be fixed:
   - The Phase C question is: does demand-paged exact memory provide an effective long-memory ceiling sufficient for target workloads?
   - Residual failures may justify native positional work (Phase F), not declare the approach invalid
 
-### P5. Distractor quality
+### P5. Distractor quality (contract §6 — Phase C)
 - [ ] LCTX09 distractors must use near-semantic decoys, not unrelated filler text
 - [ ] Add at least 50 semantically similar decoys per 100K tokens of filler
 
-### P6. Phase D gate infrastructure
+### P6. Phase D gate infrastructure (Contract §6 — Phase D)
 - [ ] Create fresh held-out tasks for counterfactual evaluation (minimum 5 per axis)
 - [ ] Implement A/B evaluation harness: model runs without procedure → with procedure → measure delta
-- [ ] Record results in `ledger/counterfactual_eval.json` with `gate_passed: bool`
+- [ ] Record results in `ledger/counterfactual_eval.json` with protocol_version='2.2', criterion_threshold, and raw paired A/B data
 
-### P5. Freeze Phase-A constants before Phase B (Contract §3.2)
+### P7. Freeze Phase-A constants before Phase B (Contract §3.2)
 - [ ] Record C_success, C_memory, C_latency, C_trust in `ledger/phase-constants.json`
 - [ ] Constants are frozen before any substrate evaluation — the form of victory must not be chosen after seeing substrate results
 - [ ] Apply `python3 check-invariants.py --check-constants` before Phase B begins
 
-### P6. Pre-register Compensation Hypothesis if needed (Contract §3.3)
+### P8. Pre-register Compensation Hypothesis if needed (Contract §3.3)
 - [ ] If corrected B2 dominates B1 on both competence and cost-adjusted efficiency,
     Phase B may proceed only under a pre-registered Compensation Hypothesis
 - [ ] The hypothesis must state: "Proceed because S1 is expected to retain >= X% of B2 success
     while using <= Y% of B2 model-resident memory on multi-session workloads"
 - [ ] No vague statement; must have a numeric Axis-3 or efficiency threshold
-- [ ] Record in `ledger/compensation-hypothesis.json`
+- [ ] Record in `ledger/compensation-hypothesis.json` with preregistered_at timestamp
 
-### P7. Integrate contract invariants as mandatory gate
+### P9. Integrate contract invariants as mandatory gate
 - [ ] All experiment runners must use `contract.transition.ClaimTransitioner` to record results
 - [ ] No research code may write CONFIRMED, PHASE_GATE_PASS, or SUPPORTED_CLAIM directly
 - [ ] `python3 check-invariants.py` must pass non-zero for any material claim
 - [ ] The check-invariants exit code is the gate — not advisory
 - [ ] Formally decide on Phase E/F skip status through the contract amendment process
-- [ ] Record amendment in `ledger/amendment-log.md`
+- [ ] Record amendment in `ledger/amendment-log.json`
 - [ ] Or reopen Phases E/F with minimal scope
 
 ---
@@ -121,9 +121,10 @@ Verify invariants: `python3 check-invariants.py --check-lockbox`
 
 | Experiment | Purpose | Comparison |
 |---|---|---|
-| EXP-D1 | LCTX01-10 at 100K tokens | Native vs external memory |
-| EXP-D2 | LCTX01-10 at 500K tokens | Scaling behaviour |
-| EXP-D3 | LCTX01-10 at 1M tokens | Million-token target |
+| EXP-D1 | LCTX01-10 at 131K tokens | Native vs external memory |
+| EXP-D2 | LCTX01-10 at 256K tokens | Scaling behaviour |
+| EXP-D3 | LCTX01-10 at 512K tokens | Scaling behaviour |
+| EXP-D4 | LCTX01-10 at 1M tokens | Million-token target |
 
 **Gate:** Measure the effective long-memory ceiling across 131K–200K–256K–512K–1M.
 Success is determining whether demand-paged exact memory provides a sufficient ceiling
@@ -176,7 +177,7 @@ Verify invariants: `python3 check-invariants.py --check-phase-d`
 Before emitting any `CONFIRMED`, `THESIS PROVEN`, or `PHASE COMPLETE`:
 
 ```bash
-python3 check-invariants.py --check-all
+python3 check-invariants.py
 ```
 
 If this returns non-zero, the claim is blocked. No exceptions.

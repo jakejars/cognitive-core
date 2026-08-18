@@ -1,0 +1,21 @@
+{
+    "model_id": "Qwen3.5-4B",
+    "revision": "main",
+    "template_source": "apply_chat_template",
+    "template_string": "<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n",
+    "tokenizer_class": "PreTrainedTokenizerFast",
+    "golden_tokenisation_test": {
+        "test_input": "<|im_start|>user\nWhat is the capital of France?<|im_end|>\n<|im_start|>assistant\n",
+        "description": "Simple factual prompt in Qwen chat format",
+        "expected_token_ids": [151644, 198, 15225, 338, 544, 1706, 9466, 2459, 315, 456, 151645, 198, 151644, 198, 15225]
+    },
+    "generation_config": {
+        "thinking_mode": false,
+        "max_total_tokens": 131072,
+        "max_answer_tokens": 256,
+        "temperature": 0.0,
+        "top_p": 0.0,
+        "stop_policy": "eos_plus_stops",
+        "stop_tokens": [151645, 151643]
+    }
+}

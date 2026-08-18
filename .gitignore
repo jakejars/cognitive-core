@@ -27,5 +27,8 @@ __pycache__/
 # macOS
 .DS_Store
 
+# DSH harness
+.dsh/
+
 # Logs
 *.log

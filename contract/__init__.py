@@ -15,14 +15,17 @@ from contract.schema import (
 )
 from contract.invariants import (
     ContractViolation,
-    check_experiment_matrix, check_lockbox_integrity,
+    check_experiment_matrix, check_lockbox_intact, check_lockbox_pass,
     check_chat_template_parity, check_phase_d_gate,
     check_phase_constants, check_compensation_hypothesis,
-    check_amendment_record,
+    check_amendment_record, check_budget_overrun, check_model_config_parity,
 )
 from contract.transition import (
     ClaimTransitioner, TransitionRequest, TransitionResult,
     request_claim, request_phase_gate,
+)
+from contract.receipt_writer import (
+    ReceiptWriter,
 )
 
 __all__ = [
@@ -35,11 +38,13 @@ __all__ = [
     "receipt_from_dict",
     # Invariants
     "ContractViolation",
-    "check_experiment_matrix", "check_lockbox_integrity",
+    "check_experiment_matrix", "check_lockbox_intact", "check_lockbox_pass",
     "check_chat_template_parity", "check_phase_d_gate",
     "check_phase_constants", "check_compensation_hypothesis",
-    "check_amendment_record",
+    "check_amendment_record", "check_budget_overrun", "check_model_config_parity",
     # Transitions
     "ClaimTransitioner", "TransitionRequest", "TransitionResult",
     "request_claim", "request_phase_gate",
+    # Receipt Writer
+    "ReceiptWriter",
 ]

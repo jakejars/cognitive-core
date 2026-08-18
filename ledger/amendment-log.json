@@ -1,0 +1,18 @@
+[
+    {
+        "date": "2026-08-18",
+        "reason": "Initial protocol audit: reclassify all prior experiments as DEV/exploratory. B2 template bug, missing S2, contaminated lockbox, incomplete LCTX, Phase D gate not passed.",
+        "observed_results": "B2 received MiniCPM chat template (46.2% invalid). S2 never run. Lockbox tasks contaminated. LCTX 5/10 implemented. Phase D gate not passed.",
+        "affected_metrics": "All prior experiment conclusions withdrawn. B1 vs B2 comparison invalid. Small-executive thesis unresolved.",
+        "invalidated_evidence": true,
+        "new_evaluation_source": "Fresh confirmation campaign with corrected per-model templates, S2 runner, lockbox isolation, and executable invariants."
+    },
+    {
+        "date": "2026-08-18",
+        "reason": "Phase E (neural improvements) and Phase F (long-context extension) skipped pending confirmation campaign results. External memory retrieval at 1M tokens suggests neural attention extension may not be needed, but formal decision deferred until clean matrix is established.",
+        "observed_results": "External memory achieves 100% retrieval at 1M tokens. Native attention collapses to 20% at 100K. Decision record DEC-001 documents the rationale.",
+        "affected_metrics": "Phase E/F removed from critical path. Budget reallocation to confirmation campaign.",
+        "invalidated_evidence": false,
+        "new_evaluation_source": "Lockbox evaluation after confirmation campaign will determine if Phase E/F are needed."
+    }
+]

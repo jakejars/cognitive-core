@@ -101,7 +101,7 @@ class ModelManifest:
     weights_hash: str
     tokenizer_id: str
     tokenizer_hash: str
-    template_adapter_version: str  # e.g. "minicpm_v1", "qwen_apply_chat_template_v1"
+    template_adapter_version: str  # e.g. "verified_minicpm_v1", "verified_qwen_v1"
     applied_template: str  # The actual template string or adapter name used
 
 
@@ -115,6 +115,7 @@ class GenerationManifest:
     top_p: float
     stop_policy: str  # e.g. "eos_only", "stop_strings", "eos_plus_stops"
     stop_tokens: List[int] = field(default_factory=list)
+    seed: Optional[int] = None  # Random seed for reproducibility (Contract §3.4)
 
 
 # ── Substrate Configuration (for S1, S2 runs) ────────────────────────────
@@ -172,9 +173,12 @@ class RunResult:
 
 @dataclass
 class ProtocolInfo:
+    """Protocol metadata for a run (Contract §3.4)."""
     contract_version: str
     preregistration_hash: str  # Hash of the pre-registered plan
     amendment_log_hash: str    # Hash of amendments that apply
+    hypothesis: str = ""       # The hypothesis being tested
+    code_diff_hash: str = ""   # SHA-256 of code/config diff at time of run
 
 
 # ── Complete Experiment Receipt ────────────────────────────────────────────
@@ -201,6 +205,7 @@ class ExperimentReceipt:
     protocol: ProtocolInfo
 
     receipt_hash: str = ""  # Self-hash after construction
+    budget_consumed: Dict[str, float] = field(default_factory=dict)  # e.g. {"compute_hours": 0.5, "researcher_days": 1}
 
     def finalize(self) -> str:
         """Compute and store the receipt hash."""
@@ -213,6 +218,13 @@ class ExperimentReceipt:
         canonical = json.dumps(d, sort_keys=True, default=str)
         return hashlib.sha256(canonical.encode()).hexdigest()[:32]
 
+    def verify_hash(self) -> bool:
+        """Recompute and compare the receipt hash. Returns True if valid."""
+        if not self.receipt_hash:
+            return False
+        expected = self._compute_hash()
+        return self.receipt_hash == expected
+
     def validate(self) -> List[str]:
         """Structural validation — does the receipt make sense?"""
         errors = []
@@ -220,6 +232,8 @@ class ExperimentReceipt:
             errors.append("run_id is required")
         if not self.receipt_hash:
             errors.append("receipt not finalized (call finalize())")
+        elif not self.verify_hash():
+            errors.append("receipt_hash mismatch — data has been tampered with")
         if self.cell in (ExperimentCell.S1, ExperimentCell.S2) and self.substrate is None:
             errors.append(f"{self.cell.value} requires substrate manifest")
         if self.result.metrics.n_total == 0:
@@ -231,15 +245,19 @@ class ExperimentReceipt:
 
 @dataclass
 class LockboxEntry:
-    """Tracks exposure of a single protected task/lockbox item."""
+    """Tracks exposure of a single protected task/lockbox item (Contract §3.1)."""
     content_hash: str
     partition: Partition
     created_at: str
     frozen_at: str         # When it was frozen for lockbox use
+    authorised_release_at: Optional[str] = None  # When researcher may first access the plaintext
     first_exposed_at: Optional[str] = None  # When first read by researcher/evaluator
+    first_researcher_exposure_at: Optional[str] = None  # When researcher first accessed plaintext
     first_evaluated_at: Optional[str] = None  # When first evaluated by a model
-    evaluation_count: int = 0
-    exposure_history: List[Dict[str, str]] = field(default_factory=list)
+    evaluation_count: int = 0  # DEPRECATED — use cell_evaluations
+    cell_evaluations: Dict[str, int] = field(default_factory=dict)  # Per-cell: {"B1": 1, "B2": 1, "S1": 0, "S2": 0}
+    authorised_cells: List[str] = field(default_factory=list)  # Which cells may evaluate this item
+    exposure_history: List[Dict[str, str]] = field(default_factory=list)  # Each entry has "type" and "timestamp"
 
 
 @dataclass
@@ -251,17 +269,33 @@ class LockboxLedger:
         """A lockbox item is valid iff:
         1. Content hash matches frozen manifest
         2. No prior DEV/REPLICATION/training/retrieval/skill-mining exposure
-        3. Evaluation count is within allowed limits
+        3. Per-cell evaluation count is within allowed limits
         """
         entry = self.entries.get(content_hash)
         if not entry:
             return False
         if entry.partition != Partition.LOCKBOX:
             return False
-        if entry.first_exposed_at is not None and entry.evaluation_count == 0:
+        if entry.first_exposed_at is not None and entry.evaluation_count == 0 and not entry.cell_evaluations:
             return False  # Exposed but never evaluated — possible leak
-        if entry.evaluation_count > 1:
-            return False  # Lockbox items should be evaluated exactly once (or 0 if never used)
+        if entry.authorised_cells:
+            for cell, count in entry.cell_evaluations.items():
+                if cell not in entry.authorised_cells:
+                    return False  # Unauthorised cell evaluated this item
+                if count > 1:
+                    return False  # More than 1 evaluation per cell
+        else:
+            # Legacy: fall back to global evaluation_count check
+            if entry.evaluation_count > 1:
+                return False
+        # Check researcher exposure happened after authorised release
+        if entry.first_researcher_exposure_at and entry.authorised_release_at:
+            if entry.first_researcher_exposure_at < entry.authorised_release_at:
+                return False
+        # Check exposure_history for contamination
+        for h in entry.exposure_history:
+            if h.get("type") in ("training", "retrieval", "skill_mining"):
+                return False  # These exposure types are never acceptable
         return True
 
 
@@ -367,6 +401,13 @@ def receipt_from_dict(d: dict) -> ExperimentReceipt:
             metrics=RunMetrics(**d["result"]["metrics"]),
             raw_output_hash=d["result"].get("raw_output_hash", ""),
         ),
-        protocol=ProtocolInfo(**d["protocol"]),
+        protocol=ProtocolInfo(
+            contract_version=d["protocol"]["contract_version"],
+            preregistration_hash=d["protocol"]["preregistration_hash"],
+            amendment_log_hash=d["protocol"].get("amendment_log_hash", ""),
+            hypothesis=d["protocol"].get("hypothesis", ""),
+            code_diff_hash=d["protocol"].get("code_diff_hash", ""),
+        ),
         receipt_hash=d.get("receipt_hash", ""),
+        budget_consumed=d.get("budget_consumed", {}),
     )
